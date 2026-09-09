@@ -80,12 +80,12 @@
 .dark {
   /* ---- DARK (the logo's own environment) ---- */
   --bg-0: #050505;
-  --bg-1: #0b0c0e;
-  --bg-2: #121417;
-  --bg-3: #1a1d22;
+  --bg-1: #0e1014; /* raised from #0b0c0e: one step off true black read as flat */
+  --bg-2: #15181d;
+  --bg-3: #1e2228;
 
-  --line-1: rgba(255, 255, 255, 0.06);
-  --line-2: rgba(255, 255, 255, 0.12);
+  --line-1: rgba(255, 255, 255, 0.07);
+  --line-2: rgba(255, 255, 255, 0.15);
 
   --steel-100: #f2f3f5;
   --steel-300: #c9ccd1;
@@ -101,27 +101,41 @@
   --armed: #fb923c;
   --warn: #fbbf24;
 
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.045);
+  --glass-border: rgba(255, 255, 255, 0.11);
 
+  /*
+    Dark elevation is carried by LIGHT, not shadow. A black shadow on a
+    near-black page is invisible, so each level adds a faint outer ring that
+    catches the eye where the surface meets the page, and the dark halo below
+    only deepens the separation. Ring alpha is what actually reads as height.
+  */
   --shadow-soft:
-    0 1px 2px rgba(0, 0, 0, 0.6),
-    0 4px 10px -4px rgba(0, 0, 0, 0.6),
-    0 12px 28px -12px rgba(0, 0, 0, 0.7);
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.75),
+    0 10px 26px -8px rgba(0, 0, 0, 0.85);
   --shadow-raised:
-    0 2px 5px rgba(0, 0, 0, 0.6),
-    0 10px 24px -8px rgba(0, 0, 0, 0.72),
-    0 24px 52px -20px rgba(0, 0, 0, 0.8);
+    0 0 0 1px rgba(255, 255, 255, 0.055),
+    0 3px 8px rgba(0, 0, 0, 0.78),
+    0 16px 34px -10px rgba(0, 0, 0, 0.88);
   --shadow-panel:
-    0 4px 12px -4px rgba(0, 0, 0, 0.7),
-    0 30px 70px -24px rgba(0, 0, 0, 0.85);
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 6px 16px -4px rgba(0, 0, 0, 0.8),
+    0 34px 72px -22px rgba(0, 0, 0, 0.92);
   --shadow-lift:
-    0 4px 10px -2px rgba(0, 0, 0, 0.7),
-    0 18px 36px -10px rgba(0, 0, 0, 0.8),
-    0 44px 80px -32px rgba(0, 0, 0, 0.85);
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 6px 14px -2px rgba(0, 0, 0, 0.8),
+    0 22px 44px -10px rgba(0, 0, 0, 0.9),
+    0 0 40px -12px rgba(125, 211, 252, 0.14);
 
-  --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.055);
-  --panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0) 55%);
+  /* The lit top rim. This is the single most important cue in dark mode. */
+  --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.13);
+  --panel-sheen: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.075) 0%,
+    rgba(255, 255, 255, 0.022) 38%,
+    rgba(255, 255, 255, 0) 72%
+  );
 
   --wash-a: rgba(125, 211, 252, 0.08);
   --wash-b: rgba(125, 211, 252, 0.035);

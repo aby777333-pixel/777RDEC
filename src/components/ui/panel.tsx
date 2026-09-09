@@ -29,7 +29,7 @@ export function Panel({
     <Tag
       className={cn(
         'border',
-        tone !== 'glass' && 'surface-sheen',
+        'surface-sheen',
         size === 'card' ? 'rounded-card' : 'rounded-panel',
         tone === 'card' && 'border-line-2 bg-bg-1',
         tone === 'raised' && 'border-line-2 bg-bg-2 shadow-raised',
@@ -39,7 +39,7 @@ export function Panel({
       )}
       {...rest}
     >
-      {tone === 'glass' ? children : <div className="relative">{children}</div>}
+      <div className="relative">{children}</div>
     </Tag>
   )
 }

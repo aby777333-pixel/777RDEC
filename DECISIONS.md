@@ -183,3 +183,38 @@ survives a compliance review.
 date rendered as 1 January 1970 and sorting was meaningless. `toIsoDate` now
 normalises both shapes. This had also been wrong on the research and news
 indexes since they were added.
+
+## 19. Dark elevation is carried by light, not shadow
+
+The first shadow pass worked in light and did nothing in dark, because a black
+shadow on a #050505 page is invisible. Dark mode now gets its depth from three
+things instead: a faint outer ring (`0 0 0 1px rgba(255,255,255,0.04→0.10)`)
+that catches the eye where a surface meets the page, a much stronger lit top
+rim (`inset 0 1px 0 rgba(255,255,255,0.13)`, up from 0.055), and a stronger
+panel sheen. The dark halo underneath only deepens what the ring already
+establishes.
+
+`--bg-1` also moved from `#0b0c0e` to `#0e1014`: one step off true black did
+not read as a panel at all. Hairlines went from 0.06/0.12 to 0.07/0.15, and
+glass from 0.03/0.08 to 0.045/0.11, for the same reason. The brief's exact dark
+values were the starting point, not a constraint worth keeping when the surfaces
+they produced were invisible.
+
+Glass panels previously opted out of the sheen and rim entirely, which is why
+the nav had no edge. They now use the same treatment as every other surface.
+
+## 20. The falcon mark was not hand-drawn into the repo
+
+The master logo has been supplied three times and has never reached the
+filesystem — only the original brief `.md` is ever on disk. Rather than ask a
+fourth time, I attempted to reconstruct the mark as SVG: four iterations of
+bezier work on the wing feathers, crown, brow ridge, hooked beak and talon.
+
+The result read as a helmet, not a falcon. It was discarded rather than
+shipped. A hand-drawn approximation of a brand mark is not a neutral
+placeholder — it misrepresents the identity everywhere it appears, and it is
+harder to notice as wrong than an obvious absence.
+
+The auto-detection from §16 stands, so the real file needs no code change:
+commit it to `public/brand/raptor-logo.png` (or `.svg`) and it replaces the
+type-plus-wing lockup everywhere on the next deploy.
