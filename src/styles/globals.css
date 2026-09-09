@@ -23,7 +23,7 @@
 
   --steel-100: #0c0e12; /* primary text */
   --steel-300: #383e46; /* secondary text */
-  --steel-500: #5b6169; /* muted / labels */
+  --steel-500: #51575f; /* muted / labels — darkened for tint headroom */
   --steel-700: #a2a8b0; /* disabled */
 
   --chrome: linear-gradient(135deg, #3a4048 0%, #757a82 42%, #20242a 56%, #545a62 100%);
@@ -62,17 +62,35 @@
   /* A one-pixel top highlight is what makes a surface read as lit. */
   --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   /* Very quiet vertical sheen across panels. */
-  --panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 58%);
+  --panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 54%);
   /*
     Accent wash on every surface. Low enough alpha that it reads as tinted
     steel rather than a blue card, and it is the SAME hue as --signal, so the
     site still has exactly one chromatic accent.
   */
+  /*
+    Card tints. Six hues so a grid of cards cycles rather than repeating one
+    colour, kept desaturated and low-alpha so it reads as tinted steel. The
+    triplets and the alpha stops are both per-theme tokens, so the .tint-N
+    classes below are written once.
+  */
+  --tint-1-rgb: 14, 165, 233; /* ice blue */
+  --tint-2-rgb: 245, 158, 11; /* amber */
+  --tint-3-rgb: 139, 92, 246; /* violet */
+  --tint-4-rgb: 16, 185, 129; /* emerald */
+  --tint-5-rgb: 244, 63, 94; /* rose */
+  --tint-6-rgb: 20, 184, 166; /* teal */
+
+  --tint-a-strong: 0.2;
+  --tint-a-mid: 0.07;
+  --tint-a-weak: 0.02;
+
+  /* Default when no .tint-N is applied. */
   --panel-tint: linear-gradient(
     145deg,
-    rgba(3, 105, 161, 0.088) 0%,
-    rgba(3, 105, 161, 0.032) 48%,
-    rgba(3, 105, 161, 0.008) 100%
+    rgba(var(--tint-1-rgb), var(--tint-a-strong)) 0%,
+    rgba(var(--tint-1-rgb), var(--tint-a-mid)) 48%,
+    rgba(var(--tint-1-rgb), var(--tint-a-weak)) 100%
   );
 
   /* Section washes: the only place colour appears outside the accent. */
@@ -101,7 +119,7 @@
 
   --steel-100: #f2f3f5;
   --steel-300: #c9ccd1;
-  --steel-500: #8a8f98;
+  --steel-500: #979da6; /* lightened for tint headroom */
   --steel-700: #4b5058;
 
   --chrome: linear-gradient(135deg, #e6e8eb 0%, #9aa0a8 45%, #d7dadf 55%, #6b7078 100%);
@@ -148,11 +166,24 @@
     rgba(255, 255, 255, 0.022) 38%,
     rgba(255, 255, 255, 0) 72%
   );
+  /* Dark uses the light-on-dark end of each hue, so the wash reads as a lit
+     tint rather than a muddy stain. */
+  --tint-1-rgb: 125, 211, 252; /* ice blue */
+  --tint-2-rgb: 252, 211, 77; /* amber */
+  --tint-3-rgb: 196, 181, 253; /* violet */
+  --tint-4-rgb: 110, 231, 183; /* emerald */
+  --tint-5-rgb: 253, 164, 175; /* rose */
+  --tint-6-rgb: 94, 234, 212; /* teal */
+
+  --tint-a-strong: 0.15;
+  --tint-a-mid: 0.045;
+  --tint-a-weak: 0.006;
+
   --panel-tint: linear-gradient(
     145deg,
-    rgba(125, 211, 252, 0.07) 0%,
-    rgba(125, 211, 252, 0.022) 48%,
-    rgba(125, 211, 252, 0) 100%
+    rgba(var(--tint-1-rgb), var(--tint-a-strong)) 0%,
+    rgba(var(--tint-1-rgb), var(--tint-a-mid)) 48%,
+    rgba(var(--tint-1-rgb), var(--tint-a-weak)) 100%
   );
 
   --wash-a: rgba(125, 211, 252, 0.08);
@@ -267,7 +298,9 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: var(--panel-sheen), var(--panel-tint);
+    /* Tint first: background layers paint top-down, and the sheen's white
+       wash would otherwise cover the tint where it is strongest. */
+    background: var(--panel-tint), var(--panel-sheen);
     pointer-events: none;
   }
 
@@ -373,3 +406,31 @@ html[data-reduce-motion='true'] *::after {
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
 }
+
+/*
+  Card tint variants.
+
+  Deliberately NOT inside @layer components: Tailwind tree-shakes layered
+  hand-written rules whose selectors it cannot find by scanning source, and
+  <Panel> composes these names from an index at runtime. Kept as plain CSS so
+  they always ship.
+*/
+.tint-1,
+.tint-2,
+.tint-3,
+.tint-4,
+.tint-5,
+.tint-6 {
+  --panel-tint: linear-gradient(
+    145deg,
+    rgba(var(--tint-rgb), var(--tint-a-strong)) 0%,
+    rgba(var(--tint-rgb), var(--tint-a-mid)) 48%,
+    rgba(var(--tint-rgb), var(--tint-a-weak)) 100%
+  );
+}
+.tint-1 { --tint-rgb: var(--tint-1-rgb); }
+.tint-2 { --tint-rgb: var(--tint-2-rgb); }
+.tint-3 { --tint-rgb: var(--tint-3-rgb); }
+.tint-4 { --tint-rgb: var(--tint-4-rgb); }
+.tint-5 { --tint-rgb: var(--tint-5-rgb); }
+.tint-6 { --tint-rgb: var(--tint-6-rgb); }

@@ -79,7 +79,7 @@ export function ModuleGrid({
       <SectionHeader eyebrow={eyebrow} title={heading} lead={lead} />
       <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {modules.map((module, index) => (
-          <Panel key={module.title} interactive className="flex flex-col gap-3 p-6">
+          <Panel key={module.title} interactive tintIndex={index} className="flex flex-col gap-3 p-6">
             <span className="font-mono text-[0.75rem] text-steel-500" data-numeric>
               {String(index + 1).padStart(2, '0')}
             </span>

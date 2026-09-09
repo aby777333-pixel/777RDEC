@@ -221,6 +221,8 @@ type-plus-wing lockup everywhere on the next deploy.
 
 ## 21. Surfaces are tinted steel, not neutral grey
 
+*(Superseded by §22 — kept for the reasoning.)*
+
 Cards read as flat grey rectangles. They now carry a `--panel-tint` wash — a
 145-degree gradient in the accent hue, layered under the existing sheen on
 every `.surface-sheen` surface, so it reaches module cards, blog cards, EMIL
@@ -238,3 +240,37 @@ original values were.
 Contrast was re-checked at the *strongest* point of the wash rather than the
 average. Worst case is muted `--steel-500` on a raised surface at 4.75:1;
 primary text is 14.7:1 or better. All pairs clear 4.5:1 in both themes.
+
+## 22. Six card hues, and two bugs found getting there
+
+The single-hue wash was too weak and too uniform. Cards now cycle six hues via
+`<Panel tintIndex>`, which grids pass the item index to: ice blue, amber,
+violet, emerald, rose, teal — ordered so adjacent cards alternate warm and
+cool rather than sitting next to a neighbouring hue.
+
+This does break the brief's one-accent rule. That was a deliberate owner
+decision, asked for twice.
+
+**Bug 1: the white sheen was painting over the tint.** CSS background layers
+paint first-listed on top, and `--panel-sheen` was listed before
+`--panel-tint`. In light mode that sheen is a white wash across the top of the
+card — exactly where the tint gradient peaks — so it erased the colour. Tint
+now comes first, and the light sheen eased from 0.8 to 0.5.
+
+**Bug 2: Tailwind was stripping the tint classes entirely.** The `.tint-1`
+… `.tint-6` rules lived in `@layer components`, and Tailwind tree-shakes
+layered hand-written rules whose selectors it cannot find by scanning source.
+`<Panel>` composed the names from an index at runtime, so the scanner never
+saw them and the rules were dropped from the build — every card silently fell
+back to the default hue. Diagnosed by grepping the emitted CSS for the actual
+selectors, after an earlier grep gave a false positive by matching the token
+*names* in `:root`. The rules now sit outside any layer, and `Panel` picks
+from a literal array so the names are greppable either way.
+
+**Contrast.** Checked for all six hues on both surfaces in both themes, at the
+*strongest* stop of the gradient. Muted `--steel-500` needed headroom, so it
+moved from `#5b6169` to `#51575f` in light and `#8a8f98` to `#979da6` in dark
+— which also makes captions easier to read generally. Worst case is now
+4.89:1 in light and 4.52:1 in dark; primary text is 11:1 or better everywhere.
+Alphas are 0.20 light and 0.15 dark, differing because the perceptual effect
+does.

@@ -26,11 +26,11 @@ export default function BlogIndexPage() {
       <Section className="wash border-b border-line-1">
         <SectionHeader eyebrow="Topics" title="Where to start" />
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {BLOG_CATEGORIES.map((category) => {
+          {BLOG_CATEGORIES.map((category, index) => {
             const count = postsInCategory(category.slug).length
             return (
               <Link key={category.slug} href={`/blog/category/${category.slug}`} className="group">
-                <Panel interactive className="flex h-full flex-col gap-2.5 p-6">
+                <Panel interactive tintIndex={index} className="flex h-full flex-col gap-2.5 p-6">
                   <div className="flex items-baseline justify-between gap-3">
                     <span className="font-display text-[1.0625rem] uppercase tracking-tight text-steel-100">
                       {category.label}

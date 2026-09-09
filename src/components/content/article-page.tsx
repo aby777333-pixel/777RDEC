@@ -51,10 +51,10 @@ export function ArticlePage({
           <div className="mt-16 border-t border-line-1 pt-10">
             <h2 className="text-eyebrow uppercase text-steel-500">Related reading</h2>
             <ul className="mt-6 grid gap-4 md:grid-cols-3">
-              {related.map((post) => (
+              {related.map((post, index) => (
                 <li key={post.slug}>
                   <Link href={`${relatedBasePath}/${post.slug}`} className="group block h-full">
-                    <Panel interactive className="flex h-full flex-col gap-2 p-5">
+                    <Panel interactive tintIndex={index} className="flex h-full flex-col gap-2 p-5">
                       <span className="font-mono text-[0.6875rem] text-steel-500" data-numeric>
                         {formatDate(post.frontmatter.date)}
                       </span>

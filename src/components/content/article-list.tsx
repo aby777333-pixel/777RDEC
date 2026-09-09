@@ -18,10 +18,10 @@ export function ArticleList({
 
   return (
     <ul className="flex flex-col gap-4">
-      {entries.map((entry) => (
+      {entries.map((entry, index) => (
         <li key={entry.slug}>
           <Link href={`${basePath}/${entry.slug}`} className="group block">
-            <Panel interactive className="flex flex-col gap-3 p-6 group-hover:bg-bg-2">
+            <Panel interactive tintIndex={index} className="flex flex-col gap-3 p-6 group-hover:bg-bg-2">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="font-mono text-[0.75rem] text-steel-500" data-numeric>
                   {formatDate(entry.frontmatter.date)}
