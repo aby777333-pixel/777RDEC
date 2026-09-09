@@ -9,10 +9,16 @@ import { cn } from '@/lib/utils'
  * `raster` caps both height and width: the master lockup is much wider than it
  * is tall, and an uncapped width pushes the navigation into wrapping.
  */
+/**
+ * `raster` caps height and width. The master lockup carries a wordmark and a
+ * tagline, so it needs real height to stay legible — 40px in a 64px header,
+ * not 32px. Width is capped too, since the lockup is ~2:1 and an uncapped
+ * width pushes the navigation into wrapping.
+ */
 const SCALE = {
-  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-6 max-w-[7rem]', tagline: 'text-[0.5rem]' },
-  md: { type: 'text-[1.375rem]', wing: 'h-6 w-11', raster: 'h-8 max-w-[9.5rem]', tagline: 'text-[0.5625rem]' },
-  lg: { type: 'text-[2.5rem]', wing: 'h-11 w-20', raster: 'h-14 max-w-[16rem]', tagline: 'text-[0.5625rem]' },
+  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-7 max-w-[8rem]', tagline: 'text-[0.5rem]' },
+  md: { type: 'text-[1.375rem]', wing: 'h-6 w-11', raster: 'h-10 max-w-[11rem]', tagline: 'text-[0.5625rem]' },
+  lg: { type: 'text-[2.5rem]', wing: 'h-11 w-20', raster: 'h-16 max-w-[18rem]', tagline: 'text-[0.5625rem]' },
 } as const
 
 type Size = keyof typeof SCALE

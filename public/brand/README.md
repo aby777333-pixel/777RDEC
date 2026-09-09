@@ -1,36 +1,50 @@
 # Brand assets
 
-## The logo
+## Files in use
 
-Drop the master logo here as **`raptor-logo.png`** (or `raptor-logo.svg` — either
-is picked up, SVG preferred if both exist).
+| File | Used for |
+|---|---|
+| `raptor-logo.png` | The master lockup, brushed silver. Used in the **dark** theme. |
+| `raptor-logo-dark.png` | Darker-inked version of the same lockup. Used in the **light** theme. |
+| `raptor-lockup.svg` | Type-and-wing fallback, kept for decks, email signatures and anywhere a vector is easier than a raster. Not used by the site while the two PNGs above exist. |
 
-`src/components/ui/raptor-logo.tsx` checks for those files on the server at
-render time:
+`src/components/ui/raptor-logo.tsx` resolves these on the server and the result
+is passed down through `BrandProvider`. Order of preference is
+`raptor-logo.svg` then `raptor-logo.png`; if neither exists the component
+composes the lockup from live type plus the abstracted wing instead, so the
+site never shows a broken image.
 
-- **File present** → it is used everywhere the lockup appears: header, footer,
-  mobile drawer, 404, 500, design system.
-- **File absent** → the component composes the lockup from live type plus the
-  abstracted five-feather wing, which is crisp at every size and re-themes with
-  the palette. That is what the site currently shows.
+## What was done to the supplied file
 
-No code change is needed either way. Add the file, redeploy, done.
+The master logo arrived as `Raptor transparent logo.png` (612 x 408, RGBA).
+Two things needed fixing before it could be used:
 
-### What to supply
+1. **92% of the canvas was transparent padding.** The mark occupied only
+   474 x 220, offset from centre (82px of space above, 106px below). Sized by
+   height in a 40px header slot, the visible mark would have rendered about
+   21px tall and sat noticeably high. It was cropped to its alpha bounding box
+   plus an even 2% margin, giving 492 x 238.
 
-The master mark is brushed silver on transparent or black: falcon head with a
-swept five-feather wing, a vertical divider, then `777` / `RAPTOR` in heavy
-metallic sans with `PRECISION. POWER. PERFORMANCE.` beneath.
+2. **The silver washed out on white.** Mean luminance of the opaque pixels was
+   160/255, which is 2.6:1 against a white background — below any usable
+   threshold. `raptor-logo-dark.png` remaps the tonal range to
+   `[20..150]`, preserving the internal gradient so it still reads as brushed
+   metal, and lands at 5.8:1.
 
-- **Transparent background.** The logo sits on white in the light theme and on
-  near-black in the dark theme, so a baked-in background will show as a box.
-- Roughly 1200×640 or larger for the PNG, or any SVG.
-- If the silver mark disappears against white in the light theme, also supply
-  **`raptor-logo-dark.png`** — a darker-inked variant — and it will be used for
-  the light theme automatically.
+The untouched original is preserved in git history in commit `daaad9d`.
 
-### Favicon
+## Replacing the logo later
 
-`public/favicon.svg` is currently the abstracted wing on black. Replace it with
-a crop of the falcon head once the master file is here; keep it as an SVG and
-keep the filename.
+Drop a new `raptor-logo.png` (or `.svg`) in here. Two things to check:
+
+- **Transparent background**, or it will show as a box against both themes.
+- **Trim the padding** before saving. The component sizes by height, so
+  built-in whitespace shrinks the visible mark.
+
+If the new artwork is dark enough to work on white, delete
+`raptor-logo-dark.png` and both themes will use the single file.
+
+## Favicon
+
+`public/favicon.svg` is the abstracted wing on black. Replace it with a crop
+of the falcon head when convenient — keep it as an SVG and keep the filename.
