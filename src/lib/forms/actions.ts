@@ -81,14 +81,13 @@ async function submit(target: Target, formData: FormData): Promise<FormState> {
     consent: data.consent,
   })
 
-  if (!result.ok && result.reason === 'failed') {
-    return {
-      status: 'error',
-      message: `Something went wrong on our side and your message was not saved. Please try again, or email ${CONTACT_EMAIL}.`,
-    }
-  }
-
-  await sendNotification({
+  /*
+    An enquiry is too valuable to drop because one dependency is down, so the
+    notification is attempted regardless of whether the row persisted. The
+    submission counts as successful if EITHER path worked: persisted for the
+    record, or delivered to a human who can act on it.
+  */
+  const notified = await sendNotification({
     subject: `${target === 'demo_requests' ? 'Demo request' : 'Contact message'} — ${data.fullName}`,
     body: [
       `Name:      ${data.fullName}`,
@@ -103,6 +102,21 @@ async function submit(target: Target, formData: FormData): Promise<FormState> {
       data.message || '(no message)',
     ].join('\n'),
   })
+
+  if (!result.ok) {
+    // Loud, because a submission that reached nobody is a lost customer and a
+    // silent "not configured" in production is worse than an outage.
+    console.error(
+      `[forms:${target}] not persisted (${result.reason}); notification ${notified ? 'delivered' : 'FAILED'}`,
+    )
+  }
+
+  if (!result.ok && !notified) {
+    return {
+      status: 'error',
+      message: `Something went wrong on our side and your message did not reach us. Please try again, or email ${CONTACT_EMAIL} directly.`,
+    }
+  }
 
   return { status: 'success', message: SUCCESS[target] }
 }

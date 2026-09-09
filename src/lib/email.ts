@@ -22,7 +22,12 @@ const consoleProvider: EmailProvider = {
   name: 'console',
   async send(message) {
     console.info('[email:console]', message.subject, '\n', message.body)
-    return true
+    /*
+      In development, logging counts as delivery so forms are usable without
+      credentials. In production it must NOT: reporting success for a message
+      that only reached a log file is how enquiries get lost silently.
+    */
+    return process.env.NODE_ENV !== 'production'
   },
 }
 
