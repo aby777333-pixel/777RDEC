@@ -88,7 +88,7 @@ function ContactBlock() {
   return (
     <>
       <address className="flex flex-col gap-2 not-italic">
-        <span className="text-eyebrow uppercase text-steel-500">Headquarters</span>
+        <span className="tint-1 tint-ink text-eyebrow uppercase">Headquarters</span>
         <span className="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed text-steel-300">
           <MapPin size={15} strokeWidth={1.5} aria-hidden className="mt-1 shrink-0 text-steel-500" />
           <span>
@@ -102,7 +102,7 @@ function ContactBlock() {
       </address>
 
       <div className="flex flex-col gap-2">
-        <span className="text-eyebrow uppercase text-steel-500">Talk to us</span>
+        <span className="tint-4 tint-ink text-eyebrow uppercase">Talk to us</span>
         <a
           href={`tel:${PHONE_E164}`}
           className="inline-flex items-center gap-2.5 text-[0.9375rem] text-steel-300 transition-colors hover:text-steel-100"
@@ -119,7 +119,7 @@ function ContactBlock() {
       </div>
 
       <div className="flex flex-col gap-2">
-        <span className="text-eyebrow uppercase text-steel-500">Registered entity</span>
+        <span className="tint-3 tint-ink text-eyebrow uppercase">Registered entity</span>
         <p className="text-[0.9375rem] leading-relaxed text-steel-300">
           {LEGAL_ENTITY_NAME}
           <span className="block text-steel-500">
@@ -137,7 +137,7 @@ function ContactBlock() {
  */
 export function LegalEntityBlock() {
   return (
-    <div className="flex max-w-4xl flex-col gap-3 text-[0.8125rem] leading-relaxed text-steel-500">
+    <div className="flex flex-col gap-3 text-[0.8125rem] leading-relaxed text-steel-500 lg:max-w-[95%]">
       <p>{TECHNOLOGY_PROVIDER_DISCLOSURE}</p>
       <p>
         {LEGAL_ENTITY_NAME} ({LEGAL_ENTITY_JURISDICTION}). Company No. {COMPANY_NUMBER}.{' '}

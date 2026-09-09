@@ -76,12 +76,16 @@ export function getContent(collection: ContentCollection, slug: string): Content
 }
 
 /** Blog categories, ordered, with the copy the index and menu both use. */
+/**
+ * `tint` is a fixed hue index per category, not positional — so EMIL is always
+ * blue and Risk always rose, wherever the category appears.
+ */
 export const BLOG_CATEGORIES = [
-  { slug: 'emil', label: 'EMIL', blurb: 'The intelligence layer: how it learns, what it is allowed to do, and where it stops.' },
-  { slug: 'risk', label: 'Risk', blurb: 'Exposure, limits, drawdown guards and capital protection in practice.' },
-  { slug: 'brokerage', label: 'Brokerage', blurb: 'Running a brokerage on one stack instead of three vendors.' },
-  { slug: 'engineering', label: 'Engineering', blurb: 'How the platform is built, and what breaks when it is built badly.' },
-  { slug: 'markets', label: 'Markets', blurb: 'Market structure, sessions and cross-asset behaviour.' },
+  { slug: 'emil', label: 'EMIL', tint: 0, blurb: 'The intelligence layer: how it learns, what it is allowed to do, and where it stops.' },
+  { slug: 'risk', label: 'Risk', tint: 4, blurb: 'Exposure, limits, drawdown guards and capital protection in practice.' },
+  { slug: 'brokerage', label: 'Brokerage', tint: 1, blurb: 'Running a brokerage on one stack instead of three vendors.' },
+  { slug: 'engineering', label: 'Engineering', tint: 2, blurb: 'How the platform is built, and what breaks when it is built badly.' },
+  { slug: 'markets', label: 'Markets', tint: 5, blurb: 'Market structure, sessions and cross-asset behaviour.' },
 ] as const
 
 export type BlogCategory = (typeof BLOG_CATEGORIES)[number]

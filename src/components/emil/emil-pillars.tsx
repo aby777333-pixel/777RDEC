@@ -2,6 +2,8 @@ import { Activity, Brain, Gauge, Shield, Zap } from 'lucide-react'
 import { EMIL_SHORT } from '@/lib/brand'
 import { cn } from '@/lib/utils'
 
+const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
+
 type Pillar = {
   id: string
   label: string
@@ -28,9 +30,9 @@ export function EmilPillars() {
               )}
             >
               <div className="flex flex-col gap-4">
-                <div className="flex items-center gap-3">
-                  <pillar.Icon size={18} strokeWidth={1.5} aria-hidden className="text-signal" />
-                  <span className="text-eyebrow uppercase text-steel-500">
+                <div className={cn('flex items-center gap-3', TINT_CYCLE[index % TINT_CYCLE.length])}>
+                  <pillar.Icon size={18} strokeWidth={1.5} aria-hidden className="tint-ink" />
+                  <span className="tint-ink text-eyebrow uppercase">
                     {String(index + 1).padStart(2, '0')} · {pillar.label}
                   </span>
                 </div>

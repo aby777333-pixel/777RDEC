@@ -85,6 +85,15 @@
   --tint-a-mid: 0.07;
   --tint-a-weak: 0.02;
 
+  /* Readable ink per hue — the wash colours themselves are far too light for
+     text on paper. Every pair verified at 5:1 or better. */
+  --tint-1-ink: #0369a1;
+  --tint-2-ink: #92400e;
+  --tint-3-ink: #6d28d9;
+  --tint-4-ink: #047857;
+  --tint-5-ink: #be123c;
+  --tint-6-ink: #0f766e;
+
   /* Default when no .tint-N is applied. */
   --panel-tint: linear-gradient(
     145deg,
@@ -178,6 +187,14 @@
   --tint-a-strong: 0.15;
   --tint-a-mid: 0.045;
   --tint-a-weak: 0.006;
+
+  /* On dark, the wash colours are already the legible end of each hue. */
+  --tint-1-ink: #7dd3fc;
+  --tint-2-ink: #fcd34d;
+  --tint-3-ink: #c4b5fd;
+  --tint-4-ink: #6ee7b7;
+  --tint-5-ink: #fda4af;
+  --tint-6-ink: #5eead4;
 
   --panel-tint: linear-gradient(
     145deg,
@@ -428,9 +445,20 @@ html[data-reduce-motion='true'] *::after {
     rgba(var(--tint-rgb), var(--tint-a-weak)) 100%
   );
 }
-.tint-1 { --tint-rgb: var(--tint-1-rgb); }
-.tint-2 { --tint-rgb: var(--tint-2-rgb); }
-.tint-3 { --tint-rgb: var(--tint-3-rgb); }
-.tint-4 { --tint-rgb: var(--tint-4-rgb); }
-.tint-5 { --tint-rgb: var(--tint-5-rgb); }
-.tint-6 { --tint-rgb: var(--tint-6-rgb); }
+.tint-1 { --tint-rgb: var(--tint-1-rgb); --tint-ink: var(--tint-1-ink); }
+.tint-2 { --tint-rgb: var(--tint-2-rgb); --tint-ink: var(--tint-2-ink); }
+.tint-3 { --tint-rgb: var(--tint-3-rgb); --tint-ink: var(--tint-3-ink); }
+.tint-4 { --tint-rgb: var(--tint-4-rgb); --tint-ink: var(--tint-4-ink); }
+.tint-5 { --tint-rgb: var(--tint-5-rgb); --tint-ink: var(--tint-5-ink); }
+.tint-6 { --tint-rgb: var(--tint-6-rgb); --tint-ink: var(--tint-6-ink); }
+
+/* Text and rules in the surrounding card's hue. */
+.tint-ink {
+  color: var(--tint-ink, var(--signal));
+}
+.tint-rule {
+  border-color: rgba(var(--tint-rgb, 14, 165, 233), 0.45);
+}
+.tint-dot {
+  background-color: var(--tint-ink, var(--signal));
+}

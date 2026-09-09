@@ -8,6 +8,9 @@ import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
 import { cn } from '@/lib/utils'
 
+/** Shared hue cycle for grids that are not <Panel>-based. */
+const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
+
 export function PageHero({
   eyebrow,
   heading,
@@ -52,9 +55,15 @@ export function AnswerGrid({ answers }: { answers: FiveAnswers }) {
   return (
     <Section className="border-b border-line-1">
       <dl className="grid gap-x-10 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
-        {ANSWER_ROWS.map(({ key, label }) => (
-          <div key={key} className="flex flex-col gap-2.5 border-t border-line-2 pt-5">
-            <dt className="text-eyebrow uppercase text-steel-500">{label}</dt>
+        {ANSWER_ROWS.map(({ key, label }, index) => (
+          <div
+            key={key}
+            className={cn(
+              'tint-rule flex flex-col gap-2.5 border-t-2 pt-5',
+              TINT_CYCLE[index % TINT_CYCLE.length],
+            )}
+          >
+            <dt className="tint-ink text-eyebrow uppercase">{label}</dt>
             <dd className="text-[1rem] leading-relaxed text-steel-300">{answers[key]}</dd>
           </div>
         ))}
@@ -80,7 +89,7 @@ export function ModuleGrid({
       <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {modules.map((module, index) => (
           <Panel key={module.title} interactive tintIndex={index} className="flex flex-col gap-3 p-6">
-            <span className="font-mono text-[0.75rem] text-steel-500" data-numeric>
+            <span className="tint-ink font-mono text-[0.75rem] font-medium" data-numeric>
               {String(index + 1).padStart(2, '0')}
             </span>
             <h3 className="font-display text-[1.1875rem] leading-snug text-steel-100">
