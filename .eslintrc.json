@@ -1,0 +1,13 @@
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-restricted-syntax": [
+      "error",
+      {
+        "selector": "TSAsExpression[typeAnnotation.typeName.name='any']",
+        "message": "`as any` is banned. Type it properly."
+      }
+    ]
+  }
+}

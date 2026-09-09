@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  777 RAPTOR — token layer.
+  The logo is brushed steel on absolute black. Dark is the native theme.
+  Light is not an inversion: it is the same brushed-steel language on paper,
+  with the chrome gradient and the signal accent darkened so every pair
+  clears 4.5:1.
+*/
+
+:root {
+  /* ---- LIGHT ---- */
+  --bg-0: #ffffff;
+  --bg-1: #f6f7f9;
+  --bg-2: #eef0f3;
+  --bg-3: #e3e6ea;
+
+  --line-1: rgba(5, 10, 20, 0.07);
+  --line-2: rgba(5, 10, 20, 0.13);
+
+  --steel-100: #0c0e12; /* primary text */
+  --steel-300: #383e46; /* secondary text */
+  --steel-500: #5b6169; /* muted / labels */
+  --steel-700: #a2a8b0; /* disabled */
+
+  --chrome: linear-gradient(135deg, #3a4048 0%, #8a8f98 42%, #20242a 56%, #5a6068 100%);
+
+  --signal: #0369a1;
+  --signal-soft: rgba(3, 105, 161, 0.1);
+  --up: #047857;
+  --down: #dc2626;
+  --armed: #c2410c;
+  --warn: #b45309;
+
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(5, 10, 20, 0.09);
+
+  --shadow-soft: 0 1px 2px rgba(5, 10, 20, 0.04), 0 8px 24px -12px rgba(5, 10, 20, 0.12);
+  --shadow-panel: 0 20px 60px -28px rgba(5, 10, 20, 0.22);
+
+  color-scheme: light;
+}
+
+.dark {
+  /* ---- DARK (the logo's own environment) ---- */
+  --bg-0: #050505;
+  --bg-1: #0b0c0e;
+  --bg-2: #121417;
+  --bg-3: #1a1d22;
+
+  --line-1: rgba(255, 255, 255, 0.06);
+  --line-2: rgba(255, 255, 255, 0.12);
+
+  --steel-100: #f2f3f5;
+  --steel-300: #c9ccd1;
+  --steel-500: #8a8f98;
+  --steel-700: #4b5058;
+
+  --chrome: linear-gradient(135deg, #e6e8eb 0%, #9aa0a8 45%, #d7dadf 55%, #6b7078 100%);
+
+  --signal: #7dd3fc;
+  --signal-soft: rgba(125, 211, 252, 0.12);
+  --up: #34d399;
+  --down: #f87171;
+  --armed: #fb923c;
+  --warn: #fbbf24;
+
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.6), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
+  --shadow-panel: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
+
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--line-2);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg-0);
+    color: var(--steel-100);
+    font-family: var(--font-body, system-ui), system-ui, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background-color 240ms cubic-bezier(0.16, 1, 0.3, 1), color 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Every numeral on this site is tabular. Prices must not jitter. */
+  .font-mono,
+  [data-numeric] {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display, system-ui), system-ui, sans-serif;
+    font-weight: 700;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--signal);
+    color: var(--bg-0);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Firefox / Safari scrollbar tuning inside data panels */
+  .scroll-steel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--steel-700) transparent;
+  }
+  .scroll-steel::-webkit-scrollbar { width: 8px; height: 8px; }
+  .scroll-steel::-webkit-scrollbar-track { background: transparent; }
+  .scroll-steel::-webkit-scrollbar-thumb {
+    background: var(--steel-700);
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  .container-raptor {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-raptor { padding-inline: 1.5rem; }
+  }
+
+  /* Brushed-metal headline treatment. H1s and the 777 numeral only. */
+  .text-chrome {
+    background-image: var(--chrome);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .glass {
+    background-color: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  /* Mission-control texture: hairline grid faded at the edges. */
+  .grid-field {
+    background-image: linear-gradient(to right, var(--line-1) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line-1) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 78% 62% at 50% 42%, #000 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 78% 62% at 50% 42%, #000 30%, transparent 100%);
+  }
+}
+
+/*
+  Motion. Honoured for the OS setting and for the manual footer toggle,
+  which sets data-reduce-motion="true" on <html>.
+*/
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html[data-reduce-motion='true'] * ,
+html[data-reduce-motion='true'] *::before,
+html[data-reduce-motion='true'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
