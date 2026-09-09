@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { PageHero } from '@/components/layout/page-shell'
 import { ArticleList } from '@/components/content/article-list'
-import { Section } from '@/components/ui/section'
+import { Section, SectionHeader } from '@/components/ui/section'
 import { BLOG_CATEGORIES, categoryFor, postsInCategory } from '@/lib/content'
 import { pageMetadata } from '@/lib/seo'
 import { cn } from '@/lib/utils'
@@ -59,11 +59,17 @@ export default function BlogCategoryPage({ params }: Params) {
           ))}
         </nav>
 
-        <ArticleList
-          entries={posts}
-          basePath="/blog"
-          emptyMessage={`Nothing published under ${category.label} yet.`}
+        <SectionHeader
+          eyebrow={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}
+          title={`Everything under ${category.label}`}
         />
+        <div className="mt-10">
+          <ArticleList
+            entries={posts}
+            basePath="/blog"
+            emptyMessage={`Nothing published under ${category.label} yet.`}
+          />
+        </div>
       </Section>
     </>
   )

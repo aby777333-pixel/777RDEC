@@ -96,7 +96,29 @@ favicon from the wing mark, status page backed by `/api/status`.
 - **Product links.** `/experience` currently redirects to `/request-demo`.
   Point it at the real terminal when it is available (one line in
   `next.config.mjs`).
-- **Accessibility.** Contrast pairs were computed by hand and keyboard paths
-  spot-checked; a full axe pass has not been run.
-- **Cross-browser.** Not yet checked on iOS Safari, which matters most for the
-  `backdrop-filter` glass surfaces.
+- **Accessibility.** A full axe pass now runs clean: 35 routes × both themes
+  against `wcag2a`/`wcag2aa`/`wcag21a`/`wcag21aa`/`best-practice`, **0
+  violations**. Five findings were fixed to get there — see DECISIONS.md.
+  Contrast pairs are still computed by hand for the tint system.
+- **Cross-browser.** Chromium is swept on every change (both themes, plus a
+  390px pass for horizontal scroll). iOS Safari has been *audited, not
+  verified*: the Playwright WebKit download is blocked by this environment's
+  egress proxy, so the known WebKit behaviours were addressed defensively
+  (16px form controls on coarse pointers, `input[type=search]` appearance
+  reset, tap-highlight). The `backdrop-filter` glass surfaces already carry
+  their `-webkit-` prefixes. Worth one pass on a real device.
+- **Session images.** Not in the repo — see `public/sessions/README.md` for
+  the three filenames the globe on `/platform/markets` looks for. Same
+  server-side presence check as the hero images, so a missing file makes no
+  request.
+- **Case studies.** `CASE_STUDIES` in `src/lib/copy/proof.ts` is deliberately
+  empty. Add entries only once a client has approved the wording — the type
+  carries an `approved` flag to make that explicit.
+- **Integrations directory.** Every entry is marked `status: 'request'` and
+  tagged TODO_CONFIRM. Promote to `available` or `live` only for venues and
+  vendors that are genuinely connected.
+- **Roles.** The six roles in `src/lib/copy/roles.ts` are marked TODO_CONFIRM.
+  Confirm which are actually open before the careers page goes in front of
+  candidates.
+- **Newsletter delivery.** Signups land in `newsletter_subscribers`. There is
+  no sending integration yet — the list is captured, nothing is mailed.

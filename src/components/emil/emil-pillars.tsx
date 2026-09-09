@@ -157,7 +157,7 @@ function WeightsVisual() {
           <div className="flex items-baseline justify-between font-mono text-[0.6875rem]">
             <span className="text-steel-500">{weight.label}</span>
             <span className="flex items-baseline gap-2">
-              <span className="text-steel-700 line-through" data-numeric>
+              <span className="text-steel-500 line-through" data-numeric>
                 {weight.before.toFixed(2)}
               </span>
               <span

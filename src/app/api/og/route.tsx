@@ -12,6 +12,7 @@ const SIZE = { width: 1200, height: 630 }
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const title = (searchParams.get('title') ?? SITE_TAGLINE).slice(0, 90)
+  const kicker = (searchParams.get('kicker') ?? '').slice(0, 40)
 
   return new ImageResponse(
     (
@@ -83,7 +84,7 @@ export function GET(request: Request) {
               textTransform: 'uppercase',
             }}
           >
-            {SITE_TAGLINE}
+            {kicker.length > 0 ? kicker : SITE_TAGLINE}
           </span>
         </div>
       </div>

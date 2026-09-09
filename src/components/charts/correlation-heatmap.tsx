@@ -35,7 +35,9 @@ export function CorrelationHeatmap({ className }: { className?: string }) {
           </caption>
           <thead>
             <tr>
-              <th scope="col" className="w-20 px-2 py-2" />
+              <th scope="col" className="w-20 px-2 py-2">
+                <span className="sr-only">Instrument</span>
+              </th>
               {SYMBOLS.map((symbol) => (
                 <th
                   key={symbol}

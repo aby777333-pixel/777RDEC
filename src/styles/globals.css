@@ -261,6 +261,47 @@
     border-radius: 3px;
   }
 
+  /*
+    iOS Safari.
+
+    Two behaviours worth neutralising, both specific to WebKit on touch:
+
+    1. Focusing an input whose font-size is under 16px makes iOS zoom the
+       viewport and never zoom back out. Every control here sits at 15px by
+       design, so they are lifted to 16px on coarse pointers only — desktop
+       typography is untouched.
+    2. type="search" inherits a rounded native shell and a WebKit clear button
+       that ignore the border and radius set on the element.
+
+    There is no WebKit engine in this environment to verify against, so these
+    are the documented behaviours addressed defensively rather than a fix for
+    something observed.
+  */
+  @media (pointer: coarse) {
+    input,
+    select,
+    textarea {
+      font-size: max(16px, 1em);
+    }
+  }
+
+  input[type='search'] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type='search']::-webkit-search-decoration,
+  input[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* Stop iOS painting a grey flash over every tapped link and button. */
+  a,
+  button,
+  [role='button'] {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   /* Firefox / Safari scrollbar tuning inside data panels */
   .scroll-steel {
     scrollbar-width: thin;

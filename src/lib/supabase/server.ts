@@ -22,6 +22,14 @@ export type InsertResult = { ok: true } | { ok: false; reason: 'not_configured' 
 export async function insertRow(
   table: 'demo_requests' | 'contact_messages' | 'newsletter_subscribers',
   row: Record<string, unknown>,
+  options?: {
+    /**
+     * Treat a unique-constraint collision as a no-op rather than a failure.
+     * Used by the newsletter, where re-subscribing an existing address is the
+     * expected outcome and must not read as an error.
+     */
+    ignoreDuplicates?: boolean
+  },
 ): Promise<InsertResult> {
   if (!supabaseConfigured) {
     // Local development without credentials: log and continue rather than
@@ -39,7 +47,9 @@ export async function insertRow(
         apikey: SERVICE_ROLE_KEY,
         Authorization: `Bearer ${SERVICE_ROLE_KEY}`,
         'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
+        Prefer: options?.ignoreDuplicates
+          ? 'return=minimal,resolution=ignore-duplicates'
+          : 'return=minimal',
       },
       body: JSON.stringify(row),
       cache: 'no-store',

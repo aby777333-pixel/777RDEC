@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { RaptorLogo } from '@/components/ui/raptor-logo'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { ReduceMotionToggle } from './reduce-motion-toggle'
+import { NewsletterForm } from '@/components/forms/newsletter-form'
+import { CookiePreferencesButton } from './cookie-banner'
 import { FOOTER_PRODUCT_LINKS, LEGAL_LINKS } from '@/lib/navigation'
 import { MapPin, Phone } from 'lucide-react'
 import {
@@ -41,6 +43,17 @@ export function Footer() {
           <ContactBlock />
         </div>
 
+        <div className="mt-10 grid gap-6 border-t border-line-1 pt-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,32rem)] lg:gap-12">
+          <div className="flex flex-col gap-2">
+            <span className="tint-6 tint-ink text-eyebrow uppercase">Occasional dispatches</span>
+            <p className="text-[0.9375rem] leading-relaxed text-steel-300">
+              Method notes, release notes and market-structure writing. No signals, no
+              performance claims, and nothing on a schedule.
+            </p>
+          </div>
+          <NewsletterForm />
+        </div>
+
         <nav aria-label="Product" className="mt-10 border-t border-line-1 pt-8">
           <ul className="flex flex-wrap gap-x-6 gap-y-3">
             {FOOTER_PRODUCT_LINKS.map((link) => (
@@ -71,6 +84,9 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <CookiePreferencesButton className="text-[0.8125rem] text-steel-500 transition-colors hover:text-steel-300" />
+              </li>
             </ul>
           </nav>
 

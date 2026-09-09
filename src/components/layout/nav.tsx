@@ -1,6 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { Search } from 'lucide-react'
 import { MegaMenu } from './mega-menu'
 import { MobileDrawer } from './mobile-drawer'
 import { ButtonLink } from '@/components/ui/button'
@@ -33,6 +35,18 @@ export function Nav() {
           <MegaMenu />
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          <Link
+            href="/search"
+            aria-label="Search"
+            title="Search"
+            className={cn(
+              'hidden h-9 w-9 items-center justify-center rounded-ui border border-line-2 text-steel-300 sm:inline-flex',
+              'transition-colors duration-200 hover:border-signal hover:text-signal',
+              'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal',
+            )}
+          >
+            <Search size={16} strokeWidth={1.5} aria-hidden />
+          </Link>
           <ThemeToggle className="hidden sm:inline-flex" />
           <ButtonLink
             href="/platform"

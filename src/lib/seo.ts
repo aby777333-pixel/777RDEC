@@ -8,6 +8,31 @@ import {
   SITE_URL,
 } from './brand'
 
+/**
+ * Section labels for the Open Graph card, derived from the path so every page
+ * gets a card that says where in the site it sits without any call site having
+ * to pass it. A path with no entry simply falls back to the tagline.
+ */
+const OG_SECTIONS: readonly (readonly [string, string])[] = [
+  ['/platform', 'Platform'],
+  ['/brokers', 'Broker Solutions'],
+  ['/technology', 'Technology'],
+  ['/intelligence', 'Intelligence'],
+  ['/developers', 'Developers'],
+  ['/company', 'Company'],
+  ['/blog', 'Blog'],
+  ['/legal', 'Legal'],
+  ['/request-demo', 'Get started'],
+]
+
+/** Per-page Open Graph image, rendered on demand by /api/og. */
+export function ogImageUrl(title: string, path: string): string {
+  const section = OG_SECTIONS.find(([prefix]) => path === prefix || path.startsWith(`${prefix}/`))
+  const params = new URLSearchParams({ title })
+  if (section) params.set('kicker', section[1])
+  return `/api/og?${params.toString()}`
+}
+
 export function pageMetadata({
   title,
   description,
@@ -21,6 +46,7 @@ export function pageMetadata({
 }): Metadata {
   const url = `${SITE_URL}${path === '/' ? '' : path}`
   const ogTitle = title
+  const ogImage = ogImageUrl(title, path)
   return {
     title,
     description,
@@ -32,13 +58,13 @@ export function pageMetadata({
       siteName: SITE_NAME,
       title: `${ogTitle} — ${SITE_NAME}`,
       description,
-      images: [{ url: `/api/og?title=${encodeURIComponent(ogTitle)}`, width: 1200, height: 630 }],
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${ogTitle} — ${SITE_NAME}`,
       description,
-      images: [`/api/og?title=${encodeURIComponent(ogTitle)}`],
+      images: [ogImage],
     },
   }
 }

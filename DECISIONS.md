@@ -287,3 +287,97 @@ moved from `#5b6169` to `#51575f` in light and `#8a8f98` to `#979da6` in dark
 4.89:1 in light and 4.52:1 in dark; primary text is 11:1 or better everywhere.
 Alphas are 0.20 light and 0.15 dark, differing because the perceptual effect
 does.
+
+---
+
+## Session globe, search, newsletter and the accessibility pass
+
+**The session globe is not WebGL.** It is a rotating meridian field in SVG
+with the three session arcs projected onto it. That reads as a globe, costs
+nothing to ship, degrades honestly under `prefers-reduced-motion` (the
+rotation is CSS, so it simply stops), and works without a canvas context. The
+clock is real: `src/lib/sessions.ts` computes which sessions are open from the
+current UTC hour, so the lit arcs and the "open" chips are live rather than
+decorative. The clock is read after mount, never during render, so the server
+and client cannot disagree on it.
+
+Session hours describe the liquid core of each session as a desk means it,
+not exchange calendars — no holidays, no half-days, no DST drift in the
+London and New York cash opens. The page says so.
+
+**Image holders, not placeholder images.** `sessionImages()` checks
+`public/sessions/{asia,london,new-york}.jpg` on the server with `existsSync`,
+exactly as the hero images work. A missing file produces no request and no
+404 — the panel keeps its diagram treatment. Drop one, two or three in and
+they appear behind the same scrim-and-desaturate treatment the heroes use.
+`public/sessions/README.md` carries the filenames and crop guidance.
+
+**Search runs in the browser, with no service and no API.** The index is
+built on the server at build time from page copy, MDX front-matter and body
+excerpts, legal notices and every FAQ item, then handed to `/search` as
+props — 2.8 kB on the wire, less than a single round trip to a search
+backend would cost. Nothing typed into the box leaves the browser.
+
+`src/lib/search.ts` is `server-only` and cannot be imported by the client, so
+the types and the kind labels live in `search-types.ts` alongside it. The
+path → copy map in `search.ts` is written out by hand because the route tree
+is file-based and there is no registry to derive it from; a page missing from
+that map is simply not searchable, never broken.
+
+**Newsletter has no email fallback, unlike the lead forms.** A demo request
+that fails to persist is still a lead if it reaches a human inbox, so
+`actions.ts` counts either path as success. A newsletter signup that does not
+reach the list is not something anyone can chase by hand, so a persistence
+failure is reported to the subscriber honestly. Re-subscribing an address
+already on the list is a no-op that reports success — the subscriber should
+not be told about our unique index.
+
+**Cookie preferences can be re-opened.** A consent decision is not final: the
+footer control dispatches a `raptor:cookie-preferences` window event that the
+banner listens for, and the dialog re-opens showing the current choice.
+Withdrawing consent unmounts the Plausible script on the next render, so
+collection stops immediately rather than at the next page load.
+
+**Accessibility: axe run, five findings, all fixed.** 35 routes × both themes,
+`wcag2a`/`wcag2aa`/`wcag21a`/`wcag21aa`/`best-practice`. What it found:
+
+- An empty `<th>` in the correlation heatmap's corner cell — now carries an
+  `sr-only` label.
+- 2.31:1 on the struck-through "before" weights in the EMIL panels. They were
+  `--steel-700`, a border-weight token being used for text. Moved to
+  `--steel-500`, which is the muted-text token and was already tuned to pass.
+- `<dl>`/`<dt>`/`<dd>` on the FAQ page. `<Panel>` wraps its children in two
+  elements, so the `<dt>`/`<dd>` were never direct children of the `<dl>` —
+  invalid, and screen readers do not announce it as a list. Replaced with
+  headings and prose; the FAQPage JSON-LD still carries the Q&A semantics
+  for machines.
+- Heading order on `/company/news`, `/intelligence/research` and
+  `/blog/category/[category]`: article cards rendered `<h3>` straight after
+  the page `<h1>`. Each list now sits under a real `<h2>` section heading,
+  rather than demoting the cards — on `/blog` the cards genuinely are
+  sub-items of "All posts", and that structure is worth keeping consistent.
+
+Second run: **0 violations**.
+
+**iOS Safari: audited, not verified.** There is no WebKit engine in this
+environment — the Playwright WebKit download is blocked by the egress proxy —
+so this is the documented behaviours addressed defensively, not a fix for
+anything observed on a device. The existing CSS was already in good shape:
+`dvh` rather than `100vh` throughout, `-webkit-backdrop-filter`,
+`-webkit-background-clip`, `-webkit-text-fill-color` and `-webkit-mask-image`
+all present alongside their unprefixed forms. Added: form controls lift to
+16px under `(pointer: coarse)`, because iOS zooms the viewport when focusing
+an input under 16px and never zooms back; `appearance: none` on
+`input[type="search"]` and its WebKit clear button, which otherwise ignore
+the border and radius; and `-webkit-tap-highlight-color: transparent` on
+interactive elements. Desktop typography is untouched.
+
+**Per-page OG images already existed** — `/api/og` renders a title card per
+route. Added a section kicker derived from the path inside `pageMetadata`, so
+a Platform card reads "Platform" where a Legal card reads "Legal", with no
+call site needing to pass anything.
+
+**Case studies remain empty by design.** `CASE_STUDIES` is a typed, empty
+array with an `approved` flag on the type. Client outcomes are not something
+to invent, and the evidence page says plainly what we will and will not
+claim instead.

@@ -72,7 +72,7 @@ export function SelfLearning({ className }: { className?: string }) {
                   <div className="flex items-baseline justify-between gap-3 font-mono text-[0.75rem]">
                     <span className="text-steel-300">{weight.label}</span>
                     <span className="flex items-baseline gap-2">
-                      <span className="text-steel-700 line-through" data-numeric>
+                      <span className="text-steel-500 line-through" data-numeric>
                         {weight.before.toFixed(2)}
                       </span>
                       <span className={rose ? 'text-up' : 'text-down'} data-numeric>

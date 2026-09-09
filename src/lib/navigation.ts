@@ -74,6 +74,9 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { label: 'About', href: '/company/about', description: 'Why Raptor exists.' },
       { label: 'Partners', href: '/company/partners', description: 'Who we build alongside.' },
       { label: 'Careers', href: '/company/careers', description: 'Engineering for market hours.' },
+      { label: 'How We Engage', href: '/company/engagement', description: 'Scoping, delivery and commercials.' },
+      { label: 'Evidence', href: '/company/proof', description: 'What we will and will not claim.' },
+      { label: 'FAQ', href: '/company/faq', description: 'The questions buyers actually ask.' },
       { label: 'News', href: '/company/news', description: 'Product and company updates.' },
       { label: 'Contact', href: '/company/contact', description: 'Talk to a human.' },
     ],
@@ -103,6 +106,7 @@ export const FOOTER_PRODUCT_LINKS: readonly NavLink[] = [
   { label: 'Security', href: '/technology/security', description: '' },
   { label: 'Company', href: '/company', description: '' },
   { label: 'Contact', href: '/company/contact', description: '' },
+  { label: 'Search', href: '/search', description: '' },
 ]
 
 export const LEGAL_LINKS: readonly NavLink[] = [

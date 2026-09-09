@@ -77,3 +77,39 @@ export function logoSources(): LogoSources {
     light: first(LOGO_CANDIDATES.light),
   }
 }
+
+/**
+ * Optional session imagery for the session globe on `/platform/markets`.
+ *
+ * Same contract as the hero images: not in the repository, dropped in by hand,
+ * presence checked on the server so a missing file is never requested. See
+ * public/sessions/README.md.
+ */
+export type SessionImage = {
+  session: 'Asia' | 'London' | 'NewYork'
+  src: string
+  note: string
+}
+
+const SESSION_CANDIDATES: readonly SessionImage[] = [
+  {
+    session: 'Asia',
+    src: '/sessions/asia.jpg',
+    note: 'Tokyo or Singapore skyline, or a desk at the Asian open.',
+  },
+  {
+    session: 'London',
+    src: '/sessions/london.jpg',
+    note: 'London skyline, or a desk at the European open.',
+  },
+  {
+    session: 'NewYork',
+    src: '/sessions/new-york.jpg',
+    note: 'New York skyline, or a desk at the US open.',
+  },
+]
+
+/** Only session images that actually exist on disk. */
+export function sessionImages(): readonly SessionImage[] {
+  return SESSION_CANDIDATES.filter((image) => present(image.src))
+}

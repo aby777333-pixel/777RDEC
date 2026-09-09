@@ -86,6 +86,9 @@ export function MobileDrawer() {
               <span className="text-eyebrow uppercase text-steel-500">Theme</span>
               <ThemeToggle />
             </div>
+            <ButtonLink href="/search" variant="ghost" size="lg" onClick={() => setOpen(false)}>
+              Search
+            </ButtonLink>
             <ButtonLink href="/platform" variant="ghost" size="lg" onClick={() => setOpen(false)}>
               Platform
             </ButtonLink>
