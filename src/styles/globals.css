@@ -13,9 +13,10 @@
 :root {
   /* ---- LIGHT ---- */
   --bg-0: #ffffff;
-  --bg-1: #f6f7f9;
-  --bg-2: #eef0f3;
-  --bg-3: #e3e6ea;
+  /* Surfaces carry a slight cool cast — brushed steel is never neutral grey. */
+  --bg-1: #f4f6fa;
+  --bg-2: #eaeef4;
+  --bg-3: #dde3ec;
 
   --line-1: rgba(5, 10, 20, 0.07);
   --line-2: rgba(5, 10, 20, 0.13);
@@ -62,6 +63,17 @@
   --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
   /* Very quiet vertical sheen across panels. */
   --panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 58%);
+  /*
+    Accent wash on every surface. Low enough alpha that it reads as tinted
+    steel rather than a blue card, and it is the SAME hue as --signal, so the
+    site still has exactly one chromatic accent.
+  */
+  --panel-tint: linear-gradient(
+    145deg,
+    rgba(3, 105, 161, 0.088) 0%,
+    rgba(3, 105, 161, 0.032) 48%,
+    rgba(3, 105, 161, 0.008) 100%
+  );
 
   /* Section washes: the only place colour appears outside the accent. */
   --wash-a: rgba(3, 105, 161, 0.07);
@@ -80,9 +92,9 @@
 .dark {
   /* ---- DARK (the logo's own environment) ---- */
   --bg-0: #050505;
-  --bg-1: #0e1014; /* raised from #0b0c0e: one step off true black read as flat */
-  --bg-2: #15181d;
-  --bg-3: #1e2228;
+  --bg-1: #0e1218; /* raised from #0b0c0e and cooled: one step off black read as flat */
+  --bg-2: #141922;
+  --bg-3: #1c222c;
 
   --line-1: rgba(255, 255, 255, 0.07);
   --line-2: rgba(255, 255, 255, 0.15);
@@ -135,6 +147,12 @@
     rgba(255, 255, 255, 0.075) 0%,
     rgba(255, 255, 255, 0.022) 38%,
     rgba(255, 255, 255, 0) 72%
+  );
+  --panel-tint: linear-gradient(
+    145deg,
+    rgba(125, 211, 252, 0.07) 0%,
+    rgba(125, 211, 252, 0.022) 48%,
+    rgba(125, 211, 252, 0) 100%
   );
 
   --wash-a: rgba(125, 211, 252, 0.08);
@@ -249,7 +267,7 @@
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    background: var(--panel-sheen);
+    background: var(--panel-sheen), var(--panel-tint);
     pointer-events: none;
   }
 

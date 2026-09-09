@@ -218,3 +218,23 @@ harder to notice as wrong than an obvious absence.
 The auto-detection from §16 stands, so the real file needs no code change:
 commit it to `public/brand/raptor-logo.png` (or `.svg`) and it replaces the
 type-plus-wing lockup everywhere on the next deploy.
+
+## 21. Surfaces are tinted steel, not neutral grey
+
+Cards read as flat grey rectangles. They now carry a `--panel-tint` wash — a
+145-degree gradient in the accent hue, layered under the existing sheen on
+every `.surface-sheen` surface, so it reaches module cards, blog cards, EMIL
+panels, the CTA band and the nav glass in one change.
+
+Deliberately the **same hue as `--signal`**, so the site still has exactly one
+chromatic accent. Alphas differ by theme because the perceptual effect does:
+0.088 → 0.008 in light, 0.07 → 0 in dark.
+
+The base surface tokens were cooled at the same time (light `#f6f7f9` →
+`#f4f6fa`, dark `#0e1014` → `#0e1218`, and their siblings). Brushed steel is
+never neutral grey, so a slight cool cast is closer to the logo than the
+original values were.
+
+Contrast was re-checked at the *strongest* point of the wash rather than the
+average. Worst case is muted `--steel-500` on a raised surface at 4.75:1;
+primary text is 14.7:1 or better. All pairs clear 4.5:1 in both themes.
