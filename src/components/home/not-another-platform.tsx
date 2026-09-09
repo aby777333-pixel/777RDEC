@@ -63,7 +63,7 @@ export function NotAnotherPlatform() {
                 >
                   <Link
                     href={pillar.href}
-                    className="flex h-full flex-col gap-1.5 rounded-card border border-line-2 bg-bg-1 p-4 transition-colors duration-200 hover:border-signal/50 hover:bg-bg-2"
+                    className="lift surface-sheen flex h-full flex-col gap-1.5 rounded-card border border-line-2 bg-bg-1 p-4 hover:border-signal/50 hover:bg-bg-2"
                   >
                     <span className="font-display text-[1rem] uppercase tracking-tight text-steel-100">
                       {pillar.label}

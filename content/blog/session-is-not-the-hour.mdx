@@ -1,0 +1,63 @@
+---
+title: Why the session matters more than the hour
+description: A euro pair at 03:00 and at 08:00 are effectively two different instruments. Treating the session as data rather than decoration changes how limits should be set.
+date: 2026-04-23
+author: 777 Raptor
+category: markets
+draft: false
+tags: ["markets", "sessions", "market-structure"]
+---
+
+Most platforms treat time as one global clock. Markets do not work that way.
+
+A euro pair at 03:00 UTC and the same pair at 08:00 UTC are, for every practical
+purpose, two different instruments: different spread, different depth, different
+response to the same size.
+
+## What changes across a session
+
+- **Spread**, frequently several times wider outside the instrument's primary
+  session.
+- **Depth.** Size that fills comfortably at the London open can move the price
+  materially in a thin Asian session.
+- **Volatility character** — not just the level, but whether moves trend or
+  revert.
+- **Correlation**, which often only holds during overlapping sessions.
+
+## The consequence for limits
+
+A position size that is conservative during the primary session can be
+aggressive six hours later without anything about the position changing. So a
+static exposure limit is wrong for most of the day: too loose in thin
+conditions, or needlessly tight in liquid ones.
+
+Two things follow.
+
+**Limits should be set for the thinnest conditions in which a position will
+actually be held.** Not the average, and definitely not the conditions in which
+it was opened.
+
+**Holding across a session boundary is a decision.** Usually an unexamined one.
+The question "am I willing to hold this into Asia" has a different answer from
+"do I want this position", and most risk frameworks never ask the first one.
+
+## How it is modelled
+
+Session windows are configured per instrument rather than globally, because
+"active session" means something different for USDJPY than for GER40. The
+intelligence layer reports which sessions are open, and how the current session
+compares with that instrument's typical behaviour — the useful reading is not
+"volatility is 14%", it is "volatility is high for this instrument in this
+session".
+
+## Where this shows up operationally
+
+For a broker, session awareness is not a nicety. It determines when to widen,
+when to reduce available leverage, and when an unusual spread is a market
+condition rather than a feed problem. A platform that cannot tell those apart
+will either alert on nothing or alert on everything.
+
+---
+
+Related: [Global Markets](/platform/markets) ·
+[correlation is a window](/blog/correlation-is-a-window)

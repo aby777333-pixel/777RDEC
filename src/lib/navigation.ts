@@ -54,6 +54,19 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     ],
   },
   {
+    label: 'Blog',
+    href: '/blog',
+    blurb: 'How this is built, and how we think about markets.',
+    links: [
+      { label: 'All posts', href: '/blog', description: 'Everything we have published.' },
+      { label: `${EMIL_SHORT}`, href: '/blog/category/emil', description: 'The intelligence layer in depth.' },
+      { label: 'Risk', href: '/blog/category/risk', description: 'Exposure, limits and capital protection.' },
+      { label: 'Brokerage', href: '/blog/category/brokerage', description: 'Operating a brokerage on one stack.' },
+      { label: 'Engineering', href: '/blog/category/engineering', description: 'How the platform is built.' },
+      { label: 'Markets', href: '/blog/category/markets', description: 'Structure, sessions and cross-asset behaviour.' },
+    ],
+  },
+  {
     label: 'Company',
     href: '/company',
     blurb: 'Who builds this, and how to reach them.',
@@ -85,6 +98,7 @@ export const FOOTER_PRODUCT_LINKS: readonly NavLink[] = [
   { label: 'Client Portal', href: '/brokers/client-portal', description: '' },
   { label: 'Broker Solutions', href: '/brokers', description: '' },
   { label: 'API', href: '/technology/api', description: '' },
+  { label: 'Blog', href: '/blog', description: '' },
   { label: 'Developers', href: '/developers', description: '' },
   { label: 'Security', href: '/technology/security', description: '' },
   { label: 'Company', href: '/company', description: '' },

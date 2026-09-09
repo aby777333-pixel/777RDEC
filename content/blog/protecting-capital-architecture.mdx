@@ -1,0 +1,88 @@
+---
+title: The capital architecture — protected, profit, working
+description: Splitting an account into protected capital, banked profit and working capital changes what a drawdown can reach. How the profit floor and high-water-mark guard work together.
+date: 2026-06-04
+author: 777 Raptor
+category: emil
+draft: false
+tags: ["emil", "risk", "capital"]
+---
+
+Most accounts are a single number. Equity goes up, equity goes down, and every
+pound in the account is equally exposed to the next decision. That is a choice,
+even when nobody makes it deliberately.
+
+Raptor lets an account be structured instead, and EMIL enforces the structure.
+
+## Three buckets
+
+**Protected capital.** Your starting capital, or whatever portion of it you
+declare untouchable. Automation is not permitted to put it at risk. If a
+proposed position would draw on it, the order is refused before it becomes an
+order.
+
+**Banked profit.** Gains that have been moved above the profit floor. Once
+banked, they join the protected side rather than being recycled into larger
+positions. This is the mechanism that stops a good month funding a worse one.
+
+**Working capital.** The portion actually deployed. Exposure limits, daily loss
+budgets and drawdown guards all measure against this, not against total equity —
+which is why a 2% daily loss budget means 2% of what is genuinely at risk rather
+than 2% of everything you own.
+
+```
+PROTECTED    10,000        Profit floor  11,400
+PROFIT        2,841        Doubling milestone  20,000 (64.6%)
+WORKING       1,420
+```
+
+## The profit floor
+
+The profit floor is a level below which equity is not permitted to fall while
+automation is armed. It ratchets upward as profit is banked, and never
+downward.
+
+The consequence is specific: as an account grows, the amount automation is
+allowed to lose does not grow with it. A system that has done well has *less*
+latitude, not more. That is the opposite of how position sizing usually drifts.
+
+## The high-water-mark drawdown guard
+
+Separately, EMIL tracks drawdown from the highest equity the account has
+reached, not from the start of the day or the start of the month. Reset the
+measurement window and you hide exactly the decline you needed to see.
+
+You set the ceiling — 8% is a common starting point. Cross it and EMIL disarms
+itself and logs that it has done so. It does not reduce size and continue. It
+stops and hands control back.
+
+## The daily loss budget
+
+A third, shorter-horizon control: a cash or percentage budget for the session.
+Consume it and EMIL stops acting for the day while continuing to observe. The
+log records that it has stopped and how much of the budget was consumed.
+
+Three controls at three horizons — session, drawdown, and floor — because a bad
+hour, a bad fortnight and a structural decline are different problems.
+
+## What "protects the capital" honestly means
+
+It means the boundaries are enforced in the order path, outside the
+intelligence layer, so nothing EMIL concludes can widen them. It means a
+refusal is logged with its reason. It means the guard measures from the high
+water mark rather than a convenient anchor. And it means arming requires you to
+read what you are authorising and type a confirmation.
+
+It does not mean capital cannot be lost. Markets gap, liquidity thins, and a
+stop is an instruction to trade at the next available price rather than a
+promise of a level. Structure changes what is *reachable* by automation. It does
+not remove market risk, and any technology provider telling you otherwise is
+selling something.
+
+---
+
+Related: [what EMIL does when armed](/blog/what-emil-does-when-armed) ·
+[why a refused order should explain itself](/blog/refusals-should-explain-themselves)
+
+*Trading leveraged products carries a high level of risk to capital. Technology
+can improve analysis and controls; it cannot remove market risk.*

@@ -1,13 +1,29 @@
+'use client'
+
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
 import { LOGO_TAGLINE } from '@/lib/brand'
+import { useLogoSources } from '@/components/layout/brand-provider'
+import { cn } from '@/lib/utils'
+
+const SCALE = {
+  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-6', tagline: 'text-[0.5rem]' },
+  md: { type: 'text-[1.375rem]', wing: 'h-6 w-11', raster: 'h-8', tagline: 'text-[0.5625rem]' },
+  lg: { type: 'text-[2.5rem]', wing: 'h-11 w-20', raster: 'h-16', tagline: 'text-[0.5625rem]' },
+} as const
+
+type Size = keyof typeof SCALE
 
 /**
- * Logo lockup, rendered as type + the abstracted wing so it is crisp at every
- * size and re-themes with the palette.
+ * The logo lockup.
  *
- * When the master raster asset is added at /public/brand/raptor-logo.png it can
- * be swapped in here — this is the only place that decision lives.
+ * Uses the master file from public/brand/ when it is there, and otherwise
+ * composes the lockup from live type plus the abstracted five-feather wing —
+ * crisp at every size and re-themes with the palette. Which files exist is
+ * resolved on the server in the root layout and supplied via BrandProvider, so
+ * a missing file is never requested.
+ *
+ * When a darker-inked variant exists it is used for the light theme, since the
+ * master mark is brushed silver and washes out against white.
  */
 export function RaptorLogo({
   className,
@@ -16,13 +32,41 @@ export function RaptorLogo({
 }: {
   className?: string
   showTagline?: boolean
-  size?: 'sm' | 'md' | 'lg'
+  size?: Size
 }) {
-  const scale = {
-    sm: { seven: 'text-[1.125rem]', raptor: 'text-[1.125rem]', wing: 'h-5 w-9' },
-    md: { seven: 'text-[1.375rem]', raptor: 'text-[1.375rem]', wing: 'h-6 w-11' },
-    lg: { seven: 'text-[2.5rem]', raptor: 'text-[2.5rem]', wing: 'h-11 w-20' },
-  }[size]
+  const scale = SCALE[size]
+  const sources = useLogoSources()
+
+  if (sources.default) {
+    return (
+      <span className={cn('inline-flex items-center', className)}>
+        {sources.light ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element -- static brand asset, no optimisation needed */}
+            <img
+              src={sources.light}
+              alt="777 Raptor"
+              className={cn('w-auto object-contain dark:hidden', scale.raster)}
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element -- static brand asset, no optimisation needed */}
+            <img
+              src={sources.default}
+              alt=""
+              aria-hidden
+              className={cn('hidden w-auto object-contain dark:block', scale.raster)}
+            />
+          </>
+        ) : (
+          /* eslint-disable-next-line @next/next/no-img-element -- static brand asset, no optimisation needed */
+          <img
+            src={sources.default}
+            alt="777 Raptor"
+            className={cn('w-auto object-contain', scale.raster)}
+          />
+        )}
+      </span>
+    )
+  }
 
   return (
     <span className={cn('inline-flex items-center gap-3', className)}>
@@ -32,15 +76,15 @@ export function RaptorLogo({
       <span className="h-8 w-px shrink-0 bg-line-2" aria-hidden />
       <span className="flex flex-col leading-none">
         <span className="flex items-baseline gap-1.5">
-          <span className={cn('font-display font-bold tracking-tight text-chrome', scale.seven)}>777</span>
+          <span className={cn('font-display font-bold tracking-tight text-chrome', scale.type)}>777</span>
           <span
-            className={cn('font-display font-bold uppercase tracking-tight text-steel-100', scale.raptor)}
+            className={cn('font-display font-bold uppercase tracking-tight text-steel-100', scale.type)}
           >
             Raptor
           </span>
         </span>
         {showTagline ? (
-          <span className="mt-1.5 text-[0.5625rem] uppercase tracking-[0.28em] text-steel-500">
+          <span className={cn('mt-1.5 uppercase tracking-[0.28em] text-steel-500', scale.tagline)}>
             {LOGO_TAGLINE}
           </span>
         ) : null}

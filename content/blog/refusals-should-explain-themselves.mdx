@@ -1,0 +1,88 @@
+---
+title: Why a refused order should explain itself
+description: A rejection that says "order failed" trains traders to retry blindly. Naming the limit, the projected value and the ceiling changes behaviour in one interaction.
+date: 2026-05-28
+author: 777 Raptor
+category: risk
+draft: false
+tags: ["risk", "execution", "design"]
+---
+
+Here are two ways to refuse the same order.
+
+```
+Order rejected.
+```
+
+```
+Order rejected: EURUSD exposure would reach 0.75 lots
+against a per-instrument limit of 0.50.
+```
+
+The first teaches a trader to click again. The second teaches them the limit.
+
+## Silent rejections are an operational cost
+
+A rejection with no reason produces a support ticket, a phone call to the desk,
+or — most often — a retry with a slightly different size until something goes
+through. That last one is the worst outcome, because the trader has now learned
+the boundary by brute force and has no idea which of the several checks they
+were hitting.
+
+Every refused order in Raptor names three things:
+
+1. **Which check refused it** — exposure, concentration, margin, instrument
+   scope, permission, or the automation mandate.
+2. **The projected value** the order would have produced.
+3. **The ceiling** it would have crossed.
+
+That is enough for the trader to correct the order themselves, immediately,
+without asking anyone.
+
+## The order of the checks is part of the design
+
+Pre-trade validation runs in a fixed order, and the first failure stops the
+order:
+
+```
+Instrument tradeable            PASS
+Account permission              PASS
+Size within instrument bounds   PASS
+Margin available                PASS
+Aggregate exposure limit        PASS
+Concentration limit             REFUSE
+```
+
+Fixed order matters because it makes the message deterministic. The same order
+in the same account state always produces the same explanation, which is what
+makes the explanation trustworthy — and what makes an incident reproducible
+three weeks later.
+
+## The same rule applies to automation
+
+An order EMIL proposes goes through the identical gate and produces the
+identical explanation, written to the intelligence log:
+
+```
+09:41:02  REFUSE   Order rejected: would breach concentration
+                   limit on correlated positions.
+```
+
+This is the part most people skim past, and it is the most informative line in
+the log. Anyone can build a system that reports its trades. A system that
+reports what it was stopped from doing is telling you where its boundaries
+actually are.
+
+## What we deliberately do not do
+
+We do not silently reduce an order to fit. A ticket for 0.75 lots that becomes
+0.50 without comment is a system making a decision on the trader's behalf and
+not telling them. If size needs to change, the trader changes it.
+
+---
+
+Related: [the capital architecture](/blog/protecting-capital-architecture) ·
+[what EMIL does when armed](/blog/what-emil-does-when-armed)
+
+*Trading leveraged products carries a high level of risk to capital. Technology
+can improve analysis and controls; it cannot remove market risk.*

@@ -5,8 +5,11 @@ import 'server-only'
  * console adapter so local development works without credentials.
  */
 
+import { SITE_DOMAIN, SITE_NAME } from './brand'
+
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
 const NOTIFICATION_TO = process.env.DEMO_NOTIFICATION_TO ?? ''
+const FROM = `${SITE_NAME} <notifications@${SITE_DOMAIN}>`
 
 export type EmailMessage = { subject: string; body: string }
 
@@ -34,7 +37,7 @@ const resendProvider: EmailProvider = {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: '777 Raptor <notifications@777raptor.com>',
+          from: FROM,
           to: [NOTIFICATION_TO],
           subject: message.subject,
           text: message.body,

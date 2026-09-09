@@ -1,0 +1,81 @@
+---
+title: How EMIL learns without being retuned
+description: EMIL adjusts its own inputs from what the market is actually doing, so nobody has to re-optimise it every quarter. Here is the mechanism, and where it stops.
+date: 2026-06-18
+author: 777 Raptor
+category: emil
+draft: false
+tags: ["emil", "method", "adaptation"]
+---
+
+Most automated trading logic is a snapshot. Someone chooses the inputs, tunes
+the weights against a period of history, ships it, and the market moves on. The
+logic keeps applying yesterday's relationships with yesterday's confidence, and
+the only thing that changes is the equity curve.
+
+EMIL is built the other way round. It adjusts its own inputs from what the
+market is currently doing, continuously, without a human re-optimising it.
+
+## What "learns by itself" actually means here
+
+It means four specific mechanisms, not a vague claim about intelligence.
+
+**It scores its own inputs against outcomes.** EMIL watches a set of features —
+price, spread, realised volatility, session state, exposure, cross-asset
+relationships — and tracks how well each one has been describing what
+subsequently happened. A feature that has been informative gets weighted up. One
+that has stopped being informative gets weighted down. Nobody edits a config
+file to make that happen.
+
+**It notices when a relationship breaks.** A correlation that held for six
+months and inverted last week is not averaged into a comfortable middle. EMIL
+tracks stability across sub-windows and treats a broken relationship as broken,
+which is the opposite of what a static model does.
+
+**It classifies the regime before it acts.** Trending, ranging, expanding,
+contracting. The same conditions that make one reading useful make another
+useless, so the classification comes first and gates everything after it.
+
+**It re-ranks continuously, not on a schedule.** There is no quarterly
+retraining window during which the system is knowingly stale.
+
+## What it does not mean
+
+It does not mean EMIL learns its way to a profit. Adaptation reduces the chance
+of acting on a dead relationship. It does not remove market risk, and a system
+that adapts faster is not a system that is right more often.
+
+It also does not mean the model is a black box you have to trust. Every reading
+EMIL produces is logged with the inputs that produced it, in language a risk
+committee can read:
+
+```
+09:38:44  OBSERVE   Regime shift detected: EURUSD trending → ranging.
+09:40:12  ADAPT     Cross-asset correlation weight 0.31 → 0.11 (relationship unstable 9d).
+09:40:18  PROTECT   Exposure 62% of mandate.
+09:41:02  REFUSE    Order rejected: would breach concentration limit.
+```
+
+That fourth line matters more than the first three. A system that explains its
+refusals is a system you can audit.
+
+## Why adaptation and authority are separate
+
+Learning changes what EMIL *thinks*. It never changes what EMIL is *allowed to
+do*. Those are deliberately different subsystems:
+
+- Adaptation happens inside the intelligence layer.
+- Authority is a mandate you wrote, confirmed by typing a confirmation word.
+- Enforcement happens outside the intelligence layer entirely, in the risk
+  engine, in the order path.
+
+So EMIL can conclude that a larger position is warranted and still be refused
+by the exposure limit — and the refusal is logged. Nothing EMIL learns can widen
+its own boundaries. That separation is the whole design.
+
+---
+
+Next: [what EMIL actually does once you arm it](/blog/what-emil-does-when-armed).
+
+*Trading leveraged products carries a high level of risk to capital. Technology
+can improve analysis and controls; it cannot remove market risk.*

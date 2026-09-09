@@ -1,5 +1,12 @@
 import type { Metadata } from 'next'
-import { SITE_NAME, SITE_TAGLINE, SITE_URL } from './brand'
+import {
+  HQ_ADDRESS_LINES,
+  HQ_COUNTRY_CODE,
+  PHONE_E164,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+} from './brand'
 
 export function pageMetadata({
   title,
@@ -45,6 +52,39 @@ export function organizationJsonLd() {
     slogan: SITE_TAGLINE,
     description:
       'Trading technology provider: terminal, CRM, client portal, risk engine, API hub and an intelligence layer for brokers, institutions and professional desks.',
+    telephone: PHONE_E164,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: `${HQ_ADDRESS_LINES[0]}, ${HQ_ADDRESS_LINES[1]}`,
+      addressLocality: 'Ruislip',
+      postalCode: 'HA4 7AE',
+      addressCountry: HQ_COUNTRY_CODE,
+    },
+  }
+}
+
+export function articleJsonLd({
+  title,
+  description,
+  path,
+  datePublished,
+  author,
+}: {
+  title: string
+  description: string
+  path: string
+  datePublished: string
+  author: string
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description,
+    datePublished,
+    author: { '@type': 'Organization', name: author },
+    publisher: { '@type': 'Organization', name: SITE_NAME, url: SITE_URL },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE_URL}${path}` },
   }
 }
 

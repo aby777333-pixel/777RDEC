@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/brand'
 import { NAV_GROUPS } from '@/lib/navigation'
 import { LEGAL_DOCUMENTS } from '@/lib/copy/legal'
-import { listContent } from '@/lib/content'
+import { BLOG_CATEGORIES, listContent } from '@/lib/content'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/request-demo',
     '/company/contact',
     '/company/news',
+    '/blog',
     '/intelligence/research',
     '/developers/sandbox',
     '/developers/status',
@@ -26,9 +27,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const legalPaths = LEGAL_DOCUMENTS.map((doc) => `/legal/${doc.slug}`)
   const researchPaths = listContent('research').map((e) => `/intelligence/research/${e.slug}`)
   const newsPaths = listContent('news').map((e) => `/company/news/${e.slug}`)
+  const blogPaths = listContent('blog').map((e) => `/blog/${e.slug}`)
+  const blogCategoryPaths = BLOG_CATEGORIES.map((c) => `/blog/category/${c.slug}`)
 
   const all = Array.from(
-    new Set([...staticPaths, ...navPaths, ...legalPaths, ...researchPaths, ...newsPaths]),
+    new Set([
+      ...staticPaths,
+      ...navPaths,
+      ...legalPaths,
+      ...researchPaths,
+      ...newsPaths,
+      ...blogPaths,
+      ...blogCategoryPaths,
+    ]),
   )
 
   return all.map((path) => ({

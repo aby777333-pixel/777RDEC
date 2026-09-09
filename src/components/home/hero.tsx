@@ -54,12 +54,12 @@ export function Hero() {
         </div>
 
         {/* The ecosystem, stated as the six things it is made of. */}
-        <ul className="mt-16 grid gap-px overflow-hidden rounded-panel border border-line-2 bg-line-1 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="surface-sheen mt-16 grid gap-px overflow-hidden rounded-panel border border-line-2 bg-line-1 shadow-panel sm:grid-cols-2 lg:grid-cols-3">
           {ECOSYSTEM_PILLARS.map((pillar, index) => (
             <li key={pillar.id}>
               <Link
                 href={pillar.href}
-                className="group flex h-full flex-col gap-2 bg-bg-1/80 px-5 py-5 backdrop-blur-sm transition-colors duration-200 hover:bg-bg-2"
+                className="lift group flex h-full flex-col gap-2 bg-bg-1/80 px-5 py-5 backdrop-blur-sm hover:bg-bg-2"
               >
                 <span className="font-mono text-[0.6875rem] text-steel-500" data-numeric>
                   {String(index + 1).padStart(2, '0')}

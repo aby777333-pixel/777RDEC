@@ -1,5 +1,6 @@
 'use server'
 
+import { CONTACT_EMAIL } from '@/lib/brand'
 import { insertRow } from '@/lib/supabase/server'
 import { sendNotification } from '@/lib/email'
 import { verifyTurnstile } from './turnstile'
@@ -83,8 +84,7 @@ async function submit(target: Target, formData: FormData): Promise<FormState> {
   if (!result.ok && result.reason === 'failed') {
     return {
       status: 'error',
-      message:
-        'Something went wrong on our side and your message was not saved. Please try again, or email hello@777raptor.com.',
+      message: `Something went wrong on our side and your message was not saved. Please try again, or email ${CONTACT_EMAIL}.`,
     }
   }
 

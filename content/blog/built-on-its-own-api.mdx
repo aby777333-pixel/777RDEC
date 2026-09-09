@@ -1,0 +1,76 @@
+---
+title: Why the platform is built on its own public API
+description: An API that lags the product becomes a support burden. Building the interface on the same endpoints customers get is the only durable way to prevent it.
+date: 2026-05-07
+author: 777 Raptor
+category: engineering
+draft: false
+tags: ["engineering", "api", "architecture"]
+---
+
+Most trading platform APIs are a second-class surface. The interface talks to
+internal endpoints, and a separate public API is maintained alongside it for
+customers. Six months later they disagree, and the disagreement becomes a
+support queue.
+
+Raptor's interface uses the same endpoints it publishes.
+
+## What that forces
+
+**Feature parity is structural, not a promise.** If a capability is in the
+product, it is in the API, because the product could not do it otherwise. There
+is no backlog item called "expose X in the public API".
+
+**The permission model is one model.** An API key with a scope hits exactly the
+same authorisation check as a logged-in session. There is no privileged internal
+path, which also means there is no privileged internal path for an attacker to
+find.
+
+**Breaking changes hurt us first.** A change that breaks a customer integration
+breaks our own interface in development. That is a much shorter feedback loop
+than a support ticket.
+
+**Error shapes are consistent** across REST, WebSocket, FIX and webhooks,
+because one implementation produces them.
+
+## What it costs
+
+Discipline, mostly, in three specific places.
+
+*Versioning is not optional.* Every endpoint is versioned from the first day,
+including the ones only the interface uses, because "only the interface uses it"
+stops being true.
+
+*Chatty convenience endpoints are tempting.* An endpoint shaped for one screen
+is fast to build and immediately becomes public API surface you maintain
+forever. The rule is that endpoints are shaped around domain objects, and screens
+compose them.
+
+*Latency is visible.* If a screen is slow, the API is slow, and you cannot fix
+it with an internal shortcut. That is a feature, but it does not feel like one
+during a release.
+
+## Where the boundary is drawn
+
+Four transports, one model:
+
+- **REST** for state — accounts, instruments, orders, positions, reporting.
+- **WebSocket** for streams — prices, order and position updates, account
+  events, with heartbeats and a sequence number to reconnect from.
+- **FIX** for institutional flow.
+- **Webhooks** for events you should not have to poll for — signed, retried,
+  replayable, with idempotency keys.
+
+They describe the same objects. Learn the model once.
+
+## The honest limitation
+
+Building on your own API does not make the API well designed. It makes it
+current. A confusing model exposed consistently is still a confusing model — and
+that is why the documentation leads with concepts rather than an endpoint list.
+Most integration bugs come from a misunderstood model, not a mistyped URL.
+
+---
+
+Related: [API Hub](/technology/api) · [Documentation](/developers/docs) ·
+[Sandbox access](/developers/sandbox)

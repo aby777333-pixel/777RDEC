@@ -6,8 +6,9 @@ type Size = 'sm' | 'md' | 'lg'
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-signal text-bg-0 border border-signal hover:brightness-110 hover:shadow-[0_0_0_4px_var(--signal-soft)]',
-  ghost: 'border border-line-2 text-steel-100 bg-transparent hover:bg-bg-2 hover:border-steel-700',
+    'bg-signal text-bg-0 border border-signal shadow-soft hover:brightness-110 hover:shadow-[0_0_0_4px_var(--signal-soft),var(--shadow-raised)]',
+  ghost:
+    'border border-line-2 text-steel-100 bg-transparent hover:bg-bg-2 hover:border-steel-700 hover:shadow-soft',
   quiet: 'border border-transparent text-steel-300 hover:text-steel-100 hover:bg-bg-2',
   danger: 'bg-down text-bg-0 border border-down hover:brightness-110',
 }

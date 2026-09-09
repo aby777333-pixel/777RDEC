@@ -1,0 +1,101 @@
+---
+title: What EMIL does when you arm it
+description: Armed, EMIL takes trades — opens, closes, modifies and hedges — strictly inside a written mandate. What that means step by step, and what stops it.
+date: 2026-06-11
+author: 777 Raptor
+category: emil
+draft: false
+tags: ["emil", "automation", "risk"]
+---
+
+Disarmed, EMIL observes. It reads the market and your book, classifies
+conditions, and says what it sees. It cannot place, modify or close anything.
+
+Armed, EMIL takes trades. That is the point of arming it, and it is worth being
+precise about what that involves rather than hiding it behind the word
+"automation".
+
+## The three modes
+
+**Off.** EMIL is not running. The terminal is a terminal.
+
+**Assist.** EMIL observes and proposes. A proposal appears for you to accept or
+reject. Nothing reaches the market on its own.
+
+**Armed.** EMIL acts. Within the mandate you wrote, with the trading
+permissions you granted, in the markets you selected, until you disarm it.
+
+## What "acts" covers
+
+You grant permissions individually, and EMIL can only do what you granted:
+
+- **Open** — establish a new position within the exposure limit.
+- **Close** — exit a position, in whole or in part.
+- **Modify** — adjust a working order or a protective level.
+- **Hedge** — offset existing exposure rather than adding to it.
+
+Granting *close* without *open* is a common and sensible configuration: EMIL is
+allowed to reduce risk but never to create it. Many desks run exactly that way
+for months before granting anything more.
+
+## Every action goes through the same gate
+
+An order EMIL proposes has no privileged path to the market. It passes the same
+pre-trade checks as an order you type yourself:
+
+```
+Mandate active                 PASS
+Instrument in scope            PASS
+Trading permission granted     PASS
+Exposure within limit          PASS
+Concentration limit            REFUSE
+```
+
+One refusal stops the order. The reason is recorded and shown — never swallowed.
+This is why the intelligence layer being adaptive is safe: adaptation changes
+what it proposes, and the gate is somewhere else entirely.
+
+## Arming is deliberate on purpose
+
+There is no one-click arm. Requesting arm opens an authorisation dialog that
+states what EMIL will be permitted to do, the hard limits, and that it cannot
+remove market risk. The dialog does not close by clicking outside it. You
+confirm by typing a confirmation word.
+
+We made that awkward deliberately. Authorising software to trade your capital
+should not feel like accepting a cookie banner.
+
+It also includes one sentence we insist on keeping:
+
+> Not trading is also a trading decision.
+
+## Disarming is the opposite
+
+One button, always rendered, high contrast, no confirmation. The Escape key
+works too. Withdrawing authority is instant and never requires navigating
+anywhere.
+
+That asymmetry — hard to arm, trivial to disarm — is the correct shape for a
+control that has real consequences.
+
+## What happens on breach
+
+Breaching a limit does not produce a silent stop. Depending on what you
+configured:
+
+- **Exposure limit reached** — EMIL stops opening. It may still close if you
+  granted that.
+- **Daily loss budget consumed** — EMIL stops acting and continues observing,
+  logging that it has stopped and why.
+- **Drawdown guard hit** — EMIL disarms itself and says so.
+
+In every case the log records the boundary, the reading that led there, and what
+EMIL did about it.
+
+---
+
+Next: [the capital architecture](/blog/protecting-capital-architecture) — how
+protected, profit and working capital are kept separate.
+
+*Trading leveraged products carries a high level of risk to capital. Technology
+can improve analysis and controls; it cannot remove market risk.*

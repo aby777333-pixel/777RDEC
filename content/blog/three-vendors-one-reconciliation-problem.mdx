@@ -1,0 +1,79 @@
+---
+title: Three vendors, one reconciliation problem
+description: A separate platform, CRM and client portal means three data models and a reconciliation job you own forever. What changes when the client record is the same record everywhere.
+date: 2026-05-14
+author: 777 Raptor
+category: brokerage
+draft: false
+tags: ["brokerage", "operations", "crm"]
+---
+
+The standard way to launch a brokerage is to buy a trading platform from one
+vendor, a CRM from another, and a client portal from a third. Each is
+individually reasonable. Together they create a permanent job nobody costed.
+
+## What the job actually is
+
+Three systems means three ideas of who a client is. The platform knows a trading
+account. The CRM knows a lead who became a customer. The portal knows a login
+with documents attached. Nothing links them except an integration somebody
+wrote, and the integration is only ever as fresh as the last time someone
+maintained it.
+
+The daily consequences are mundane and expensive:
+
+- A client asks why their withdrawal is pending. The desk can see the request in
+  the portal and the balance in the platform, but not the verification hold that
+  caused it.
+- Sales calls a client who took a heavy loss that morning, because the CRM has
+  no idea.
+- Compliance asks for a client's full history and someone assembles it from
+  three exports.
+- A leverage change applies in one system and not another, and nobody notices
+  until an order behaves unexpectedly.
+
+None of these is a crisis. All of them are a tax.
+
+## What "one record" changes
+
+In Raptor the CRM record *is* the client record. The portal writes to it, the
+terminal authenticates against it, the back office administers it, and reporting
+reads it. There is no synchronisation step because there is nothing to
+synchronise.
+
+Concretely:
+
+- **Verification state is visible to the desk** at the moment a client calls,
+  including why a document was rejected.
+- **Funding state has one value.** Pending means pending in every screen.
+- **A permission change applies immediately** everywhere, because permissions
+  are evaluated in one place and enforced server-side.
+- **Trading activity is part of the relationship**, not a separate report — what
+  they trade, in what size, in which session.
+
+## The part that is genuinely harder
+
+A shared data model is less flexible than three loosely coupled systems. If you
+want a bespoke CRM field that the platform must respect, that is a change to one
+model rather than a mapping in an integration layer. We think that trade is
+correct — a mapping layer is where correctness goes to die — but it is a real
+trade and worth naming.
+
+The other honest constraint: migrating onto a single model is more work up front
+than pointing an integration at an existing vendor. The payoff is that the work
+finishes.
+
+## What to ask any vendor
+
+Not "do you integrate with X". Ask:
+
+1. Where does the client identity live, and how many copies of it exist?
+2. If I change a client's permission, which systems learn about it, and when?
+3. Who owns reconciliation when two systems disagree?
+
+The third question is the one that reveals the answer.
+
+---
+
+Related: [Raptor CRM](/brokers/crm) · [Client Portal](/brokers/client-portal) ·
+[Back Office](/brokers/back-office)

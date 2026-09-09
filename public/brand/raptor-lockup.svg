@@ -1,0 +1,41 @@
+<!--
+  Fallback lockup, stored as a real file so it can be dropped into decks,
+  emails and signatures without exporting from the site.
+
+  This is the abstracted mark: the logo's five-feather swept wing plus the
+  wordmark, in the brushed-steel gradient. It is NOT the master logo — see
+  README.md in this folder for where that goes.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200" width="600" height="200" role="img" aria-label="777 Raptor">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E6E8EB"/>
+      <stop offset="45%" stop-color="#9AA0A8"/>
+      <stop offset="55%" stop-color="#D7DADF"/>
+      <stop offset="100%" stop-color="#6B7078"/>
+    </linearGradient>
+    <linearGradient id="chromeWing" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6B7078"/>
+      <stop offset="50%" stop-color="#D7DADF"/>
+      <stop offset="100%" stop-color="#EFF1F3"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(28 46)" fill="none" stroke="url(#chromeWing)" stroke-linecap="round">
+    <path d="M2 100 C 42 86, 92 56, 168 6" stroke-width="7"/>
+    <path d="M2 84 C 38 72, 80 46, 143 7" stroke-width="6" opacity="0.82"/>
+    <path d="M2 68 C 34 58, 68 38, 118 9" stroke-width="5" opacity="0.62"/>
+    <path d="M2 52 C 30 45, 56 30, 94 11" stroke-width="4" opacity="0.44"/>
+    <path d="M2 36 C 26 32, 44 24, 68 14" stroke-width="3" opacity="0.26"/>
+  </g>
+
+  <rect x="238" y="52" width="1.6" height="96" fill="#9AA0A8" opacity="0.55"/>
+
+  <g fill="url(#chrome)" font-family="'Space Grotesk','Sora',system-ui,sans-serif" font-weight="700">
+    <text x="272" y="98" font-size="54" letter-spacing="2">777</text>
+    <text x="272" y="146" font-size="54" letter-spacing="1">RAPTOR</text>
+  </g>
+  <text x="274" y="172" fill="#8A8F98" font-family="system-ui,sans-serif" font-size="12.5" letter-spacing="3.4">
+    PRECISION. POWER. PERFORMANCE.
+  </text>
+</svg>

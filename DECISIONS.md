@@ -119,3 +119,67 @@ enabled and no policies. It has not been run against the project — creating
 tables in a live database is the owner's call, not a side effect of building a
 website. The forms validate and respond correctly without it; they log rather
 than persist until `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set.
+
+## 13. Elevation is a three-layer, tinted shadow stack
+
+Flat borders made every surface read as a wireframe. Shadows are now four
+tokens (`soft`, `raised`, `panel`, `lift`), each a contact edge plus a mid
+diffusion plus a wide ambient, tinted with a blue-black (16,24,40) in light so
+elevation reads as cool steel rather than grey haze. A `surface-sheen` utility
+adds a one-pixel top highlight and a quiet vertical gradient — that highlight
+is what makes a card look lit rather than pasted on. Interactive cards get a
+2px rise via `.lift`.
+
+## 14. Colour arrives as atmosphere, not as a second accent
+
+The brief allows one chromatic accent, and adding a second would have broken
+it. Instead a `.wash` utility lays two soft off-centre pools of the accent at
+5–8% alpha behind selected sections, and both stops are tokens, so the tint
+follows the theme toggle. That gives the site subtle colour without a second
+hue anywhere in the palette.
+
+## 15. Hero images are blended, not overlaid
+
+The supplied renders are colourful — blue sky, orange sunset — against a
+monochrome steel palette. Dropping them in at full saturation would read as
+stock photography behind a headline. The `.hero-media` / `.hero-tint` /
+`.hero-scrim` stack instead desaturates the image toward the palette
+(`saturate(0.5)` light, `saturate(0.6) brightness(0.62)` dark), tints it with
+the accent under `soft-light`, then lays a radial scrim that is near-opaque
+behind the centred caption and clears toward the edges, plus a bottom fade into
+the page. The caption sits on near-solid ground while the image still reads at
+the margins. Every value is a per-theme token, so light gets a light scrim and
+dark a dark one.
+
+## 16. The logo file is auto-detected rather than hard-wired
+
+`public/brand/raptor-logo.svg|.png` is used the moment it exists, with an
+optional `raptor-logo-dark.*` for the light theme, since a brushed-silver mark
+washes out on white. Because the lockup renders inside client components (nav,
+mobile drawer, error boundary), the filesystem check runs once in the root
+layout and is passed down through `BrandProvider` — a client component cannot
+import `server-only` code. Absent any file, the component composes the lockup
+from live type plus the abstracted wing, which is what the site shows today.
+
+## 17. EMIL is described by mechanism, not by adjective
+
+"Learns by itself", "takes trades" and "protects the capital" are all true and
+all now said plainly, but each is backed by the mechanism rather than left as a
+claim: learning is four named mechanisms with a weights table that shows one
+relationship collapsing; taking trades is four individually granted permissions
+passing the same pre-trade gate as a human order; protecting capital is the
+three-bucket architecture with a ratcheting profit floor and a high-water-mark
+guard.
+
+The one line held back is any suggestion that adaptation leads to profit, or
+that structure removes market risk. `scripts/check-copy.ts` enforces the
+vocabulary; the framing is a judgment call, and it is also the framing that
+survives a compliance review.
+
+## 18. Blog dates: YAML parses them into Date objects
+
+`gray-matter` turns an unquoted `2026-05-07` into a `Date`, so a
+`typeof === 'string'` guard silently mapped every post to the epoch — every
+date rendered as 1 January 1970 and sorting was meaningless. `toIsoDate` now
+normalises both shapes. This had also been wrong on the research and news
+indexes since they were added.

@@ -3,11 +3,16 @@ import { RaptorLogo } from '@/components/ui/raptor-logo'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { ReduceMotionToggle } from './reduce-motion-toggle'
 import { FOOTER_PRODUCT_LINKS, LEGAL_LINKS } from '@/lib/navigation'
+import { MapPin, Phone } from 'lucide-react'
 import {
   COMPANY_NUMBER,
+  CONTACT_EMAIL,
+  HQ_ADDRESS_LINES,
   JURISDICTION_NOTE,
   LEGAL_ENTITY_JURISDICTION,
   LEGAL_ENTITY_NAME,
+  PHONE_DISPLAY,
+  PHONE_E164,
   REGISTERED_ADDRESS,
   SITE_TAGLINE,
   TECHNOLOGY_PROVIDER_DISCLOSURE,
@@ -17,7 +22,7 @@ export function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative border-t border-line-1 bg-bg-1">
+    <footer className="wash relative border-t border-line-1 bg-bg-1">
       <div className="container-raptor py-16">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="flex flex-col gap-4">
@@ -32,7 +37,11 @@ export function Footer() {
           </div>
         </div>
 
-        <nav aria-label="Product" className="mt-12 border-t border-line-1 pt-8">
+        <div className="mt-12 grid gap-8 border-t border-line-1 pt-8 sm:grid-cols-2 lg:grid-cols-3">
+          <ContactBlock />
+        </div>
+
+        <nav aria-label="Product" className="mt-10 border-t border-line-1 pt-8">
           <ul className="flex flex-wrap gap-x-6 gap-y-3">
             {FOOTER_PRODUCT_LINKS.map((link) => (
               <li key={link.href}>
@@ -71,6 +80,54 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  )
+}
+
+/** Headquarters and how to reach a person, in the footer of every page. */
+function ContactBlock() {
+  return (
+    <>
+      <address className="flex flex-col gap-2 not-italic">
+        <span className="text-eyebrow uppercase text-steel-500">Headquarters</span>
+        <span className="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed text-steel-300">
+          <MapPin size={15} strokeWidth={1.5} aria-hidden className="mt-1 shrink-0 text-steel-500" />
+          <span>
+            {HQ_ADDRESS_LINES.map((line) => (
+              <span key={line} className="block">
+                {line}
+              </span>
+            ))}
+          </span>
+        </span>
+      </address>
+
+      <div className="flex flex-col gap-2">
+        <span className="text-eyebrow uppercase text-steel-500">Talk to us</span>
+        <a
+          href={`tel:${PHONE_E164}`}
+          className="inline-flex items-center gap-2.5 text-[0.9375rem] text-steel-300 transition-colors hover:text-steel-100"
+        >
+          <Phone size={15} strokeWidth={1.5} aria-hidden className="shrink-0 text-steel-500" />
+          <span data-numeric>{PHONE_DISPLAY}</span>
+        </a>
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
+          className="text-[0.9375rem] text-steel-300 transition-colors hover:text-steel-100"
+        >
+          {CONTACT_EMAIL}
+        </a>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <span className="text-eyebrow uppercase text-steel-500">Registered entity</span>
+        <p className="text-[0.9375rem] leading-relaxed text-steel-300">
+          {LEGAL_ENTITY_NAME}
+          <span className="block text-steel-500">
+            {LEGAL_ENTITY_JURISDICTION} · Company No. {COMPANY_NUMBER}
+          </span>
+        </p>
+      </div>
+    </>
   )
 }
 

@@ -55,7 +55,10 @@ const config: Config = {
       },
       boxShadow: {
         soft: 'var(--shadow-soft)',
+        raised: 'var(--shadow-raised)',
         panel: 'var(--shadow-panel)',
+        lift: 'var(--shadow-lift)',
+        edge: 'var(--edge-highlight)',
         'ring-signal': '0 0 0 1px var(--signal), 0 0 0 4px color-mix(in srgb, var(--signal) 22%, transparent)',
       },
       backgroundImage: {

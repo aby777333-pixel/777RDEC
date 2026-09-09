@@ -3,6 +3,8 @@ import { AnswerGrid, CtaBand, PageHero } from '@/components/layout/page-shell'
 import { RiskLine } from '@/components/layout/risk-line'
 import { EmilPillars } from '@/components/emil/emil-pillars'
 import { EmilModes } from '@/components/emil/emil-modes'
+import { SelfLearning } from '@/components/emil/self-learning'
+import { CapitalArchitecture } from '@/components/emil/capital-architecture'
 import { NotAnEa } from '@/components/emil/not-an-ea'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { emil as copy } from '@/lib/copy/platform'
@@ -26,11 +28,33 @@ export default function EmilPage() {
 
       <AnswerGrid answers={copy.answers} />
 
+      <Section className="wash border-b border-line-1">
+        <SectionHeader
+          eyebrow="Self-adjusting"
+          title="It learns without being retuned."
+          lead={`${EMIL_SHORT} adjusts its own inputs from what the market is actually doing. Not on a quarterly schedule — continuously, as the normal operating state. Here are the four mechanisms, and the line they are not allowed to cross.`}
+        />
+        <div className="mt-12">
+          <SelfLearning />
+        </div>
+      </Section>
+
+      <Section className="border-b border-line-1">
+        <SectionHeader
+          eyebrow="Capital protection"
+          title="It protects the capital you ring-fenced."
+          lead="An account does not have to be one number. Declare a portion untouchable, set a floor that ratchets up as profit is banked, and automation is refused before it can reach either."
+        />
+        <div className="mt-12">
+          <CapitalArchitecture />
+        </div>
+      </Section>
+
       <Section className="border-b border-line-1 pb-0">
         <SectionHeader
           eyebrow={EMIL_EXPANSION}
           title="Observe. Understand. Adapt. Protect. Act."
-          lead={`Five things ${EMIL_SHORT} does, in the order it does them. The fifth only happens if you have authorised it.`}
+          lead={`Five things ${EMIL_SHORT} does, in the order it does them. The fifth only happens once you have armed it.`}
         />
       </Section>
 

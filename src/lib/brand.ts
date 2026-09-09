@@ -20,12 +20,24 @@ export const EMIL_SHORT = 'EMIL'
 export const LEGAL_ENTITY_NAME = '777 Capital Markets Limited'
 export const LEGAL_ENTITY_JURISDICTION = 'United Kingdom'
 export const COMPANY_NUMBER = '17049134'
-/**
- * TODO_CONFIRM — two different registered addresses appear in prior
- * materials. Abe to confirm before launch. Rendered verbatim, including
- * the marker, so it cannot ship unnoticed.
- */
-export const REGISTERED_ADDRESS = 'TODO_CONFIRM — registered address pending confirmation'
+
+/** Headquarters, as separate lines for postal display. */
+export const HQ_ADDRESS_LINES = [
+  '2nd Floor College House',
+  '17 King Edwards Road',
+  'Ruislip HA4 7AE',
+  'United Kingdom',
+] as const
+
+/** Single-line form, for the footer and inline legal references. */
+export const REGISTERED_ADDRESS = HQ_ADDRESS_LINES.join(', ')
+
+export const HQ_COUNTRY_LONG = 'United Kingdom of Great Britain and Northern Ireland'
+export const HQ_COUNTRY_CODE = 'GB'
+
+/** Dial-ready form is the href; the spaced form is what people read. */
+export const PHONE_E164 = '+919698000999'
+export const PHONE_DISPLAY = '+91 9698 000 999'
 export const JURISDICTION_NOTE =
   'Availability of products, markets, instruments and automation features differs by jurisdiction. Not all features described on this site are available or permitted in all regions.'
 
@@ -38,7 +50,7 @@ export const RISK_LINE_SHORT =
   'Trading leveraged products carries a high level of risk to capital. Technology can improve analysis and controls; it cannot remove market risk.'
 
 
-export const CONTACT_EMAIL = `hello@${SITE_DOMAIN}`
+export const CONTACT_EMAIL = `info@${SITE_DOMAIN}`
 export const DEVELOPERS_EMAIL = `developers@${SITE_DOMAIN}`
 
 /** Ecosystem pillars — the six blocks that dock together on the homepage. */

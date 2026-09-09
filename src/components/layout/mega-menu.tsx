@@ -32,7 +32,7 @@ export function MegaMenu() {
                 'data-[motion=from-start]:animate-ticker-in data-[motion=from-end]:animate-ticker-in',
               )}
             >
-              <div className="w-[min(46rem,calc(100vw-3rem))] overflow-hidden rounded-panel border border-line-2 bg-bg-1 shadow-panel">
+              <div className="surface-sheen w-[min(46rem,calc(100vw-3rem))] overflow-hidden rounded-panel border border-line-2 bg-bg-1 shadow-panel">
                 <div className="grid gap-6 p-6 md:grid-cols-[15rem_1fr]">
                   <div className="flex flex-col gap-2 border-line-1 md:border-r md:pr-6">
                     <Link
@@ -49,7 +49,7 @@ export function MegaMenu() {
                         <NavigationMenu.Link asChild>
                           <Link
                             href={link.href}
-                            className="block rounded-ui px-3 py-2.5 transition-colors duration-200 hover:bg-bg-2"
+                            className="block rounded-ui px-3 py-2.5 transition-colors duration-200 hover:bg-bg-2 hover:shadow-soft"
                           >
                             <span className="block text-[0.9375rem] text-steel-100">{link.label}</span>
                             <span className="mt-0.5 block text-[0.8125rem] leading-snug text-steel-500">

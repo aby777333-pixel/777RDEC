@@ -1,0 +1,80 @@
+---
+title: Correlation is a window, not a property
+description: Change the window and you change the number; change the interval and you can change the sign. What a correlation reading is worth, and how to tell when it has stopped meaning anything.
+date: 2026-04-30
+author: 777 Raptor
+category: markets
+draft: false
+tags: ["markets", "correlation", "risk"]
+---
+
+A correlation coefficient is a summary of one window of history. It is not a
+property of two instruments. That sentence is the whole argument, and almost
+every expensive surprise in a "diversified" book comes from forgetting it.
+
+## The three choices hidden in every number
+
+Any correlation figure encodes three decisions, and a figure quoted without them
+is not interpretable:
+
+1. **What is being correlated.** Log returns, not price levels. Correlating
+   levels finds shared trend, which is why unrelated instruments in a bull market
+   look related.
+2. **The sampling interval.** Two instruments that appear uncorrelated on daily
+   data can be tightly linked during a single overlapping session.
+3. **The window.** A 20-day and a 200-day reading answer different questions.
+   Neither is the correct one.
+
+Raptor shows all three wherever a coefficient appears. Not for rigour's sake —
+because a trader who can see the window can tell when the number is about to
+stop applying.
+
+## Three ways a relationship dies
+
+**Regime change.** A pairing that held through a quiet period frequently inverts
+when volatility expands. This is the common case, and it is the worst one,
+because it inverts precisely when position sizes are largest.
+
+**Session mismatch.** The relationship exists for four hours a day and the daily
+number averages it into nothing — or the reverse, where a daily reading implies
+a link that only ever existed during the London overlap.
+
+**Common factor removal.** Two instruments correlated because both responded to
+a third thing. The third thing stops moving and the relationship evaporates
+without either instrument changing behaviour at all.
+
+## Stability is the more useful number
+
+A coefficient of 0.8 that has sat between 0.7 and 0.9 all quarter is a different
+object from a coefficient of 0.8 that was −0.2 six weeks ago. Both display as
+0.8.
+
+So the reading that changes decisions is not the coefficient — it is the
+coefficient plus its behaviour across sub-windows. Where a relationship has
+broken down, the platform says it has broken down rather than averaging the
+break away. The intelligence layer weights an unstable relationship down for
+exactly this reason.
+
+## What it means for a book
+
+Positions spread across eight instruments can be one position by exposure. The
+practical test is not how many symbols you hold; it is what happens to the book
+under a single move. Group the correlated instruments, then look at the
+concentration.
+
+And then remember that the grouping was computed over a window, and check the
+window.
+
+## What this does not tell you
+
+Nothing here predicts anything. Correlation describes how two instruments have
+moved together over a chosen period. It is not causation, a stable reading is
+not a promise, and a relationship that held last month may not hold today.
+
+---
+
+Related: [Market Intelligence](/intelligence/market) ·
+[Risk Intelligence](/intelligence/risk)
+
+*Trading leveraged products carries a high level of risk to capital. Technology
+can improve analysis and controls; it cannot remove market risk.*

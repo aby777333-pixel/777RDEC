@@ -84,8 +84,9 @@ favicon from the wing mark, status page backed by `/api/status`.
   request and the hero falls back to the gradient and grid.
 - **Logo.** `RaptorLogo` composes the lockup from type plus the abstracted
   wing. Drop `public/brand/raptor-logo.png` in and swap it in that one file.
-- **Registered address.** `REGISTERED_ADDRESS` in `lib/brand.ts` is
-  `TODO_CONFIRM` and renders verbatim so it cannot ship unnoticed.
+- **Phone country code.** The supplied number is `+91 9698 000 999` — an
+  Indian dialling code against a UK headquarters. Used exactly as given; worth
+  confirming it is the intended public number.
 - **Supabase migration not applied.** `supabase/migrations/0001_leads.sql` is
   written but has not been run against the project. Forms validate and respond
   correctly without it; they just do not persist.

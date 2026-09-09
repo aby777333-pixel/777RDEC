@@ -9,6 +9,25 @@ import { EMIL_EXPANSION, EMIL_SHORT } from '@/lib/brand'
 
 const LINES = ['Markets change.', 'Strategies decay.', 'Relationships shift.', 'Risk moves.'] as const
 
+const CLAIMS = [
+  {
+    label: 'It learns',
+    body: 'Inputs are scored against what actually happened and re-ranked continuously. A relationship that stops holding stops driving the reading.',
+  },
+  {
+    label: 'It acts',
+    body: 'Armed, it opens, closes, modifies and hedges — only with the permissions you granted, only in the markets you selected.',
+  },
+  {
+    label: 'It protects',
+    body: 'Protected capital, a profit floor that only ratchets up, and a drawdown guard from the high-water mark. Breach it and it disarms itself.',
+  },
+  {
+    label: 'It explains',
+    body: 'Every event is logged in plain language, refusals included — which are the lines that tell you where the boundaries really are.',
+  },
+] as const
+
 export function EmilReveal() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.3 })
@@ -49,10 +68,30 @@ export function EmilReveal() {
               transition={{ duration: 0.7, delay: 1.4 }}
               className="max-w-xl text-body text-steel-300"
             >
-              {EMIL_SHORT} observes the market and your book, states what it sees in plain language,
-              and acts only inside a mandate you have written and confirmed. It is not an expert
-              advisor and it is not a bot.
+              {EMIL_SHORT} adjusts its own inputs from what the market is actually doing — nobody
+              retunes it every quarter. Armed, it takes trades: opening, closing, modifying and
+              hedging, strictly inside a mandate you wrote and confirmed. And it holds the capital
+              boundaries you set, enforced in the order path where the intelligence layer cannot
+              reach them.
             </motion.p>
+
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ duration: 0.7, delay: 1.5 }}
+              className="flex flex-col gap-3"
+            >
+              {CLAIMS.map((claim) => (
+                <li key={claim.label} className="flex gap-3 border-t border-line-2 pt-3">
+                  <span className="w-[7.5rem] shrink-0 text-eyebrow uppercase text-signal">
+                    {claim.label}
+                  </span>
+                  <span className="text-[0.9375rem] leading-relaxed text-steel-300">
+                    {claim.body}
+                  </span>
+                </li>
+              ))}
+            </motion.ul>
 
             <motion.div
               initial={{ opacity: 0 }}

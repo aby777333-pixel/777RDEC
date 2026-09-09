@@ -21,11 +21,12 @@ export function ArticleList({
       {entries.map((entry) => (
         <li key={entry.slug}>
           <Link href={`${basePath}/${entry.slug}`} className="group block">
-            <Panel className="flex flex-col gap-3 p-6 transition-colors duration-200 group-hover:border-signal/40 group-hover:bg-bg-2">
+            <Panel interactive className="flex flex-col gap-3 p-6 group-hover:bg-bg-2">
               <div className="flex flex-wrap items-center gap-3">
                 <span className="font-mono text-[0.75rem] text-steel-500" data-numeric>
                   {formatDate(entry.frontmatter.date)}
                 </span>
+                <Chip>{entry.frontmatter.readMinutes} min read</Chip>
                 {entry.frontmatter.draft ? <Chip tone="warn">Placeholder</Chip> : null}
                 {entry.frontmatter.tags.map((tag) => (
                   <Chip key={tag}>{tag}</Chip>

@@ -79,7 +79,7 @@ export function ModuleGrid({
       <SectionHeader eyebrow={eyebrow} title={heading} lead={lead} />
       <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {modules.map((module, index) => (
-          <Panel key={module.title} className="flex flex-col gap-3 p-6">
+          <Panel key={module.title} interactive className="flex flex-col gap-3 p-6">
             <span className="font-mono text-[0.75rem] text-steel-500" data-numeric>
               {String(index + 1).padStart(2, '0')}
             </span>
@@ -104,7 +104,7 @@ export function CtaBand({
   actions: readonly NextStep[]
 }) {
   return (
-    <Section grid>
+    <Section grid className="wash">
       <Panel tone="raised" size="panel" className="flex flex-col gap-6 p-8 md:p-12">
         <h2 className="max-w-3xl text-h2 uppercase text-steel-100">{heading}</h2>
         <p className="max-w-2xl text-body text-steel-300">{body}</p>

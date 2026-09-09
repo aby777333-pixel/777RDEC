@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import '@/styles/globals.css'
 import { ThemeProvider } from '@/components/layout/theme-provider'
+import { BrandProvider } from '@/components/layout/brand-provider'
+import { logoSources } from '@/lib/brand-assets'
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/lib/brand'
 import { organizationJsonLd } from '@/lib/seo'
 
@@ -53,7 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${display.variable} ${body.variable} ${mono.variable}`}
     >
       <body className="min-h-dvh bg-bg-0 antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <BrandProvider logo={logoSources()}>{children}</BrandProvider>
+        </ThemeProvider>
         <script
           type="application/ld+json"
           // Static, build-time constant — no user input reaches this string.

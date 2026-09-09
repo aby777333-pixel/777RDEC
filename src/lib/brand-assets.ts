@@ -53,5 +53,27 @@ export function heroImages(): readonly AmbientImage[] {
   return CANDIDATES.filter((image) => present(image.src))
 }
 
-/** Master logo. Absent → <RaptorLogo> composes the lockup from type + wing. */
-export const LOGO_RASTER_PATH = '/brand/raptor-logo.png'
+/**
+ * Master logo.
+ *
+ * Checked on the server in preference order. Absent → <RaptorLogo> composes
+ * the lockup from live type plus the abstracted wing, so nothing breaks and no
+ * broken-image icon appears. See public/brand/README.md.
+ *
+ * `light` is an optional darker-inked variant for use on white, since the
+ * master mark is brushed silver and can wash out against a light background.
+ */
+const LOGO_CANDIDATES = {
+  default: ['/brand/raptor-logo.svg', '/brand/raptor-logo.png'],
+  light: ['/brand/raptor-logo-dark.svg', '/brand/raptor-logo-dark.png'],
+} as const
+
+export type LogoSources = { default: string | null; light: string | null }
+
+export function logoSources(): LogoSources {
+  const first = (paths: readonly string[]) => paths.find(present) ?? null
+  return {
+    default: first(LOGO_CANDIDATES.default),
+    light: first(LOGO_CANDIDATES.light),
+  }
+}

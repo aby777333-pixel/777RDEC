@@ -37,8 +37,42 @@
   --glass-bg: rgba(255, 255, 255, 0.72);
   --glass-border: rgba(5, 10, 20, 0.09);
 
-  --shadow-soft: 0 1px 2px rgba(5, 10, 20, 0.04), 0 8px 24px -12px rgba(5, 10, 20, 0.12);
-  --shadow-panel: 0 20px 60px -28px rgba(5, 10, 20, 0.22);
+  /*
+    Shadows are tinted with a blue-black (16,24,40) rather than pure black, so
+    elevation reads as cool steel rather than grey haze. Three layers each:
+    a contact edge, a mid diffusion, and a wide ambient.
+  */
+  --shadow-soft:
+    0 1px 2px rgba(16, 24, 40, 0.05),
+    0 2px 6px -2px rgba(16, 24, 40, 0.06),
+    0 12px 28px -12px rgba(16, 24, 40, 0.1);
+  --shadow-raised:
+    0 2px 4px rgba(16, 24, 40, 0.05),
+    0 8px 20px -6px rgba(16, 24, 40, 0.1),
+    0 24px 48px -20px rgba(16, 24, 40, 0.14);
+  --shadow-panel:
+    0 4px 10px -4px rgba(16, 24, 40, 0.07),
+    0 30px 70px -28px rgba(16, 24, 40, 0.2);
+  --shadow-lift:
+    0 4px 8px -2px rgba(16, 24, 40, 0.07),
+    0 16px 32px -10px rgba(16, 24, 40, 0.14),
+    0 40px 72px -32px rgba(16, 24, 40, 0.18);
+
+  /* A one-pixel top highlight is what makes a surface read as lit. */
+  --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  /* Very quiet vertical sheen across panels. */
+  --panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 58%);
+
+  /* Section washes: the only place colour appears outside the accent. */
+  --wash-a: rgba(3, 105, 161, 0.07);
+  --wash-b: rgba(58, 64, 72, 0.05);
+
+  /* Hero image treatment. Light needs a light scrim and a gentle desaturate. */
+  --hero-image-opacity: 0.42;
+  --hero-image-filter: saturate(0.5) contrast(1.02) brightness(1.04);
+  --hero-scrim-center: rgba(255, 255, 255, 0.9);
+  --hero-scrim-edge: rgba(255, 255, 255, 0.34);
+  --hero-tint: rgba(3, 105, 161, 0.06);
 
   color-scheme: light;
 }
@@ -70,8 +104,34 @@
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.08);
 
-  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.6), 0 8px 24px -12px rgba(0, 0, 0, 0.7);
-  --shadow-panel: 0 20px 60px -20px rgba(0, 0, 0, 0.8);
+  --shadow-soft:
+    0 1px 2px rgba(0, 0, 0, 0.6),
+    0 4px 10px -4px rgba(0, 0, 0, 0.6),
+    0 12px 28px -12px rgba(0, 0, 0, 0.7);
+  --shadow-raised:
+    0 2px 5px rgba(0, 0, 0, 0.6),
+    0 10px 24px -8px rgba(0, 0, 0, 0.72),
+    0 24px 52px -20px rgba(0, 0, 0, 0.8);
+  --shadow-panel:
+    0 4px 12px -4px rgba(0, 0, 0, 0.7),
+    0 30px 70px -24px rgba(0, 0, 0, 0.85);
+  --shadow-lift:
+    0 4px 10px -2px rgba(0, 0, 0, 0.7),
+    0 18px 36px -10px rgba(0, 0, 0, 0.8),
+    0 44px 80px -32px rgba(0, 0, 0, 0.85);
+
+  --edge-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  --panel-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0) 55%);
+
+  --wash-a: rgba(125, 211, 252, 0.08);
+  --wash-b: rgba(125, 211, 252, 0.035);
+
+  /* Dark needs a dark scrim, and the image dimmed rather than lightened. */
+  --hero-image-opacity: 0.6;
+  --hero-image-filter: saturate(0.6) contrast(1.06) brightness(0.62);
+  --hero-scrim-center: rgba(5, 5, 5, 0.88);
+  --hero-scrim-edge: rgba(5, 5, 5, 0.3);
+  --hero-tint: rgba(125, 211, 252, 0.05);
 
   color-scheme: dark;
 }
@@ -159,6 +219,93 @@
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
+  }
+
+  /*
+    Surface treatment. The sheen sits above the background and below content,
+    so a card reads as a lit panel rather than a flat rectangle. Paired with
+    the one-pixel top highlight in the shadow stack.
+  */
+  .surface-sheen {
+    position: relative;
+    box-shadow: var(--shadow-soft), var(--edge-highlight);
+  }
+  .surface-sheen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--panel-sheen);
+    pointer-events: none;
+  }
+
+  /* Interactive cards rise slightly. Transform only — cheap to animate. */
+  .lift {
+    transition:
+      transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 320ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift), var(--edge-highlight);
+  }
+
+  /*
+    Section wash: two soft off-centre pools of the accent at very low alpha.
+    This is the site's only use of colour as atmosphere, and it re-tints with
+    the theme because both stops are tokens.
+  */
+  .wash {
+    position: relative;
+    isolation: isolate;
+  }
+  .wash::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 68% 58% at 12% 0%, var(--wash-a), transparent 68%),
+      radial-gradient(ellipse 58% 52% at 90% 18%, var(--wash-b), transparent 70%);
+  }
+
+  /*
+    Hero image blend.
+    Layer order, bottom to top: the image (desaturated toward the steel
+    palette and dimmed per theme), an accent tint so it reads as brand rather
+    than stock, a radial scrim that is opaque behind the centred caption and
+    clears toward the edges, a bottom fade into the page, and the hairline
+    grid. The caption therefore sits on near-solid ground while the image
+    still reads at the margins.
+  */
+  .hero-media {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: var(--hero-image-opacity);
+    filter: var(--hero-image-filter);
+  }
+  .hero-tint {
+    position: absolute;
+    inset: 0;
+    background: var(--hero-tint);
+    mix-blend-mode: soft-light;
+  }
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse 82% 76% at 50% 46%,
+        var(--hero-scrim-center) 0%,
+        var(--hero-scrim-center) 34%,
+        var(--hero-scrim-edge) 82%,
+        transparent 100%
+      ),
+      linear-gradient(180deg, transparent 55%, var(--bg-0) 100%);
   }
 
   /* Mission-control texture: hairline grid faded at the edges. */

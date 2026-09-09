@@ -12,7 +12,10 @@ import {
   DEVELOPERS_EMAIL,
   LEGAL_ENTITY_NAME,
   COMPANY_NUMBER,
-  REGISTERED_ADDRESS,
+  HQ_ADDRESS_LINES,
+  HQ_COUNTRY_LONG,
+  PHONE_DISPLAY,
+  PHONE_E164,
 } from '@/lib/brand'
 
 export const metadata: Metadata = pageMetadata({
@@ -62,7 +65,31 @@ export default function ContactPage() {
                     </a>
                   </dd>
                 </div>
+                <div className="flex flex-col gap-0.5">
+                  <dt className="text-steel-500">Phone</dt>
+                  <dd>
+                    <a
+                      href={`tel:${PHONE_E164}`}
+                      className="text-signal underline underline-offset-4"
+                      data-numeric
+                    >
+                      {PHONE_DISPLAY}
+                    </a>
+                  </dd>
+                </div>
               </dl>
+            </Panel>
+
+            <Panel className="flex flex-col gap-3 p-6">
+              <h2 className="text-eyebrow uppercase text-steel-500">Headquarters</h2>
+              <address className="text-[0.9375rem] leading-relaxed text-steel-300 not-italic">
+                {HQ_ADDRESS_LINES.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+                <span className="mt-1 block text-steel-500">{HQ_COUNTRY_LONG}</span>
+              </address>
             </Panel>
 
             <Panel className="flex flex-col gap-3 p-6 text-[0.8125rem] leading-relaxed text-steel-500">
@@ -71,8 +98,6 @@ export default function ContactPage() {
                 {LEGAL_ENTITY_NAME}
                 <br />
                 Company No. {COMPANY_NUMBER}
-                <br />
-                {REGISTERED_ADDRESS}
               </p>
             </Panel>
           </div>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { AnswerGrid, CtaBand, ModuleGrid, PageHero } from '@/components/layout/page-shell'
 import { RiskLine } from '@/components/layout/risk-line'
 import { EmilModes } from '@/components/emil/emil-modes'
+import { CapitalArchitecture } from '@/components/emil/capital-architecture'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { emilLab as copy } from '@/lib/copy/intelligence'
 import { pageMetadata } from '@/lib/seo'
@@ -32,6 +33,17 @@ export default function EmilLabPage() {
         />
         <div className="mt-10">
           <EmilModes />
+        </div>
+      </Section>
+
+      <Section className="wash border-b border-line-1">
+        <SectionHeader
+          eyebrow="The boundaries"
+          title="What the mandate ring-fences."
+          lead="Every limit below is enforced in the order path, outside the intelligence layer. Nothing EMIL concludes can widen them."
+        />
+        <div className="mt-12">
+          <CapitalArchitecture />
         </div>
       </Section>
 

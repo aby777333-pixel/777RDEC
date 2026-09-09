@@ -1,0 +1,79 @@
+---
+title: A drawdown guard is a decision you make in advance
+description: The moment you need a loss limit is the moment you are least able to set one. Why the guard measures from the high-water mark, and what it should do on breach.
+date: 2026-05-21
+author: 777 Raptor
+category: risk
+draft: false
+tags: ["risk", "drawdown", "controls"]
+---
+
+A drawdown guard is not really a risk control. It is a commitment device. You
+are deciding, calmly, what you will do in a situation where you will not be
+calm.
+
+That is why the details matter more than the number.
+
+## Measure from the high-water mark
+
+Three common anchors, and what each hides:
+
+- **From the start of the day.** Hides a slow multi-week decline entirely.
+- **From the start of the month.** Resets on an arbitrary date, and a bad run
+  that straddles month-end is measured as two smaller ones.
+- **From the highest equity reached.** Hides nothing.
+
+Raptor measures from the high-water mark. If the account reached 13,105 and now
+sits at 12,927, the drawdown is 1.36% — regardless of what day it is or how the
+month started.
+
+The objection is that this feels harsher, and it is. It is harsher in exactly
+the situation where every other anchor is quietly flattering you.
+
+## Decide what "breach" does
+
+A guard that has no defined action on breach is a notification, not a guard.
+The options, in increasing severity:
+
+1. **Warn.** Log it, surface it, change nothing.
+2. **Stop opening.** Existing positions run; no new risk is added.
+3. **Stop acting.** Automation stops entirely and continues observing.
+4. **Disarm.** Automation withdraws its own authority and hands control back.
+5. **Flatten.** Close everything.
+
+We default the drawdown guard to *disarm* rather than *flatten*, and that is a
+deliberate opinion. Forced liquidation at the worst available price is itself a
+risk event, and the decision to realise a loss belongs to a person. Automation
+stopping is almost always the right automated response; automation panicking is
+not.
+
+Flatten exists — as an operator-triggered kill switch, with an audit record —
+because sometimes a person does need to hit it.
+
+## Three horizons, three controls
+
+One number cannot cover a bad hour, a bad fortnight and a structural decline:
+
+| Control | Horizon | Typical action |
+|---|---|---|
+| Daily loss budget | One session | Stop acting, keep observing |
+| Drawdown from high-water mark | Weeks to months | Disarm |
+| Profit floor | Life of the account | Refuse the order outright |
+
+They compose. Consuming the daily budget does not touch the drawdown guard, and
+neither of them can breach the profit floor, because the floor is checked before
+an order exists.
+
+## Write it down before you need it
+
+The useful version of this conversation is not "what is a reasonable drawdown
+limit". It is: what will you do at 4%, at 8%, at 12%? Put those in the mandate.
+The system will hold you to them, which is the entire point of asking the
+software to enforce it rather than promising yourself you will.
+
+---
+
+Related: [the capital architecture](/blog/protecting-capital-architecture)
+
+*Trading leveraged products carries a high level of risk to capital. Technology
+can improve analysis and controls; it cannot remove market risk.*

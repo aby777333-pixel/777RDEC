@@ -22,7 +22,9 @@ export function Nav() {
     <header
       className={cn(
         'sticky top-0 z-40 transition-all duration-300 ease-raptor',
-        scrolled ? 'glass border-b border-line-1' : 'border-b border-transparent bg-transparent',
+        scrolled
+          ? 'glass border-b border-line-1 shadow-soft'
+          : 'border-b border-transparent bg-transparent',
       )}
     >
       <div className="container-raptor flex h-16 items-center justify-between gap-4">
