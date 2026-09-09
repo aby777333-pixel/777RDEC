@@ -1,5 +1,8 @@
 -- 777 Raptor — lead capture.
 --
+-- APPLIED to project ixpqkvyxqvmllottnvgi as migration `leads_capture`.
+-- See 0002 for the grant revocation that hardens these tables further.
+--
 -- Three tables, RLS enabled, and deliberately NO policies: only the service
 -- role reads or writes these, and the service role bypasses RLS. The browser
 -- anon key can therefore do nothing here, which is the point — every write

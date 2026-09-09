@@ -112,13 +112,26 @@ figures instead, which is now what is actually true.
 
 It is all recoverable from git history if any of it becomes useful.
 
-## 12. The Supabase migration is written but not applied
+## 12. The Supabase migration is applied, and hardened past the original spec
 
-`supabase/migrations/0001_leads.sql` creates the three lead tables with RLS
-enabled and no policies. It has not been run against the project — creating
-tables in a live database is the owner's call, not a side effect of building a
-website. The forms validate and respond correctly without it; they log rather
-than persist until `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set.
+`0001_leads.sql` creates the three lead tables with RLS enabled and no
+policies. Applied on request to project `ixpqkvyxqvmllottnvgi`.
+
+The RLS claim was then **verified rather than assumed**. Acting as `anon`
+against a table containing a real row, SELECT returned 0 rows and INSERT failed
+with `42501: new row violates row-level security policy`. The probe row was
+deleted; all three tables ship empty.
+
+That check surfaced a weakness the original spec missed: `anon` and
+`authenticated` still held table-level GRANTs. RLS was doing the work alone, so
+one accidentally-added permissive policy would have exposed everything
+instantly. `0002_leads_revoke_client_grants.sql` revokes those privileges and
+changes the schema default privileges, so the client roles cannot reach these
+tables even if a policy later says they can. Confirmed after: `anon_select`,
+`anon_insert` and `auth_select` all false, `service_role` INSERT still true.
+
+The one remaining advisory is INFO-level `rls_enabled_no_policy`, which is the
+intended design rather than a defect.
 
 ## 13. Elevation is a three-layer, tinted shadow stack
 

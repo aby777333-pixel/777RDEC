@@ -87,9 +87,10 @@ favicon from the wing mark, status page backed by `/api/status`.
 - **Phone country code.** The supplied number is `+91 9698 000 999` — an
   Indian dialling code against a UK headquarters. Used exactly as given; worth
   confirming it is the intended public number.
-- **Supabase migration not applied.** `supabase/migrations/0001_leads.sql` is
-  written but has not been run against the project. Forms validate and respond
-  correctly without it; they just do not persist.
+- **Supabase migration applied.** Both migrations are live on project
+  `ixpqkvyxqvmllottnvgi`: the three lead tables with RLS, plus the grant
+  revocation. Forms still need `SUPABASE_SERVICE_ROLE_KEY` set in Netlify
+  before they persist — `SUPABASE_URL` is already set.
 - **Legal review.** Every `/legal/*` page carries a visible note that it is a
   draft prepared alongside the site and needs counsel.
 - **Product links.** `/experience` currently redirects to `/request-demo`.
