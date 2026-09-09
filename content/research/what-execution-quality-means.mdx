@@ -1,0 +1,57 @@
+---
+title: What execution quality actually means
+description: Fill rate, slippage and latency measure different things. Optimising one of them usually degrades another.
+date: 2026-03-22
+author: 777 Raptor
+draft: true
+tags: ["method", "execution", "liquidity"]
+---
+
+"Execution quality" is used to mean at least four different things, and the
+confusion is expensive. Measuring the wrong one leads to routing decisions that
+make the experienced outcome worse.
+
+## The four measurements
+
+**Fill rate.** The proportion of orders that fill at all. A high fill rate on
+its own tells you almost nothing — a provider can achieve it by quoting a wide
+spread that is always available.
+
+**Slippage.** The difference between the price displayed when the order was sent
+and the price it filled at. Useful, but sensitive to how the reference price is
+chosen, and easily flattered by a slow feed.
+
+**Latency.** Time from order sent to execution report received. Matters most for
+short-horizon strategies and matters much less than most people assume for
+everyone else.
+
+**Rejection rate.** How often an order comes back unfilled. A provider with
+excellent slippage on the orders it accepts and a 12% rejection rate is not
+providing good execution.
+
+## Why they trade off
+
+Tightening the price a provider is willing to show generally raises rejections.
+Reducing rejections generally widens the price. Routing to the fastest session
+can mean routing away from the deepest one.
+
+The consequence is that a single execution-quality score is a weighting
+decision disguised as a measurement. Anyone who gives you one has chosen the
+weights for you.
+
+## How we measure
+
+Per provider, per instrument, per session, we record all four measurements
+separately and show them separately. Then routing rules are written against the
+measurement that matters for the flow being routed, rather than against a
+composite.
+
+A desk running short-horizon flow and a desk running position trades should not
+be routed by the same rule, and they should not be told they have the same
+execution quality.
+
+## What this does not tell you
+
+None of this predicts what a provider will do next month, and none of it is a
+statement about outcomes. It is measurement of what already happened, which is
+the only thing measurement can be.

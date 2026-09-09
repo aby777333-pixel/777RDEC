@@ -9,6 +9,6 @@ export const metadata: Metadata = pageMetadata({
   path: '/platform/terminal',
 })
 
-export default function Page() {
-  return <StandardPage copy={copy} />
+export default function TerminalPage() {
+  return <StandardPage copy={copy} modulesHeading="Inside the terminal" />
 }

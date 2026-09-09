@@ -86,11 +86,11 @@ export function MobileDrawer() {
               <span className="text-eyebrow uppercase text-steel-500">Theme</span>
               <ThemeToggle />
             </div>
-            <ButtonLink href="/request-demo" variant="ghost" size="lg" onClick={() => setOpen(false)}>
-              Request Demo
+            <ButtonLink href="/platform" variant="ghost" size="lg" onClick={() => setOpen(false)}>
+              Platform
             </ButtonLink>
-            <ButtonLink href="/experience" variant="primary" size="lg" onClick={() => setOpen(false)}>
-              Experience Raptor
+            <ButtonLink href="/request-demo" variant="primary" size="lg" onClick={() => setOpen(false)}>
+              Request Demo
             </ButtonLink>
           </div>
         </Dialog.Content>

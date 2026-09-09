@@ -27,7 +27,7 @@ export function CorrelationHeatmap({ className }: { className?: string }) {
 
   return (
     <div className={cn('flex flex-col gap-4', className)}>
-      <div className="scroll-steel overflow-x-auto">
+      <div className="scroll-steel w-full min-w-0 overflow-x-auto">
         <table className="w-full min-w-[34rem] border-collapse font-mono text-[0.6875rem]">
           <caption className="sr-only">
             Illustrative correlation matrix across eight instruments. Values range from minus one to

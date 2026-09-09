@@ -1,0 +1,59 @@
+---
+title: Measuring correlation honestly
+description: What a correlation number does and does not tell you about a book, and why the window matters more than the coefficient.
+date: 2026-04-14
+author: 777 Raptor
+draft: true
+tags: ["method", "risk", "cross-asset"]
+---
+
+A correlation coefficient is a summary of one window of history. It is not a
+property of two instruments. Change the window and you change the number;
+change the sampling interval and you can change its sign.
+
+This matters because correlation is usually consumed as though it were
+structural. A desk sees 0.82 between two currency pairs and concludes the pair
+is one position. Sometimes that is right. Often the 0.82 is an artefact of the
+window chosen.
+
+## What we compute, and over what
+
+We compute Pearson correlation on log returns, at a fixed sampling interval,
+over an explicitly stated window. All three of those choices are visible
+wherever a number is shown, because a coefficient without them is not
+interpretable.
+
+- **Log returns, not prices.** Correlating price levels finds trends, not
+  relationships.
+- **A fixed interval.** Mixing intervals across instruments with different
+  session hours produces relationships that are partly an artefact of when each
+  market was open.
+- **A stated window.** A 20-day and a 200-day reading answer different
+  questions. Neither is the correct one.
+
+## Where it breaks down
+
+Three failure modes account for most of the damage:
+
+1. **Regime change.** A relationship that held through a low-volatility period
+   frequently inverts when volatility expands. The historical coefficient is
+   then actively misleading.
+2. **Session mismatch.** Two instruments that appear uncorrelated at a daily
+   interval can be tightly linked during a single overlapping session.
+3. **Common factor.** Two instruments correlate because both respond to a third
+   thing. When that third thing stops moving, the relationship evaporates
+   without either instrument changing behaviour.
+
+## What we do about it
+
+We report correlation alongside the stability of the relationship over
+sub-windows. A coefficient of 0.8 that has been between 0.7 and 0.9 all
+quarter is a different object from a coefficient of 0.8 that was −0.2 six weeks
+ago, and the interface distinguishes them.
+
+Where a relationship has broken down, the reading says so rather than averaging
+the break away.
+
+Correlation is not causation, and a stable correlation is not a guarantee of
+anything. It is one input for thinking about whether a book is as diversified
+as its instrument count suggests.

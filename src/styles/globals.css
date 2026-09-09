@@ -25,7 +25,7 @@
   --steel-500: #5b6169; /* muted / labels */
   --steel-700: #a2a8b0; /* disabled */
 
-  --chrome: linear-gradient(135deg, #3a4048 0%, #8a8f98 42%, #20242a 56%, #5a6068 100%);
+  --chrome: linear-gradient(135deg, #3a4048 0%, #757a82 42%, #20242a 56%, #545a62 100%);
 
   --signal: #0369a1;
   --signal-soft: rgba(3, 105, 161, 0.1);

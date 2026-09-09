@@ -43,7 +43,7 @@ export function NotAnotherPlatform() {
           </motion.p>
         </div>
 
-        <div className="relative mx-auto mt-16 max-w-4xl rounded-panel border border-line-2 p-4 md:p-6">
+        <div className="relative mx-auto mt-16 max-w-4xl overflow-hidden rounded-panel border border-line-2 p-4 md:p-6">
           <span className="absolute -top-2.5 left-6 bg-bg-0 px-2 text-eyebrow uppercase text-steel-500">
             One ecosystem
           </span>

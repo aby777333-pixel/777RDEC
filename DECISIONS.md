@@ -38,46 +38,84 @@ one component.
 ## 4. Supplied hero images are referenced, not embedded
 
 Four images were provided in conversation but did not reach the filesystem, so
-nothing could be embedded. `lib/brand-assets.ts` names the paths the site
-expects and `<AmbientHero>` renders a CSS/SVG treatment when a file is
-absent. This also keeps the prompt's "zero stock photography" rule intact by
-default: the product visuals are all live components.
+nothing could be embedded. `lib/brand-assets.ts` names the three paths the site
+expects and checks for them **on the server at render time**, so a missing file
+produces no request and no 404 in the console — `<HeroImage>` simply falls back
+to the gradient and hairline grid. Drop the files in and they appear; see
+`public/hero/README.md`.
 
-## 5. No Three.js yet
+## 5. No Three.js
 
-The prompt allows WebGL only for the hero terminal scene and the session
-globe. The hero is more convincing as real DOM — actual Lightweight Charts, an
-actual ticking ladder, actual tabular numerals — so it is built that way, with
-a CSS perspective tilt. The session globe is not built yet, so `@react-three/fiber`
-is not a dependency. Adding it later does not affect anything else.
+The brief allows WebGL for a hero terminal scene and a session globe. Neither
+is built: the terminal is out of scope (§11) and the globe was not reached, so
+`@react-three/fiber` is not a dependency. Adding it later affects nothing else.
 
-## 6. `decimal.js` is installed but not yet load-bearing
-
-Sandbox P&L is display-only and currently formatted with `toFixed`, which
-cannot produce floating-point artefacts at these magnitudes. `decimal.js` is
-in `package.json` for the order-ticket work in Phase 5, where accumulated
-arithmetic starts to matter.
-
-## 7. `noUncheckedIndexedAccess` is off
+## 6. `noUncheckedIndexedAccess` is off
 
 `strict: true` is on, plus `noUnusedLocals` and `noUnusedParameters`.
 `noUncheckedIndexedAccess` was tried and removed: across the indicator and
 price-engine code it produced defensive noise rather than caught bugs.
 
-## 8. Correlation and treemap values are fixed, not simulated
+## 7. Correlation and treemap values are fixed, not simulated
 
 A correlation figure that changes on every page load invites a visitor to read
 it as live market data. Both the heatmap and the exposure treemap use fixed,
 plausible values with a visible note that they are illustrative.
 
-## 9. Cookie banner gates the analytics script itself
+## 8. Cookie banner gates the analytics script itself
 
 Consent does not set a flag that a script then checks — the `<Script>` element
 is not rendered at all until consent is granted, and `analyticsEnabled` is
 false when no Plausible domain is configured. Declining means no third-party
 request is ever made.
 
-## 10. The white-label logo upload never leaves the browser
+## 9. The white-label logo upload never leaves the browser
 
 `FileReader.readAsDataURL` only. No network call, no Supabase storage, and the
 UI says so where the control is.
+
+## 10. Contrast was computed, not eyeballed
+
+Both palettes were checked by hand against WCAG. `--steel-500` on `--bg-2` is
+5.7:1 dark and 5.5:1 light. `--signal` on `--bg-0` is 12.2:1 dark and 5.9:1
+light. The light-mode chrome gradient's lightest stop was moved from `#8A8F98`
+to `#757A82` (3.3:1 → 4.3:1 on white) so headlines clear AA rather than only
+AA Large.
+
+## 11. The terminal and sandbox were removed
+
+An earlier pass built a simulated trading terminal, a seeded price engine in a
+Web Worker, a depth ladder, an order ticket with pre-trade risk refusals, a
+`/experience` sandbox and an interactive EMIL arm/disarm control panel. All of
+it worked, but the real terminal and apps are supplied separately, so
+reimplementing them here would only create something to throw away.
+
+**Removed:** `lib/sim/*`, `lib/sandbox/*`, `lib/indicators.ts`,
+`lib/emil/machine.ts`, `components/sandbox/*`, `TerminalFrame`, `CrmFrame`,
+`LwChart`, `DepthLadder`, `EmilControlPanel`, `ArmDialog`, `EmilLog`,
+`EmilStrip`, and the `(experience)` route group. The
+`lightweight-charts`, `zustand` and `decimal.js` dependencies went with them.
+Homepage first load dropped from 235 kB to 176 kB.
+
+**Kept**, because these are marketing devices rather than product
+reimplementations: the correlation matrix and exposure treemap (fixed,
+illustrative, labelled as such), the gauges, the ecosystem diagram, the EMIL
+pillars and operating-mode illustrations, the EMIL status card, and
+`PortalFrame` — which exists so the white-label section can re-skin something
+live in the browser.
+
+**Consequences.** `/experience` now redirects to `/request-demo` (one line in
+`next.config.mjs`) so the URL keeps working and is reserved for the real
+product. The nav's primary call to action is Request Demo. Legal copy that
+described interactive simulations was rewritten to describe illustrative
+figures instead, which is now what is actually true.
+
+It is all recoverable from git history if any of it becomes useful.
+
+## 12. The Supabase migration is written but not applied
+
+`supabase/migrations/0001_leads.sql` creates the three lead tables with RLS
+enabled and no policies. It has not been run against the project — creating
+tables in a live database is the owner's call, not a side effect of building a
+website. The forms validate and respond correctly without it; they log rather
+than persist until `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set.

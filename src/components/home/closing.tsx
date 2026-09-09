@@ -19,8 +19,8 @@ export function Closing() {
             <ButtonLink href="/request-demo" variant="primary" size="lg">
               Request a demo
             </ButtonLink>
-            <ButtonLink href="/experience" variant="ghost" size="lg">
-              Experience Raptor
+            <ButtonLink href="/platform/emil" variant="ghost" size="lg">
+              How EMIL thinks
             </ButtonLink>
           </div>
         </div>

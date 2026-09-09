@@ -13,7 +13,7 @@ export const platformHub: PageCopy = {
     who: 'Individual and professional traders, prop desks, and the brokers and institutions who put a platform in front of them.',
     why: 'Fragmented tooling costs decisions. When your position book lives in one system and your charts in another, exposure is something you discover after the fact rather than before the order.',
     connects: `The terminal reads the same instrument master, risk limits and account state as the CRM, client portal and back office. ${EMIL_SHORT} observes the whole surface rather than a single chart.`,
-    next: 'Open the sandbox and place a simulated order, or ask for a walkthrough against your own instrument set and risk policy.',
+    next: 'Ask for a walkthrough against your own instrument set, session hours and risk policy.',
   },
   modules: [
     { title: 'Raptor Terminal', body: 'Charting, depth, order tickets, positions and journaling in one resizable workspace.' },
@@ -41,7 +41,7 @@ export const terminal: PageCopy = {
     who: 'Active traders and professional desks who need speed without installing anything, and brokers who need to hand that to their clients under their own brand.',
     why: 'Latency is not only network time. It is also the seconds spent switching windows, re-deriving position size, and checking whether an order breaches a limit.',
     connects: 'Fills flow straight to the journal and execution analytics. The risk engine validates every ticket before it leaves the browser and again on the server.',
-    next: 'Place a simulated order in the sandbox and watch P&L, exposure and the journal update from the same event.',
+    next: 'A walkthrough of the order path: ticket, pre-trade checks, fill, position, journal entry — all from the same event.',
   },
   modules: [
     { title: 'Resizable workspaces', body: 'One to nine charts, saved per user, restored on login. Layouts follow the trader, not the device.' },
@@ -51,9 +51,9 @@ export const terminal: PageCopy = {
     { title: 'Positions and P&L', body: 'Open exposure, floating and realised P&L, and margin utilisation on the same screen as the chart.' },
     { title: 'Journal and analytics', body: 'Every fill annotated automatically: session, instrument, hold time, adverse excursion, outcome.' },
   ],
-  ctaHeading: 'Trade the sandbox before you trade the pitch',
+  ctaHeading: 'Judge it on your own instruments',
   ctaBody:
-    'The sandbox is the terminal running on simulated data. Place orders, hit a risk limit, look at the journal, and decide whether the surface suits your desk.',
+    'We configure the terminal against your instruments and your risk limits, then place orders, breach a limit deliberately, and look at what the journal recorded.',
   ctaActions: DEFAULT_CTA_ACTIONS,
   showRiskLine: true,
 }
@@ -126,7 +126,7 @@ export const tradingTools: PageCopy = {
     who: 'Traders who review their own performance, and desk managers who need that review to be based on data rather than recollection.',
     why: 'Improvement needs measurement. Manual journals stop being accurate exactly when they matter — after a hard week.',
     connects: 'Alerts can target the terminal, email or a webhook. Journal entries are created by the fill, then annotated by the trader.',
-    next: 'Look at the journal and analytics views in the sandbox with a few simulated trades behind them.',
+    next: 'Look at the journal and analytics views with a representative set of trades behind them.',
   },
   modules: [
     { title: 'Charting', body: 'Multiple timeframes, drawing tools, saved templates, and indicators computed locally.' },
@@ -137,7 +137,7 @@ export const tradingTools: PageCopy = {
     { title: 'Templates', body: 'Workspace, indicator and alert templates that can be pushed to a whole desk.' },
   ],
   ctaHeading: 'Measure the desk, not the anecdote',
-  ctaBody: 'We will walk through the analytics views using a simulated book that looks like yours.',
+  ctaBody: 'We will walk through the analytics views using a book that looks like yours.',
   ctaActions: DEFAULT_CTA_ACTIONS,
 }
 
@@ -152,7 +152,7 @@ export const risk: PageCopy = {
     who: 'Risk managers, desk heads and brokers who are accountable for what the platform is allowed to do.',
     why: 'The moment you need a limit is the moment nobody has time to enforce it manually.',
     connects: 'Every order — human or automated — passes the same checks. The engine is also what bounds the intelligence layer.',
-    next: 'In the sandbox, set a maximum exposure, then try to breach it and read the refusal.',
+    next: 'Bring a limit you actually enforce. We will configure it, breach it deliberately, and read the refusal together.',
   },
   modules: [
     { title: 'Pre-trade validation', body: 'Size, exposure, concentration and margin checked before an order is accepted.' },

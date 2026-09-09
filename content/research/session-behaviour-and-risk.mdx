@@ -1,0 +1,48 @@
+---
+title: Why the session matters more than the hour
+description: Instruments do not behave uniformly through the day. Treating the session as data rather than decoration changes how limits should be set.
+date: 2026-02-08
+author: 777 Raptor
+draft: true
+tags: ["method", "market-structure", "risk"]
+---
+
+Most platforms treat time as a single global clock. Markets do not work that
+way. A euro pair at 03:00 UTC and the same pair at 08:00 UTC are, for practical
+purposes, two different instruments: different spread, different depth,
+different response to the same size.
+
+## What changes across a session
+
+- **Spread.** Frequently several times wider outside the instrument's primary
+  session.
+- **Depth.** Size that sits comfortably at the London open can move the price
+  materially in a thin Asian session.
+- **Volatility character.** Not merely the level, but whether moves trend or
+  revert.
+- **Correlation.** Relationships often only hold during overlapping sessions.
+
+## The consequence for risk limits
+
+A position size that is conservative during the primary session can be
+aggressive six hours later, without anything about the position changing. A
+static limit is therefore a limit that is wrong for most of the day — too loose
+in thin conditions, or too tight in liquid ones.
+
+Two things follow:
+
+1. **Exposure limits should be aware of the session**, or at least set for the
+   thinnest conditions in which a position will be held.
+2. **Holding a position across a session boundary is a decision**, and it is
+   usually an unexamined one.
+
+## How this shows up in the platform
+
+Session windows are configured per instrument, not globally, and the intelligence
+layer reports which sessions are open and how current conditions compare with
+the instrument's typical behaviour for that session.
+
+The simulation on this site models the same thing: instruments are quieter
+outside their active sessions and most active at the London and New York opens.
+That is a modelling choice designed to be recognisable, not a claim about any
+particular day.

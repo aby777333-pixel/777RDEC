@@ -28,7 +28,7 @@ const AUDIENCES: readonly Audience[] = [
       'A journal built from your fills rather than your memory.',
       `${EMIL_SHORT} explaining conditions in plain language, and acting only if you authorise it.`,
     ],
-    cta: { label: 'Open the sandbox', href: '/experience' },
+    cta: { label: 'See the terminal', href: '/platform/terminal' },
   },
   {
     id: 'broker',

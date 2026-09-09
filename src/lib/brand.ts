@@ -33,11 +33,10 @@ export const JURISDICTION_NOTE =
 export const TECHNOLOGY_PROVIDER_DISCLOSURE =
   '777 Raptor is a technology provider. It does not provide brokerage services, investment advice, portfolio management, liquidity provision or custody unless a named legal entity is authorised to do so in the relevant jurisdiction.'
 
-/** Short-form risk line. Required on every EMIL surface and in the sandbox. */
+/** Short-form risk line. Required on every EMIL and risk surface. */
 export const RISK_LINE_SHORT =
   'Trading leveraged products carries a high level of risk to capital. Technology can improve analysis and controls; it cannot remove market risk.'
 
-export const SIMULATED_DATA_NOTICE = 'SIMULATED DATA · NOT A LIVE ACCOUNT'
 
 export const CONTACT_EMAIL = `hello@${SITE_DOMAIN}`
 export const DEVELOPERS_EMAIL = `developers@${SITE_DOMAIN}`

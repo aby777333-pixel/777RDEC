@@ -2,7 +2,7 @@ import { AlertTriangle } from 'lucide-react'
 import { RISK_LINE_SHORT } from '@/lib/brand'
 import { cn } from '@/lib/utils'
 
-/** Required on every EMIL surface and in the sandbox (§7). */
+/** Required on every EMIL and risk surface (§7). */
 export function RiskLine({ className }: { className?: string }) {
   return (
     <p

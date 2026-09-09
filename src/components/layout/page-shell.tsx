@@ -3,6 +3,7 @@ import { Eyebrow } from '@/components/ui/eyebrow'
 import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { WingMark } from '@/components/ui/wing-mark'
+import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
 import { cn } from '@/lib/utils'
@@ -11,16 +12,18 @@ export function PageHero({
   eyebrow,
   heading,
   lead,
+  imageVariant,
   children,
 }: {
   eyebrow: string
   heading: string
   lead: string
+  imageVariant?: 'default' | 'emil'
   children?: React.ReactNode
 }) {
   return (
-    <section className="relative overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28">
-      <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
+    <section className="relative isolate overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28">
+      <HeroImage variant={imageVariant ?? 'default'} />
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}

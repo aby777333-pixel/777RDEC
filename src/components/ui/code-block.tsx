@@ -38,7 +38,7 @@ export function CodeBlock({
           {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
-      <pre className="scroll-steel overflow-x-auto px-4 py-4 text-data">
+      <pre className="scroll-steel w-full min-w-0 overflow-x-auto px-4 py-4 text-data">
         <code className="font-mono text-steel-300">{code}</code>
       </pre>
     </div>

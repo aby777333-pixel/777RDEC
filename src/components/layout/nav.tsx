@@ -32,11 +32,11 @@ export function Nav() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle className="hidden sm:inline-flex" />
-          <ButtonLink href="/request-demo" variant="ghost" size="sm" className="hidden sm:inline-flex">
-            Request Demo
+          <ButtonLink href="/platform" variant="ghost" size="sm" className="hidden sm:inline-flex">
+            Platform
           </ButtonLink>
-          <ButtonLink href="/experience" variant="primary" size="sm" className="hidden sm:inline-flex">
-            Experience Raptor
+          <ButtonLink href="/request-demo" variant="primary" size="sm" className="hidden sm:inline-flex">
+            Request Demo
           </ButtonLink>
           <MobileDrawer />
         </div>

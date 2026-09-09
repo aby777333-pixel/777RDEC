@@ -1,0 +1,35 @@
+---
+title: EMIL Lab is open
+description: Configure a mandate, arm the intelligence layer against simulated data, and see exactly where its boundaries are.
+date: 2026-05-06
+author: 777 Raptor
+draft: true
+tags: ["product", "emil"]
+---
+
+Describing a permissions model does not convince anyone. Being made to type a
+confirmation before anything is permitted to act is a different experience.
+
+**EMIL Lab** is the real control surface, running against simulated data. You
+set the analysis permissions, the markets, the risk limits, the maximum
+exposure, the automation level and the trading permissions. Then you request
+arm, read what you are authorising, and type it.
+
+## What we deliberately made awkward
+
+- **Arming requires typing.** There is no one-click arm, because arming is an
+  act of authorisation.
+- **The authorisation text is specific.** It states what will be permitted, the
+  hard limits, and that the intelligence layer cannot remove market risk.
+- **The dialog does not close by clicking outside it.** Dismissing an
+  authorisation prompt by accident should not be possible.
+
+## What we deliberately made easy
+
+- **Disarming.** One button, always rendered, high contrast, no confirmation.
+  The Escape key works too. Withdrawing authorisation should never require
+  navigating anywhere.
+
+The log narrates what the layer is doing in readable language — including
+refusals, which are the interesting part. An order rejected for breaching a
+concentration limit tells you more about a system than one that filled.

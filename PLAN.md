@@ -1,79 +1,100 @@
 # PLAN
 
-Working record, one entry per phase. Written before the phase, updated after.
+Working record. Written before each phase, updated after.
+
+## Scope
+
+**This repository is the marketing website only.** The Raptor Terminal, EMIL
+cockpit, CRM and client portal are supplied separately and will be linked or
+embedded here later. Nothing in this repo simulates or reimplements them.
+
+An earlier pass had built a simulated terminal and a sandbox; that was removed
+on instruction. See DECISIONS.md §11 for exactly what came out and what is
+still available to build on.
 
 ## Phase 1 — Foundation ✅
 
-**Built.** Next 14 App Router scaffold with `src/`, TypeScript strict (plus
-`noUnusedLocals` / `noUnusedParameters`), Tailwind with a CSS-variable token
-layer, self-hosted fonts via `next/font`, `lib/brand.ts`, UI primitives,
-Nav + mega-menu + mobile drawer + footer + cookie banner, `check-copy.ts`
-wired into `npm run build`, and every route from §2 as a real page.
+Next 14 App Router, `src/`, TypeScript strict (plus `noUnusedLocals` /
+`noUnusedParameters`), Tailwind over a CSS-variable token layer, self-hosted
+fonts via `next/font`, `lib/brand.ts`, UI primitives, Nav + mega-menu + mobile
+drawer + footer + consent-gated cookie banner, `check-copy.ts` wired into
+`npm run build`, and every route from the brief as a real page.
 
-**Assumptions.** `/docs/brief.md` is not in the repo, so page copy is derived
-from the headlines quoted in the super prompt plus the positioning it states.
-Every approved headline in the prompt is used verbatim.
+*Done when: every route exists with correct metadata, nav works on mobile,
+copy guard passes.* ✅
 
-**Done when.** Every §2 route exists with correct metadata, nav works on
-mobile, copy guard passes. ✅
+## Phase 2 — Design system ✅
 
-## Phase 2 — Simulation core ✅
+Two complete palettes (light and dark), three-state theme control, type scale,
+hairline grid field, glass surfaces, tabular numerals, `/design-system` QA
+page rendering every token and component in both themes.
 
-**Built.** `lib/sim/instruments.ts` (40 instruments, six asset classes),
-`sessions.ts` (session windows + activity multiplier), `priceEngine.ts` (GBM
-with a decaying drift term and an anchor pull, seeded via mulberry32),
-`priceEngine.worker.ts`, `use-price-feed.ts` (worker + rAF throttle +
-IntersectionObserver gating), `use-rolling-series.ts`, `indicators.ts`
-(EMA, SMA, Bollinger, RSI, MACD, VWAP), `LwChart`, `DepthLadder`.
-
-**Done when.** Four charts and a ladder tick smoothly. ✅ (Measured on
-desktop; mid-range Android verification still outstanding — see Open items.)
+*Done when: every component is visible in both themes on one page.* ✅
 
 ## Phase 3 — Homepage ✅
 
-All ten sections built: hero terminal, "not another platform" docking
-animation, ecosystem flow, EMIL reveal, audience switcher, cross-asset
-heatmap, risk, white-label re-skin, API code panel, closing. Homepage first
-load 230 kB against the 350 kB budget.
+Nine sections: image-led hero with the ecosystem grid, "not another platform"
+docking animation, ecosystem flow diagram, EMIL reveal, audience switcher,
+cross-asset correlation matrix, risk visualisation, white-label re-skin demo,
+API code panels, closing. First load 176 kB against the 350 kB budget.
 
-## Phase 4 — EMIL ✅
+## Phase 4 — Product pages ✅
 
-`lib/emil/machine.ts` as an explicit discriminated union,
-`EmilControlPanel`, `ArmDialog` (typed `ARM` confirmation, not dismissible by
-click-outside), `EmilLog` with `aria-live`, `EmilStatusCard`, `EmilStrip`.
-DISARM renders in every state and `Escape` disarms when the panel has focus.
+Every page carries real copy and answers the five questions (what / who / why /
+how it connects / what next). Live components on the homepage,
+`/technology/architecture` (ecosystem diagram), `/platform/emil` (five pillars
+with micro-visuals, the not-an-EA comparison, the operating-mode control),
+`/technology/api` (code panels), `/brokers/white-label` (browser re-skin),
+`/platform/risk` and `/intelligence/risk` (treemap, gauges),
+`/intelligence/market` (correlation matrix).
 
-## Phase 5 — Experience Raptor 🔶 Partial
+## Phase 5 — Compliance and legal ✅
 
-The sandbox shell exists with the left rail, the simulated-data chip, the exit
-route and a working terminal + EMIL panel. Order tickets, the portfolio and
-risk workspaces, and the CRM/portal preview panes are not built yet.
+Technology-provider disclosure and legal entity block in the footer of every
+page. Seven legal documents at `/legal/*` written in plain language. Copy guard
+blocking forbidden claims. No certification badges anywhere.
 
-## Phase 6 — Product pages 🔶 Partial
+## Phase 6 — Forms and content ✅
 
-Every page exists with real copy and the five answers. Bespoke live components
-are in place on the homepage, `/technology/architecture`, `/platform/emil`,
-`/intelligence/emil-lab` and `/technology/api`. The remaining pages still need
-their own live component (RBAC matrix, liquidity routing diagram, session
-globe).
+Supabase migration for `demo_requests`, `contact_messages` and
+`newsletter_subscribers` with RLS on and no policies. Server Actions writing
+through the service role; Zod validation; honeypot plus Turnstile behind an env
+flag; swappable Resend/console email adapter. MDX pipeline for `/company/news`
+and `/intelligence/research`, with three research notes and two news items
+marked `draft: true`.
 
-## Phase 7 — Company, legal, forms 🔶 Partial
+## Phase 7 — Polish ✅
 
-Legal pages, the Supabase migration and the demo-request Server Action are
-built. Turnstile is behind an env flag. MDX content pipeline is not wired.
+`sitemap.ts`, `robots.ts`, OG image route at `/api/og` with the chrome
+treatment, JSON-LD (Organization + SoftwareApplication), branded 404 and 500,
+favicon from the wing mark, status page backed by `/api/status`.
 
-## Phase 8 — Polish ⬜ Not started
+## Verified
 
-OG image route exists; sitemap and robots are in place. Outstanding: axe
-audit, cross-browser pass (iOS Safari blur + canvas especially), favicon set
-from the falcon mark.
+- `npm run verify` — typecheck, lint and copy guard all clean.
+- Production build: 56 routes, homepage first load 176 kB.
+- Zero console errors on `/`, `/platform/emil`, `/brokers/white-label` and
+  mobile, in both themes.
+- No horizontal scroll at 390 / 768 / 1440 (`window.scrollX` stays 0).
 
 ## Open items
 
-- **Hero images.** Four images were supplied in conversation but did not
-  arrive as files. `HERO_IMAGES` in `lib/brand-assets.ts` documents the
-  expected paths; the site is designed to work without them.
-- **Logo.** `RaptorLogo` renders type + the abstracted wing rather than the
-  raster asset, because `/public/brand/raptor-logo.png` is not in the repo.
-- **Registered address.** `REGISTERED_ADDRESS` is `TODO_CONFIRM`.
-- **Mobile performance.** Needs measuring on a real mid-range Android.
+- **Hero images.** Not in the repo — see `public/hero/README.md` for the three
+  filenames. Presence is checked server-side, so a missing file makes no
+  request and the hero falls back to the gradient and grid.
+- **Logo.** `RaptorLogo` composes the lockup from type plus the abstracted
+  wing. Drop `public/brand/raptor-logo.png` in and swap it in that one file.
+- **Registered address.** `REGISTERED_ADDRESS` in `lib/brand.ts` is
+  `TODO_CONFIRM` and renders verbatim so it cannot ship unnoticed.
+- **Supabase migration not applied.** `supabase/migrations/0001_leads.sql` is
+  written but has not been run against the project. Forms validate and respond
+  correctly without it; they just do not persist.
+- **Legal review.** Every `/legal/*` page carries a visible note that it is a
+  draft prepared alongside the site and needs counsel.
+- **Product links.** `/experience` currently redirects to `/request-demo`.
+  Point it at the real terminal when it is available (one line in
+  `next.config.mjs`).
+- **Accessibility.** Contrast pairs were computed by hand and keyboard paths
+  spot-checked; a full axe pass has not been run.
+- **Cross-browser.** Not yet checked on iOS Safari, which matters most for the
+  `backdrop-filter` glass surfaces.

@@ -42,9 +42,9 @@ export function SectionHeader({
       )}
     >
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2 className="text-h2 uppercase text-steel-100">{title}</h2>
+      <h2 className="w-full text-h2 uppercase text-steel-100">{title}</h2>
       {lead ? (
-        <p className={cn('max-w-2xl text-body text-steel-300', align === 'center' && 'mx-auto')}>
+        <p className={cn('w-full max-w-2xl text-body text-steel-300', align === 'center' && 'mx-auto')}>
           {lead}
         </p>
       ) : null}

@@ -45,5 +45,5 @@ export type PageCopy = {
 
 export const DEFAULT_CTA_ACTIONS: readonly NextStep[] = [
   { label: 'Request a demo', href: '/request-demo', variant: 'primary' },
-  { label: 'Experience Raptor', href: '/experience', variant: 'ghost' },
+  { label: 'See the platform', href: '/platform', variant: 'ghost' },
 ]
