@@ -27,17 +27,27 @@ export function Nav() {
           : 'border-b border-transparent bg-transparent',
       )}
     >
-      <div className="container-raptor flex h-16 items-center justify-between gap-4">
-        <div className="flex items-center gap-6">
+      <div className="container-raptor flex h-16 items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-4">
           <RaptorLogoLink />
           <MegaMenu />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <ThemeToggle className="hidden sm:inline-flex" />
-          <ButtonLink href="/platform" variant="ghost" size="sm" className="hidden sm:inline-flex">
+          <ButtonLink
+            href="/platform"
+            variant="ghost"
+            size="sm"
+            className="hidden whitespace-nowrap lg:inline-flex"
+          >
             Platform
           </ButtonLink>
-          <ButtonLink href="/request-demo" variant="primary" size="sm" className="hidden sm:inline-flex">
+          <ButtonLink
+            href="/request-demo"
+            variant="primary"
+            size="sm"
+            className="hidden whitespace-nowrap sm:inline-flex"
+          >
             Request Demo
           </ButtonLink>
           <MobileDrawer />

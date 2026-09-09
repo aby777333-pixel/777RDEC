@@ -5,10 +5,14 @@ import { LOGO_TAGLINE } from '@/lib/brand'
 import { useLogoSources } from '@/components/layout/brand-provider'
 import { cn } from '@/lib/utils'
 
+/**
+ * `raster` caps both height and width: the master lockup is much wider than it
+ * is tall, and an uncapped width pushes the navigation into wrapping.
+ */
 const SCALE = {
-  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-6', tagline: 'text-[0.5rem]' },
-  md: { type: 'text-[1.375rem]', wing: 'h-6 w-11', raster: 'h-8', tagline: 'text-[0.5625rem]' },
-  lg: { type: 'text-[2.5rem]', wing: 'h-11 w-20', raster: 'h-16', tagline: 'text-[0.5625rem]' },
+  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-6 max-w-[7rem]', tagline: 'text-[0.5rem]' },
+  md: { type: 'text-[1.375rem]', wing: 'h-6 w-11', raster: 'h-8 max-w-[9.5rem]', tagline: 'text-[0.5625rem]' },
+  lg: { type: 'text-[2.5rem]', wing: 'h-11 w-20', raster: 'h-14 max-w-[16rem]', tagline: 'text-[0.5625rem]' },
 } as const
 
 type Size = keyof typeof SCALE
@@ -39,7 +43,7 @@ export function RaptorLogo({
 
   if (sources.default) {
     return (
-      <span className={cn('inline-flex items-center', className)}>
+      <span className={cn('inline-flex shrink-0 items-center', className)}>
         {sources.light ? (
           <>
             {/* eslint-disable-next-line @next/next/no-img-element -- static brand asset, no optimisation needed */}

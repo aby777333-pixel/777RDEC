@@ -14,7 +14,7 @@ export function MegaMenu() {
           <NavigationMenu.Item key={group.label}>
             <NavigationMenu.Trigger
               className={cn(
-                'group inline-flex h-9 items-center gap-1 rounded-ui px-3 text-[0.9375rem] text-steel-300',
+                'group inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-ui px-2.5 text-[0.9375rem] text-steel-300',
                 'transition-colors duration-200 hover:bg-bg-2 hover:text-steel-100 data-[state=open]:bg-bg-2 data-[state=open]:text-steel-100',
               )}
             >
