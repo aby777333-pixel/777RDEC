@@ -37,7 +37,16 @@ export const metadata: Metadata = {
     'The market does not stand still. Neither should your technology. Terminal, CRM, client portal, risk engine, API and an intelligence layer — one connected ecosystem.',
   applicationName: SITE_NAME,
   formatDetection: { telephone: false, address: false, email: false },
-  icons: { icon: '/favicon.svg', apple: '/favicon.svg' },
+  icons: {
+    // Generated from the falcon mark in public/brand/raptor-logo.png, on a
+    // dark plate so it stays legible in any browser tab. The SVG wing is kept
+    // as a fallback for clients that prefer vector.
+    icon: [
+      { url: '/favicon.png', type: 'image/png', sizes: '512x512' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
 }
 
 export const viewport: Viewport = {
