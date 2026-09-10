@@ -6,19 +6,19 @@ import { useLogoSources } from '@/components/layout/brand-provider'
 import { cn } from '@/lib/utils'
 
 /**
- * `raster` caps both height and width: the master lockup is much wider than it
- * is tall, and an uncapped width pushes the navigation into wrapping.
- */
-/**
- * `raster` caps height and width. The master lockup carries a wordmark and a
- * tagline, so it needs real height to stay legible — 40px in a 64px header,
- * not 32px. Width is capped too, since the lockup is ~2:1 and an uncapped
- * width pushes the navigation into wrapping.
+ * `raster` caps height and width. The master lockup is a falcon plus a wordmark
+ * plus a tagline stacked into a ~2:1 frame, so height is what makes it legible:
+ * at 40px the tagline was unreadable and the bird was a smudge.
+ *
+ * Sizes now: 48px in an 80px header, 96px in the footer, 36px in the mobile
+ * drawer. The width cap is a backstop against a replacement file with a
+ * different aspect ratio pushing the navigation into wrapping — at 2:1 the
+ * height is what binds, not the cap.
  */
 const SCALE = {
-  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-7 max-w-[8rem]', tagline: 'text-[0.5rem]' },
-  md: { type: 'text-[1.375rem]', wing: 'h-6 w-11', raster: 'h-10 max-w-[11rem]', tagline: 'text-[0.5625rem]' },
-  lg: { type: 'text-[2.5rem]', wing: 'h-11 w-20', raster: 'h-16 max-w-[18rem]', tagline: 'text-[0.5625rem]' },
+  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-9 max-w-[10rem]', tagline: 'text-[0.5rem]' },
+  md: { type: 'text-[1.5rem]', wing: 'h-7 w-12', raster: 'h-12 max-w-[13rem]', tagline: 'text-[0.5625rem]' },
+  lg: { type: 'text-[3rem]', wing: 'h-14 w-24', raster: 'h-24 max-w-[24rem]', tagline: 'text-[0.6875rem]' },
 } as const
 
 type Size = keyof typeof SCALE

@@ -16,14 +16,14 @@ export function MobileDrawer() {
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger
-        className="inline-flex h-10 w-10 items-center justify-center rounded-ui border border-line-2 text-steel-300 lg:hidden"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-ui border border-line-2 text-steel-300 xl:hidden"
         aria-label="Open navigation"
       >
         <Menu size={18} strokeWidth={1.5} aria-hidden />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-bg-0/80 backdrop-blur-sm lg:hidden" />
-        <Dialog.Content className="fixed inset-0 z-50 flex flex-col bg-bg-0 lg:hidden">
+        <Dialog.Overlay className="fixed inset-0 z-50 bg-bg-0/80 backdrop-blur-sm xl:hidden" />
+        <Dialog.Content className="fixed inset-0 z-50 flex flex-col bg-bg-0 xl:hidden">
           <Dialog.Title className="sr-only">Navigation</Dialog.Title>
           <div className="flex items-center justify-between border-b border-line-1 px-5 py-4">
             <RaptorLogo size="sm" />

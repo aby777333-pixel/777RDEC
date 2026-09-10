@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 
 export function MegaMenu() {
   return (
-    <NavigationMenu.Root className="relative hidden lg:flex" delayDuration={80}>
+    <NavigationMenu.Root className="relative hidden xl:flex" delayDuration={80}>
       <NavigationMenu.List className="flex items-center gap-0.5">
         {NAV_GROUPS.map((group) => (
           <NavigationMenu.Item key={group.label}>

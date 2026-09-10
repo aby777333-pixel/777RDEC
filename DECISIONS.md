@@ -381,3 +381,36 @@ call site needing to pass anything.
 array with an `approved` flag on the type. Client outcomes are not something
 to invent, and the evidence page says plainly what we will and will not
 claim instead.
+
+---
+
+## Bigger logos, and the nav collision that was hiding behind them
+
+Asked to make the logos bigger. Measuring first turned up a pre-existing bug
+that a larger logo would have made much worse: **the menu bar was already
+colliding with the right-hand controls** at common laptop widths. At 1024px
+"Blog", "Company" and "Developers" ran straight through the theme toggle and
+the Request Demo button; at 1280px "Developers" sat under the search icon.
+Only at 1440px and above was there clearance. Adding the search control the
+day before had taken ~44px out of an already-negative budget.
+
+So the sizing change came with a fix:
+
+- **The menu bar now appears at `xl` (1280px) rather than `lg` (1024px)**, and
+  the drawer covers everything below it. Between 1024 and 1280 the six mega-menu
+  groups plus a logo plus four right-hand controls simply do not fit on one
+  line, and a hamburger is a better answer than overlapping text.
+- **Dropped the "Platform" ghost button** from the header. It duplicated the
+  Platform mega-menu group and its overview link, and it cost ~84px in the
+  worst-affected range.
+
+Logo sizes: nav 40 → **48px**, footer 64 → **96px**, drawer 28 → **36px**, and
+the header grew 64 → **80px** to give the nav mark room to breathe. The lockup
+is ~2:1, so width follows height — the `max-w` caps are a backstop against a
+replacement file with a different aspect ratio, not the binding constraint.
+`scroll-mt-24` (96px) still clears the taller header, so in-page anchors are
+unaffected.
+
+Verified across sixteen widths from 360 to 2560: no overlap anywhere, the
+drawer opens at every width where the menu bar is hidden, and axe is still at
+0 violations.

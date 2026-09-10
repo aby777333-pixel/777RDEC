@@ -29,7 +29,7 @@ export function Nav() {
           : 'border-b border-transparent bg-transparent',
       )}
     >
-      <div className="container-raptor flex h-16 items-center justify-between gap-3">
+      <div className="container-raptor flex h-20 items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-4">
           <RaptorLogoLink />
           <MegaMenu />
@@ -48,14 +48,6 @@ export function Nav() {
             <Search size={16} strokeWidth={1.5} aria-hidden />
           </Link>
           <ThemeToggle className="hidden sm:inline-flex" />
-          <ButtonLink
-            href="/platform"
-            variant="ghost"
-            size="sm"
-            className="hidden whitespace-nowrap lg:inline-flex"
-          >
-            Platform
-          </ButtonLink>
           <ButtonLink
             href="/request-demo"
             variant="primary"
