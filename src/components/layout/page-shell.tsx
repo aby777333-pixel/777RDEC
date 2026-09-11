@@ -3,7 +3,7 @@ import { Eyebrow } from '@/components/ui/eyebrow'
 import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { WingMark } from '@/components/ui/wing-mark'
-import { HeroImage } from './hero-image'
+import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
 import { cn } from '@/lib/utils'
@@ -15,18 +15,20 @@ export function PageHero({
   eyebrow,
   heading,
   lead,
-  imageVariant,
+  imageVariant: _imageVariant,
   children,
 }: {
   eyebrow: string
   heading: string
   lead: string
+  /** Kept for the two EMIL pages that still pass it; the hero backdrop no
+   *  longer varies by page. */
   imageVariant?: 'default' | 'emil'
   children?: React.ReactNode
 }) {
   return (
-    <section className="relative isolate overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28">
-      <HeroImage variant={imageVariant ?? 'default'} />
+    <section className="force-dark relative isolate overflow-hidden border-b border-line-1 bg-bg-0 pb-16 pt-20 md:pb-24 md:pt-28">
+      <SwingBackdrop className="-z-10" />
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}

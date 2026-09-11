@@ -533,3 +533,188 @@ html[data-reduce-motion='true'] *::after {
 .hue-4 { --tint-rgb: var(--tint-4-rgb); --tint-ink: var(--tint-4-ink); }
 .hue-5 { --tint-rgb: var(--tint-5-rgb); --tint-ink: var(--tint-5-ink); }
 .hue-6 { --tint-rgb: var(--tint-6-rgb); --tint-ink: var(--tint-6-ink); }
+
+/*
+  "A swinging robot (CSS only)" by amit_sheen, ported.
+
+  Faithful to the pen: its own browns, greys and whites, its own timings. Two
+  changes were needed to make it a section backdrop rather than a page:
+
+  1. Everything is scoped under `.swing-scene`. The pen styles `body` and a
+     bare `*`, which would have reached the whole site.
+  2. The nesting is flattened. The pen's CSS panel is nested; this project's
+     PostCSS chain is Tailwind + autoprefixer with no nesting plugin, so
+     relying on it would have depended on a build step that is not there.
+
+  Scale is a font-size on the container, since the whole scene is in `em`.
+  No JavaScript at all — which also means the site's reduce-motion rules
+  already stop it, like any other CSS animation.
+*/
+.swing-scene {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  perspective: 800px;
+  font-size: clamp(2.2px, 0.52vw, 6.5px);
+  --duration: 2s;
+  --delay: -3s;
+}
+.swing-scene * {
+  transform-style: preserve-3d;
+}
+.swing-scene .scene {
+  position: relative;
+  animation: swing-scene 48s -28s infinite linear;
+}
+.swing-scene .scene * {
+  position: absolute;
+}
+@keyframes swing-scene {
+  to { rotate: y 1turn; }
+}
+
+.swing-scene .floor {
+  inset: -100em;
+  background-color: #333;
+  background-image:
+    radial-gradient(closest-side, transparent, #000),
+    radial-gradient(circle at 46.3% 44.6%, #0006, transparent 2em),
+    radial-gradient(circle at 53.7% 44.6%, #0006, transparent 2em),
+    radial-gradient(circle at 53.7% 55.4%, #0006, transparent 2em),
+    radial-gradient(circle at 46.3% 55.4%, #0006, transparent 2em),
+    repeating-linear-gradient(#0003 0, #0000, #0003 1em),
+    repeating-linear-gradient(90deg, #0003 0, #0000, #0003 1em);
+  transform: translateY(16em) rotateX(90deg);
+}
+.swing-scene .shadow {
+  inset: 90em;
+  background-image: radial-gradient(closest-side, #0003, 75%, transparent);
+  animation:
+    swing-shadowMove var(--duration) infinite ease-in-out alternate,
+    swing-shadowOpacity calc(var(--duration) * 0.5) infinite ease-in-out alternate;
+}
+@keyframes swing-shadowMove { from { translate: -15em; } to { translate: 15em; } }
+@keyframes swing-shadowOpacity { from { opacity: 0.5; scale: 2; } to { opacity: 1; scale: 1; } }
+
+.swing-scene .swing { position: absolute; translate: 0 -12em; }
+
+.swing-scene .structure { left: -0.5em; top: -1.2em; --color: brown; }
+.swing-scene .structure .top { rotate: 45deg; --width: 1em; --height: 1em; --depth: 24em; }
+.swing-scene .structure .legs { translate: 0 1em var(--tz, 11em); }
+.swing-scene .structure .legs > div {
+  transform-origin: top;
+  rotate: var(--rz, 15deg);
+  --width: 1em;
+  --height: 30em;
+  --depth: 1em;
+}
+.swing-scene .structure .legs > div:nth-child(2) { --rz: -15deg; }
+.swing-scene .structure .legs:nth-child(2) { --tz: -11em; }
+
+.swing-scene .moving { animation: swing-swing var(--duration) infinite ease-in-out alternate; }
+.swing-scene .moving .line {
+  left: -0.1em; top: 0;
+  width: 0.2em; height: 20em;
+  background-image: linear-gradient(90deg, #fff, #777, #fff);
+  transform: translateZ(var(--tz, 4em));
+}
+.swing-scene .moving .line:nth-child(2) { --tz: -4em; }
+.swing-scene .moving .line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  rotate: y 90deg;
+  background: inherit;
+}
+.swing-scene .moving .seat {
+  left: -2em; top: 20em;
+  --width: 4em; --height: 1em; --depth: 10em; --color: brown;
+}
+@keyframes swing-swing { from { rotate: 45deg; } to { rotate: -45deg; } }
+
+.swing-scene .robot { translate: -1.5em 19.5em; }
+.swing-scene .robot .thigh {
+  left: 0.5em; top: -0.5em;
+  transform: translateZ(var(--tz, 1em)) rotateY(var(--ry, -10deg));
+  --width: 5em; --height: 1em; --depth: 1em;
+}
+.swing-scene .robot .thigh:nth-child(2) { --tz: -1em; --ry: 10deg; }
+.swing-scene .robot .calf {
+  left: 100%; top: 0;
+  width: 4em; height: 1em;
+  transform-origin: top left;
+  animation: swing-calf var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 4em; --height: 1em; --depth: 1em;
+}
+.swing-scene .robot .foot {
+  left: 100%; top: 0;
+  transform-origin: bottom left;
+  animation: swing-foot var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 2em; --height: 1em; --depth: 1em;
+}
+.swing-scene .robot .thorax {
+  left: 0; bottom: -0.5em;
+  transform-origin: bottom left;
+  animation: swing-thorax var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 2em; --height: 6em; --depth: 4em;
+}
+.swing-scene .robot .neck {
+  left: 0.5em; top: -1.5em;
+  transform-origin: bottom;
+  animation: swing-head var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 1em; --height: 2em; --depth: 1em;
+}
+.swing-scene .robot .head {
+  left: -0.5em; top: -2.5em;
+  transform-origin: bottom;
+  animation: swing-head var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 2em; --height: 3em; --depth: 2em;
+}
+.swing-scene .robot .arm {
+  left: 0.5em; top: 1em;
+  transform-origin: 50% 50% calc(var(--lr, 1) * -1.5em);
+  animation: swing-arm var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 1em; --height: 1em; --depth: 4em;
+}
+.swing-scene .robot .arm:nth-child(9) { --lr: -1; }
+.swing-scene .robot .hand {
+  left: 0; top: 0;
+  transform-origin: 0% 50% calc(var(--lr, 1) * -1.5em);
+  animation: swing-hand var(--duration) var(--delay) infinite ease-in-out alternate;
+  --width: 1em; --height: 1em; --depth: 3em;
+}
+
+@keyframes swing-calf { 0% { rotate: 5deg; } 100% { rotate: 85deg; } }
+@keyframes swing-foot { 0%, 30% { rotate: -45deg; } 70%, 100% { rotate: -25deg; } }
+@keyframes swing-thorax {
+  0%, 20% { translate: 0.5em 0; rotate: -60deg; }
+  80%, 100% { translate: 0 0; rotate: 15deg; }
+}
+@keyframes swing-head { 0% { rotate: -5deg; } 100% { rotate: 10deg; } }
+@keyframes swing-arm {
+  0%, 20% { transform: translateZ(calc(var(--lr, 1) * 3em)) rotateX(calc(var(--lr, 1) * -40deg)) rotateY(calc(var(--lr, 1) * 20deg)); }
+  80%, 100% { transform: translateZ(calc(var(--lr, 1) * 3em)) rotateX(0deg) rotateY(calc(var(--lr, 1) * -60deg)); }
+}
+@keyframes swing-hand {
+  0%, 20% { transform: translateZ(calc(var(--lr, 1) * 3.5em)) rotateY(calc(var(--lr, 1) * 60deg)) rotateZ(40deg); }
+  80%, 100% { transform: translateZ(calc(var(--lr, 1) * 3.5em)) rotateY(calc(var(--lr, 1) * 120deg)) rotateX(0deg); }
+}
+
+/* boxes: six faces built from --width / --height / --depth */
+.swing-scene *:has(> i) {
+  width: var(--width);
+  height: var(--height);
+}
+.swing-scene i {
+  left: 50%; top: 50%;
+  background-color: var(--color, #fff);
+  box-shadow: 0 0 1em #000 inset;
+}
+.swing-scene i:nth-child(1) { inset: 0; transform: translateZ(calc(var(--depth) * 0.5)); }
+.swing-scene i:nth-child(2) { width: var(--depth); height: 100%; transform: translate(-50%, -50%) rotateY(90deg) translateZ(calc(var(--width) * 0.5)); }
+.swing-scene i:nth-child(3) { inset: 0; transform: rotateY(180deg) translateZ(calc(var(--depth) * 0.5)); }
+.swing-scene i:nth-child(4) { width: var(--depth); height: 100%; transform: translate(-50%, -50%) rotateY(270deg) translateZ(calc(var(--width) * 0.5)); }
+.swing-scene i:nth-child(5) { width: var(--width); height: var(--depth); transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--height) * 0.5)); }
+.swing-scene i:nth-child(6) { width: var(--width); height: var(--depth); transform: translate(-50%, -50%) rotateX(270deg) translateZ(calc(var(--height) * 0.5)); }

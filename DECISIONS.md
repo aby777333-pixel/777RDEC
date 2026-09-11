@@ -898,3 +898,37 @@ luminance-keyed alpha and its theme observer are gone.
 This is a real trade: two sections of the site no longer follow the page theme.
 It is the right one — a light-mode hero showing a grey smear is worse than a
 dark band on a light page, and every other section still themes normally.
+
+## 38. The swinging robot, on every inner hero
+
+"A swinging robot (CSS only)" by amit_sheen now backs `PageHero` — the shared
+inner-page hero, so roughly forty pages carry it.
+
+**Faithful to its colours**, as asked: the frame and seat are CSS `brown`
+(`rgb(165,42,42)`), the floor `#333`, the robot white, every timing the pen's
+own. Verified from computed styles rather than by eye.
+
+Two changes were unavoidable to make a page into a section backdrop:
+
+1. **Scoped.** The pen styles `body` and a bare `*`. Left alone, `* { position:
+   absolute }` would have detonated the site. Everything now sits under
+   `.swing-scene`.
+2. **Flattened.** The pen's CSS is nested. This project's PostCSS chain is
+   Tailwind plus autoprefixer with no nesting plugin, so shipping it nested
+   would have relied on a build step that is not there.
+
+Scale is a `font-size` on the container, since the whole scene is expressed in
+`em` — `clamp(2.2px, 0.52vw, 6.5px)` fits it to a hero band.
+
+**It costs no JavaScript.** `/platform` went 94.3 → 94.4 kB. No canvas, no
+render loop, no hook — which also means the site's reduce-motion rules stop it
+for free, like any other CSS animation, and a hidden tab stops compositing it.
+
+The band is `.force-dark` like the other two, per §37: the pen assumes a black
+ground and now gets one in both themes.
+
+`<HeroImage>` is no longer rendered anywhere. The file and
+`public/hero/README.md` stay — the supplied-render system is a documented
+feature of this repo and removing it is a bigger decision than this change. The
+`imageVariant` prop on `PageHero` is likewise kept, inert, because two EMIL
+pages still pass it.
