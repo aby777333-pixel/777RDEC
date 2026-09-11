@@ -791,3 +791,44 @@ the preview pane and a Chrome tab alike — freezes `requestAnimationFrame` *and
 a control that fired zero times for a fixed element at the top of the viewport.
 The build is clean and the shapes are right; whether the scene draws needs one
 look from a focused window.
+
+## 33. The hero blowout was exposure, not palette
+
+First attempt at the pen's colours produced a milky white wash with the
+headline barely readable. The palette was right; the exposure was not.
+
+Grid Run's grading ends `tanh(col*col)` then `sqrt(col)`, and `sqrt` lifts
+midtones hard — 0.25 becomes 0.5. That is flattering when almost every pixel is
+near zero, which is true of the original because it resolves surfaces and most
+rays hit nothing. My glow march lights *every* pixel to some degree, so the
+lift had plenty to work with and took the whole frame with it.
+
+Measured, rendering the two offscreen and reading the buffer back:
+
+| | mean alpha | mean luminance | near-opaque | bright |
+|---|---|---|---|---|
+| blown out | 0.926 | 0.578 | 79.9% | 59.1% |
+| over-corrected | 0.088 | 0.009 | 0% | 0% |
+| **shipped** | **0.297** | **0.076** | **3.2%** | **2.2%** |
+
+The fix is a tighter glow kernel (`d*d*58` → `150`), a damped atmosphere term,
+a shorter distance falloff and a scaled-back lift. Same grading, same colours,
+three per cent of the frame actually bright — which is what "dark with glowing
+struts" means numerically.
+
+Worth keeping as a method note: a backdrop's exposure is measurable without
+being able to see it. Render it offscreen with `preserveDrawingBuffer`, read the
+pixels, and look at the distribution rather than the average alone — the mean
+would have called the wash "bright" and the correction "dark" without telling
+you which was wrong.
+
+## 34. Both bands shorter again
+
+Hero 891 → smaller still: headline clamp `5.2vw/4.75rem` → `4.3vw/3.75rem`,
+padding and the gap above the ecosystem tiles down another step.
+
+The closing band was the other tall one and had not been touched: `py-28
+md:py-36` with the shared `text-h1`, which is 115px at 1440 and ran the
+headline to five lines. Now `py-16 md:py-20` and a local
+`clamp(1.875rem, 4vw, 3.5rem)`, the same approach as the hero — the shared
+token stays untouched for every other page.

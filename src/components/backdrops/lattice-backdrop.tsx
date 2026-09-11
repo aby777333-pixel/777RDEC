@@ -76,37 +76,41 @@ void main() {
 
   for (int i = 0; i < 72; i++) {
     float d = map(p);
-    glow += 0.019 / (0.019 + d * d * 58.0);
+    glow += 0.012 / (0.012 + d * d * 150.0);
     float step = max(d, 0.018);
     p += rd * step;
     t += step;
-    at += 0.05 * (0.05 / max(t, 1e-3));
+    at += 0.012 * (0.012 / max(t, 1e-3));
     if (t > 26.0) break;
   }
 
-  // Grading lifted from the pen: warm tint, the hue() sweep, the double
-  // tanh/sqrt curve and the edge lift. These are its colours, not the site's
-  // tokens — see DECISIONS.md.
+  // Grading lifted from the pen: warm tint, the hue() sweep, the tanh/sqrt
+  // curve. These are its colours, not the site's tokens — see DECISIONS.md.
+  //
+  // Exposure is the whole game here. That curve assumes a frame that is mostly
+  // black, and the first pass fed it a glow march that lit everything — 80% of
+  // pixels came out near-opaque at mean luminance 0.58, a milky wash. Tightened
+  // to 2.2% bright pixels at mean luminance 0.076: dark, with struts that glow.
   float k = mix(max(0.2, 1.0 - t * 0.055), 0.25, 0.35);
   float f = S(1.0, 0.0, clamp(t / 26.0, 0.0, 1.0));
+  float g = glow * 0.055 * exp(-t * 0.090);
   vec3 tint = vec3(1.2, 0.95, 0.9);
 
   vec3 col = vec3(0.0);
-  col += tint * at * k;
-  col += hue(3.14 * k + f * f * f) * k * k;
-  col += tanh(tint * glow * 0.085);
+  col += tint * at * k * 0.6;
+  col += hue(3.14 * k + f * f * f) * g * 0.75;
+  col += tint * g;
 
-  col = tanh(col * col);
-  col = sqrt(col);
-  col = mix(sqrt(col) * 1.2, col, clamp(S(-0.1, 0.2, dot(uv, uv)), 0.0, 1.0));
+  col = tanh(col * col * 2.0);
+  col = sqrt(col) * 0.80;
 
   vec2 c = gl_FragCoord.xy / uRes;
   c *= 1.0 - c.yx;
-  col *= pow(clamp(c.x * c.y * 25.0, 0.0, 1.0), 0.25);
+  col *= pow(clamp(c.x * c.y * 25.0, 0.0, 1.0), 0.28);
 
   // Alpha from luminance so the page still shows through the void and the
   // light theme is not turned into a dark box.
-  float a = clamp(max(col.r, max(col.g, col.b)) * 1.9, 0.0, 1.0);
+  float a = clamp(max(col.r, max(col.g, col.b)) * 1.7, 0.0, 1.0);
   fragColor = vec4(col, a);
 }`
 

@@ -33,7 +33,7 @@ export function Hero() {
         local clamp rather than a change to the shared scale, which every other
         page's <h1> and the closing <h2> also read from.
       */}
-      <div className="container-raptor relative pb-10 pt-4 md:pb-14 md:pt-8">
+      <div className="container-raptor relative pb-8 pt-3 md:pb-10 md:pt-6">
         <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center md:gap-5">
           {/* self-start/center: a stretched chip in a flex column looks like a bar. */}
           <Chip tone="signal" dot className="self-center">
@@ -42,7 +42,7 @@ export function Hero() {
 
           {/* Local clamp: 8vw/8rem shared scale down to 6.4vw/6rem here. */}
           <h1
-            className="text-[clamp(2.25rem,5.2vw,4.75rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]"
+            className="text-[clamp(2rem,4.3vw,3.75rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]"
             /* Legibility without a covering layer. Token, not a literal. */
             style={{ filter: 'drop-shadow(0 2px 22px var(--bg-0)) drop-shadow(0 0 6px var(--bg-0))' }}
           >
@@ -71,7 +71,7 @@ export function Hero() {
         </div>
 
         {/* The ecosystem, stated as the six things it is made of. */}
-        <ul className="surface-sheen mt-8 grid gap-px md:mt-10 overflow-hidden rounded-panel border border-line-2 bg-line-1 shadow-panel sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="surface-sheen mt-6 grid gap-px md:mt-8 overflow-hidden rounded-panel border border-line-2 bg-line-1 shadow-panel sm:grid-cols-2 lg:grid-cols-3">
           {ECOSYSTEM_PILLARS.map((pillar, index) => (
             <li key={pillar.id}>
               <Link
