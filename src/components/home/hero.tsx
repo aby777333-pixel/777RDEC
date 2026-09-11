@@ -76,7 +76,7 @@ export function Hero() {
             <li key={pillar.id}>
               <Link
                 href={pillar.href}
-                className="lift group flex h-full flex-col gap-1.5 bg-bg-1/80 px-5 py-4 backdrop-blur-sm hover:bg-bg-2"
+                className="lift group flex h-full flex-col gap-1.5 bg-bg-1 px-5 py-4 hover:bg-bg-2"
               >
                 <span className="font-mono text-[0.6875rem] text-steel-500" data-numeric>
                   {String(index + 1).padStart(2, '0')}

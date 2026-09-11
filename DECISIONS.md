@@ -832,3 +832,47 @@ md:py-36` with the shared `text-h1`, which is 115px at 1440 and ran the
 headline to five lines. Now `py-16 md:py-20` and a local
 `clamp(1.875rem, 4vw, 3.5rem)`, the same approach as the hero — the shared
 token stays untouched for every other page.
+
+## 35. It was the wrong renderer, not the wrong exposure
+
+Two rounds were spent grading a glow march to look like Grid Run. Seeing the
+pen rendered settled it: Grid Run is not a glow at all. It **resolves
+surfaces** — solid beams with a point light, specular, ambient occlusion and
+soft shadows, receding into black. A glow march draws bright lines through fog
+and no amount of grading turns one into the other.
+
+So the hero now does what the pen does: march to `abs(d) < 1e-3`, take a
+tetrahedron normal, and light the hit — `calcAO` over five taps, a soft shadow
+march toward the moving light, distance attenuation, then the pen's own
+grading. The cell is the pen's too: a node cube plus three axis struts welded
+with `smin`, repeated through `fract`.
+
+The earlier §33 exposure work was answering the wrong question, and the
+histogram shows why it could never have arrived: a surface render puts **82% of
+pixels in the darkest fifth** with a 2% specular tail reaching 1.0. A fog march
+has no such tail — it has a hump in the middle, which is exactly the milky wash
+that kept coming back.
+
+Compiled and measured before shipping: links clean, `glError` 0, 7ms for a
+480×300 draw on an Intel iGPU, mean luminance 0.123.
+
+**Cost, stated plainly.** This is much more expensive than what it replaced —
+up to 220 march steps plus a 48-step shadow and five AO taps per pixel, against
+a single 72-step loop. Render resolution drops to 0.5 and DPR is capped at 1.25
+to pay for it, and the existing pausing (offscreen, hidden tab, reduced motion)
+matters more than it did. Worth watching on a low-end phone.
+
+**Opaque in dark, keyed in light.** The pen owns its black ground, so in dark
+the canvas is opaque, as the original is. In light that would make the hero a
+dark slab, so alpha there still comes from luminance. One uniform, set from the
+theme observer.
+
+## 36. Overlays off the hero, closing band back
+
+The ecosystem tiles were `bg-bg-1/80` with `backdrop-blur-sm` — a translucent,
+blurred sheet across the animation, and the smeared rectangle in the middle of
+the hero screenshot. Now a solid panel: the animation is either behind the card
+or not, with nothing smeared in between.
+
+The closing band is back to `py-28 md:py-36` and the shared `text-h1`. It was
+shortened in §34 and the larger version read better against the singularity.
