@@ -38,15 +38,15 @@ void main() {
 
   vec2 p = vec2(cos(th), sin(th)) * aRadius;
   p.y *= 0.46;
-  p.x += 0.10 * sin(uTime * 0.75 + aSeed * 6.2831);
-  p.y += 0.05 * cos(uTime * 0.62 + aSeed * 3.1416);
+  p.x += 0.13 * sin(uTime * 1.1 + aSeed * 6.2831);
+  p.y += 0.07 * cos(uTime * 0.9 + aSeed * 3.1416);
 
   // Stand-in for depth: particles on the far side of the orbit read smaller
   // and dimmer, which is what gives the band its volume.
   float depth = 0.5 + 0.5 * sin(th);
 
-  vGlow = 0.26 + 0.74 * depth;
-  gl_PointSize = aSize * (0.85 + depth) * uScale;
+  vGlow = 0.58 + 0.42 * depth;
+  gl_PointSize = aSize * (1.15 + depth) * uScale;
   gl_Position = vec4(p, 0.0, 1.0);
 }`
 
@@ -67,7 +67,7 @@ void main() {
 
   float soft = smoothstep(0.25, 0.0, r);
   vec3 col = mix(uBase, uInk, vGlow);
-  fragColor = vec4(col, soft * vGlow * 0.95);
+  fragColor = vec4(col, soft * vGlow);
 }`
 
 function compile(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
@@ -112,24 +112,25 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
 
   const rect = canvas.getBoundingClientRect()
   const area = Math.max(1, rect.width * rect.height)
-  const count = Math.round(Math.min(16000, Math.max(3400, area * 1.4)))
+  const count = Math.round(Math.min(22000, Math.max(5000, area * 2.0)))
 
   // One interleaved buffer, written once. theta, radius, speed, seed, size.
   const stride = 5
   const data = new Float32Array(count * stride)
   for (let i = 0; i < count; i++) {
     const o = i * stride
-    // sqrt keeps the density even rather than crowding the centre.
-    const radius = Math.sqrt(Math.random()) * 1.15
+    // sqrt keeps areal density even; the 0.42 floor clears the middle so the
+    // field reads as a halo around the copy rather than a blob behind it.
+    const radius = (0.42 + 0.58 * Math.sqrt(Math.random())) * 1.18
     data[o] = Math.random() * Math.PI * 2
     data[o + 1] = radius
     // Inner orbits turn faster, and a third of them turn the other way.
     // 0.14–0.40 rad/s is one revolution every 16–45s. The first pass ran at
     // 0.035–0.10, which is 60–180s per revolution — running perfectly and
     // indistinguishable from a still image.
-    data[o + 2] = (0.14 + (1.2 - radius) * 0.22) * (Math.random() < 0.33 ? -1 : 1)
+    data[o + 2] = (0.34 + (1.2 - radius) * 0.46) * (Math.random() < 0.33 ? -1 : 1)
     data[o + 3] = Math.random()
-    data[o + 4] = 1.3 + Math.random() * 2.5
+    data[o + 4] = 1.9 + Math.random() * 3.1
   }
 
   const buffer = gl.createBuffer()
@@ -170,7 +171,7 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
     resize(width, height) {
       gl.viewport(0, 0, width, height)
       // Points are sized in device pixels, so they have to follow the buffer.
-      gl.uniform1f(uScale, Math.max(0.9, Math.min(height, width) / 520))
+      gl.uniform1f(uScale, Math.max(1.1, Math.min(height, width) / 430))
     },
     draw(seconds) {
       gl.clearColor(0, 0, 0, 0)
@@ -184,7 +185,9 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
       gl.deleteBuffer(buffer)
       gl.deleteVertexArray(vao)
       gl.deleteProgram(program)
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
+      // Deliberately NOT loseContext(): getContext() hands back the same
+      // object for a given canvas, so killing it here leaves a re-mounted
+      // component holding a dead context and a blank canvas forever.
     },
   }
 }

@@ -71,6 +71,7 @@ export function useCanvasBackdrop(
     let start = 0
     let running = false
     let disposed = false
+    let lastDrawAt = 0
 
     /**
      * Measured, never remembered.
@@ -105,6 +106,7 @@ export function useCanvasBackdrop(
       if (disposed) return
       if (start === 0) start = now
       renderer.draw((now - start) / 1000)
+      lastDrawAt = Date.now()
       frame = window.requestAnimationFrame(tick)
     }
 
@@ -154,6 +156,31 @@ export function useCanvasBackdrop(
       attributeFilter: ['data-reduce-motion'],
     })
 
+    /**
+     * A dropped animation frame chain is silent: nothing fires, and the canvas
+     * holds whatever it last drew, which reads as a still image rather than as
+     * a fault. Symptom seen in the wild — both canvases sitting at uTime 0,
+     * having drawn frame one and stopped.
+     *
+     * So the loop is supervised rather than trusted. If it should be running
+     * and has not drawn for a second, restart it. A timer per canvas is a
+     * rounding error next to the render it is guarding, and browsers throttle
+     * this alongside everything else when the tab is hidden, which is exactly
+     * when we want it quiet anyway.
+     */
+    const watchdog = window.setInterval(() => {
+      if (disposed || motionIsReduced()) return
+      const shouldRun = isOnScreen() && document.visibilityState === 'visible'
+      if (!shouldRun) return
+      if (!running || Date.now() - lastDrawAt > 1000) {
+        stop()
+        running = true
+        start = 0
+        lastDrawAt = Date.now()
+        frame = window.requestAnimationFrame(tick)
+      }
+    }, 1000)
+
     const media = window.matchMedia('(prefers-reduced-motion: reduce)')
     media.addEventListener('change', sync)
     document.addEventListener('visibilitychange', sync)
@@ -163,6 +190,7 @@ export function useCanvasBackdrop(
     return () => {
       disposed = true
       stop()
+      window.clearInterval(watchdog)
       observer.disconnect()
       resizeObserver.disconnect()
       motionObserver.disconnect()

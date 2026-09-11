@@ -170,7 +170,9 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
     dispose() {
       themeObserver.disconnect()
       gl.deleteProgram(program)
-      gl.getExtension('WEBGL_lose_context')?.loseContext()
+      // Deliberately NOT loseContext(): getContext() hands back the same
+      // object for a given canvas, so killing it here leaves a re-mounted
+      // component holding a dead context and a blank canvas forever.
     },
   }
 }

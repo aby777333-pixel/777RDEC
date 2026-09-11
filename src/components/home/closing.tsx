@@ -12,24 +12,24 @@ export function Closing() {
     <section className="relative isolate overflow-hidden py-28 md:py-36">
       <ParticleBackdrop className="-z-10" />
       {/*
-        Scrim, reshaped rather than weakened.
+        Scrim, sized to the copy rather than to the section.
 
-        Turning the particles up and easing this at the same time put the worst
-        contrast in the headline band at 2.54:1 — under the 3:1 that large text
-        needs. The fix is not a dimmer field, it is a scrim shaped like the text
-        it protects: a flat core wide enough to cover the headline and both
-        buttons, then a long falloff so the field still reads brightly above,
-        below and either side of the copy. Measured back at 5.1:1.
+        The previous ellipse was 884 x 462px against a particle band of
+        819 x 266 — larger than the thing it was covering, in every direction,
+        with a 90% core. It ate every brightness increase made to the field;
+        turning the particles up while this sat on top of them changed nothing
+        visible. Now 684 x 251, solid only across the headline and buttons,
+        which is all it was ever for.
 
-        Ellipse is wide and short because the copy is: max-w-3xl, centred, a few
-        lines tall in a section that is mostly vertical padding.
+        Wide and short because the copy is: max-w-3xl, centred, a few lines
+        tall in a section that is mostly vertical padding.
       */}
       <div
-        className="pointer-events-none absolute inset-0 -z-10 opacity-90"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.92]"
         aria-hidden
         style={{
           background:
-            'radial-gradient(ellipse 62% 46% at 50% 50%, var(--bg-0) 0%, var(--bg-0) 42%, transparent 100%)',
+            'radial-gradient(ellipse 48% 25% at 50% 50%, var(--bg-0) 0%, var(--bg-0) 55%, transparent 100%)',
         }}
       />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
