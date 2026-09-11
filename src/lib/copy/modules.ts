@@ -1,16 +1,19 @@
 /**
  * Module and workspace copy.
  *
- * Two dictionaries live here, both describing what is inside the product:
+ * Three dictionaries live here, all describing what is inside the product:
  *
  * 1. `INDIGENOUS_MODULES` — the twenty modules that make up the Raptor stack.
- * 2. `WORKSPACE_GROUPS` — how the terminal workspace is organised, listed as
+ * 2. `modulesPage` — the `/platform/modules` page, whose `modules` field is
+ *    derived from the list above so the page and the search index cannot drift.
+ * 3. `WORKSPACE_GROUPS` — how the terminal workspace is organised, listed as
  *    capabilities. This describes the surface; it does not reimplement it.
  *    The terminal itself is a separate application (see PLAN.md § Scope).
  *
  * Icons are referenced by key rather than imported here, so this file stays a
  * plain string dictionary and remains swappable for translation (§1 i18n).
  */
+import { DEFAULT_CTA_ACTIONS, type PageCopy } from './types'
 
 /** One of the six card hues defined in `globals.css`. Never a colour literal. */
 export type Hue = 1 | 2 | 3 | 4 | 5 | 6
@@ -25,6 +28,7 @@ export const MODULES_SECTION = {
   eyebrow: 'Ecosystem',
   heading: '20 Indigenous Modules',
   lead: 'Every module is 100% RAPTOR-native. MT5 and cTrader are migration bridges only — not dependencies.',
+  link: { label: 'What each module does', href: '/platform/modules' },
 } as const
 
 /**
@@ -60,6 +64,36 @@ export const INDIGENOUS_MODULES: readonly IndigenousModule[] = [
   { name: 'RAPTOR Connect', blurb: 'MT5/cTrader migration bridge', hue: 3 },
   { name: 'RAPTOR App', blurb: 'iOS + Android native mobile', hue: 3 },
 ]
+
+/**
+ * The `/platform/modules` page.
+ *
+ * `modules` is derived from `INDIGENOUS_MODULES` rather than written out
+ * again. The page renders the grid itself, so this field exists to feed the
+ * search index — deriving it means a module added above becomes searchable
+ * without anyone remembering to update a second list.
+ */
+export const modulesPage: PageCopy = {
+  title: 'Modules',
+  description:
+    'The twenty modules that make up the Raptor stack: matching engine, pricing, charting, CRM, dealing desk, payments, compliance, scripting and the rest.',
+  eyebrow: 'Platform · Modules',
+  heading: 'Built, not assembled.',
+  lead: MODULES_SECTION.lead,
+  answers: {
+    what: 'The twenty modules the platform is built from, from the matching engine and pricing layer through CRM, payments, compliance and the mobile app.',
+    who: 'Brokers and institutions working out what they would actually be buying, and technical evaluators who want the component list before a demo rather than after it.',
+    why: 'A platform assembled from other vendors inherits their release cycles, their outages and their reconciliation problems. Modules written against one data model do not.',
+    connects:
+      'Every module reads the same instrument master, account state and risk limits. Adding an instrument or changing a limit once makes it true in all of them.',
+    next: 'Tell us which modules matter for your operation and the demo covers those, rather than touring all twenty.',
+  },
+  modules: INDIGENOUS_MODULES.map((module) => ({ title: module.name, body: module.blurb })),
+  ctaHeading: 'Which of these do you actually need?',
+  ctaBody:
+    'Most operations need a subset. Send us the shape of your desk and we will scope the modules that matter rather than quoting the whole stack.',
+  ctaActions: DEFAULT_CTA_ACTIONS,
+}
 
 /**
  * Icon keys. A closed union so the component's icon map is exhaustive and a

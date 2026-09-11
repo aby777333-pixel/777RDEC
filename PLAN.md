@@ -143,6 +143,7 @@ and no existing section changed.* ✅
 - **`RAPTOR AI` vs `EMIL`.** The module grid calls RAPTOR AI "the intelligence
   layer"; every other surface gives that role to EMIL. Decide which is the
   public name before this goes in front of buyers.
-- **The twenty modules are not searchable.** `lib/search.ts` indexes `PageCopy`
-  only, so module names do not appear in site search. Giving them a page would
-  fix that and give the grid somewhere to link to.
+- ~~**The twenty modules are not searchable.**~~ Resolved: `/platform/modules`
+  is now a real page, in the nav, the sitemap and the search index. Its
+  `modules` field is derived from `INDIGENOUS_MODULES`, so a module added to
+  that list becomes searchable without touching a second list.

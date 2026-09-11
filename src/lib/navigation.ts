@@ -10,6 +10,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     blurb: 'The trading surface and everything that makes it decisive.',
     links: [
       { label: 'Raptor Terminal', href: '/platform/terminal', description: 'Analysis and execution in one surface.' },
+      { label: 'Modules', href: '/platform/modules', description: 'The twenty modules the stack is built from.' },
       { label: EMIL_SHORT, href: '/platform/emil', description: 'The intelligence layer inside the terminal.' },
       { label: 'Global Markets', href: '/platform/markets', description: 'Multi-asset coverage, session by session.' },
       { label: 'Trading Tools', href: '/platform/trading-tools', description: 'Charting, scanners, alerts, journaling.' },

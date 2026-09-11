@@ -474,3 +474,45 @@ and specific figures — `155+ indicators`, `40+ PSP connectors`, `FIX 4.4/5.0`,
 `copy/modules.ts`, on the same standard as the integrations directory. Note
 also that "RAPTOR AI — Claude-powered intelligence layer" sits alongside EMIL,
 which the rest of the site calls the intelligence layer; worth reconciling.
+
+## 24. The modules page indexes what it does not render twice
+
+`/platform/modules` exists so the twenty modules have somewhere to link and
+somewhere to be found. Three things fell out of building it.
+
+**The page is composed, not `<StandardPage>`.** `StandardPage` renders a
+`<ModuleGrid>` whenever `copy.modules` is non-empty — which would have put the
+same twenty modules on the page twice, once as the five-column grid and once as
+the three-column tinted one. The page uses `PageHero` + `AnswerGrid` +
+`IndigenousModules` + `CtaBand` instead, which is `StandardPage` minus that one
+section. All four are already exported.
+
+**`copy.modules` is kept anyway, and derived.** `buildSearchIndex` reads
+`copy.modules.flatMap(m => [m.title, m.body])`, and that is the only reason
+module names are searchable. So the field stays, populated from
+`INDIGENOUS_MODULES.map(...)` rather than typed out again: adding a
+twenty-first module makes it searchable with no second list to remember. The
+field is indexed but not rendered *from*, which is worth knowing before someone
+deletes it as dead data — there is a comment on the page saying so.
+
+**A hidden heading was the wrong fix.** The page variant first dropped the
+section's `<h2>`, since the hero already said the same thing. That left the
+twenty module `<h3>`s following the page `<h1>` directly, which is an axe
+`heading-order` violation and would have broken the 0-violation run. Rather
+than paper over it with an `sr-only` heading, the `<h2>` stayed and the `<h1>`
+changed to "Built, not assembled." — so the hierarchy is real and neither
+heading repeats the other.
+
+`IndigenousModules` takes one prop, `variant`. `section` (the homepage) carries
+the eyebrow, the lead and a link on to the page; `page` carries the heading
+only, because the hero above it already has the rest and a link there would
+point at the current route.
+
+**Verified.** Build clean at 76 static pages, homepage unchanged at 177 kB.
+Search returns `/platform/modules` and nothing else for `cTrader`,
+`leaderboards`, `KYC/AML` and `Institutional dealing workstation`, and ranks it
+first for `funded accounts`; the index grew to 80 documents. Five columns at
+1440, one at 390, no horizontal scroll at either, no heading skips, no console
+errors. The Platform mega-menu now carries six links plus the overview with no
+overlap and nothing offscreen — the §"Bigger logos" collision fix is untouched,
+since no top-level nav item was added.
