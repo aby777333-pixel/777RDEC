@@ -662,3 +662,47 @@ horizontal scroll at 390, 1440 or 1920, heading order unbroken.
 Mobile is unchanged in character and still tall — 1506px at 390px, and that is
 the six-tile ecosystem grid stacking, not the headline. Worth a separate look
 if the mobile hero needs to come down too.
+
+## 29. "No animation" was the site's own Reduce motion toggle
+
+Three rounds were spent turning the particle field up, speeding its orbits,
+fixing a latched intersection flag and adding a watchdog — all real defects,
+none of them the reported fault.
+
+Measuring in the user's actual Chrome, rather than the preview pane, answered
+it in one call:
+
+```
+prefersReducedMotion    : false      <- not the OS
+siteReduceMotionStored  : "true"     <- the site's own toggle
+siteReduceMotionAttr    : "true"
+```
+
+The footer's "Reduce motion" control had been switched on and persisted to
+`localStorage`. `html[data-reduce-motion='true'] *` disables every transition
+and animation on the site, and the backdrop hook honours the same flag by
+drawing one static frame. Everything was working exactly as designed; the site
+had been told not to move.
+
+The lesson is about instruments, not code. The preview pane throttles
+`requestAnimationFrame` to roughly 1/s whether or not `visibilityState` says
+"visible", so "is it animating" was unanswerable there — and a control test
+would have shown that three rounds earlier. The moment the question was put to
+a browser that runs frames normally, the cause fell out immediately.
+
+Kept anyway, because each was a genuine fault: the latched flag (a hidden tab
+permanently killed the canvas), the stall watchdog, the `loseContext()` footgun,
+and the scrim that was larger than the field it covered.
+
+## 30. Scroll controls, and where they had to go
+
+A page-scroll control, one viewport per press. It sits on the right edge at
+vertical centre rather than the usual bottom-right corner, because the cookie
+banner already owns that corner at `fixed bottom-4 right-6 z-50` and two
+floating controls competing for one spot is worse than an unfamiliar position.
+
+Hidden entirely when the page does not scroll, so a short legal notice does not
+carry a control that would do nothing. Each button disables at its end of the
+page rather than disappearing, so the control never changes size under the
+pointer. Scrolling uses `behavior: 'auto'` when motion is reduced — which, per
+§29, is a setting worth remembering exists.

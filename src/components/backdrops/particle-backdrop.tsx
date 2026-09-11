@@ -37,7 +37,7 @@ void main() {
   float th = aTheta + uTime * aSpeed;
 
   vec2 p = vec2(cos(th), sin(th)) * aRadius;
-  p.y *= 0.46;
+  p.y *= 0.60;
   p.x += 0.13 * sin(uTime * 1.1 + aSeed * 6.2831);
   p.y += 0.07 * cos(uTime * 0.9 + aSeed * 3.1416);
 
@@ -112,7 +112,7 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
 
   const rect = canvas.getBoundingClientRect()
   const area = Math.max(1, rect.width * rect.height)
-  const count = Math.round(Math.min(22000, Math.max(5000, area * 2.0)))
+  const count = Math.round(Math.min(30000, Math.max(7000, area * 2.8)))
 
   // One interleaved buffer, written once. theta, radius, speed, seed, size.
   const stride = 5
@@ -121,7 +121,7 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
     const o = i * stride
     // sqrt keeps areal density even; the 0.42 floor clears the middle so the
     // field reads as a halo around the copy rather than a blob behind it.
-    const radius = (0.42 + 0.58 * Math.sqrt(Math.random())) * 1.18
+    const radius = (0.42 + 0.58 * Math.sqrt(Math.random())) * 1.55
     data[o] = Math.random() * Math.PI * 2
     data[o + 1] = radius
     // Inner orbits turn faster, and a third of them turn the other way.
