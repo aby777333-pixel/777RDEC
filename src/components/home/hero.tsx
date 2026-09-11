@@ -1,7 +1,6 @@
 import { ButtonLink } from '@/components/ui/button'
 import { Chip } from '@/components/ui/chip'
 import { WingMark } from '@/components/ui/wing-mark'
-import { HeroImage } from '@/components/layout/hero-image'
 import { LatticeBackdrop } from '@/components/backdrops/lattice-backdrop'
 import { ECOSYSTEM_PILLARS } from '@/lib/brand'
 import Link from 'next/link'
@@ -13,16 +12,16 @@ import Link from 'next/link'
  * the light and dark variant with the theme and degrades to the gradient and
  * hairline grid when a file is absent. See public/hero/README.md.
  *
- * The lattice sits a layer below that, at -z-20, so <HeroImage>'s wash, tint
- * and radial scrim still do the work of keeping the headline readable. Putting
- * it on top would have meant re-solving legibility against a moving
- * background.
+ * <HeroImage> has been taken out: its wash, tint, radial scrim, bottom fade
+ * and hairline grid all sat on top of the lattice and were what kept it dim.
+ * The lattice is now the hero's background outright. Legibility is handled on
+ * the type itself — a drop-shadow in the page's own background colour — rather
+ * than by a layer over the animation.
  */
 export function Hero() {
   return (
     <section className="relative isolate overflow-hidden">
-      <LatticeBackdrop className="-z-20" />
-      <HeroImage />
+      <LatticeBackdrop className="-z-10" />
       <WingMark
         className="pointer-events-none absolute -left-32 top-10 h-[26rem] w-[46rem] text-steel-700 opacity-40"
         strokeWidth={1}
@@ -42,7 +41,11 @@ export function Hero() {
           </Chip>
 
           {/* Local clamp: 8vw/8rem shared scale down to 6.4vw/6rem here. */}
-          <h1 className="text-[clamp(2.625rem,6.4vw,6rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]">
+          <h1
+            className="text-[clamp(2.625rem,6.4vw,6rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]"
+            /* Legibility without a covering layer. Token, not a literal. */
+            style={{ filter: 'drop-shadow(0 2px 22px var(--bg-0)) drop-shadow(0 0 6px var(--bg-0))' }}
+          >
             <span className="block text-chrome">The market doesn&rsquo;t stand still.</span>
             <span className="block text-chrome">Neither should your technology.</span>
           </h1>

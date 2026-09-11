@@ -30,6 +30,8 @@ in float aSize;
 
 uniform float uTime;
 uniform float uScale;
+uniform vec2 uPointer;
+uniform float uAspect;
 
 out float vGlow;
 
@@ -43,9 +45,16 @@ void main() {
 
   // Stand-in for depth: particles on the far side of the orbit read smaller
   // and dimmer, which is what gives the band its volume.
+  // Pointer push. Measured in aspect-corrected space so the falloff is a
+  // circle on screen rather than an ellipse, then applied back in clip space.
+  vec2 rel = vec2((p.x - uPointer.x) * uAspect, p.y - uPointer.y);
+  float dist = length(rel);
+  float push = exp(-dist * 3.4) * 0.30;
+  p += normalize(rel + vec2(1e-5)) * push * vec2(1.0 / max(uAspect, 0.001), 1.0);
+
   float depth = 0.5 + 0.5 * sin(th);
 
-  vGlow = 0.58 + 0.42 * depth;
+  vGlow = 0.58 + 0.42 * depth + push * 1.6;
   gl_PointSize = aSize * (1.15 + depth) * uScale;
   gl_Position = vec4(p, 0.0, 1.0);
 }`
@@ -150,6 +159,8 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
 
   const uTime = gl.getUniformLocation(program, 'uTime')
   const uScale = gl.getUniformLocation(program, 'uScale')
+  const uPointer = gl.getUniformLocation(program, 'uPointer')
+  const uAspect = gl.getUniformLocation(program, 'uAspect')
   const uInk = gl.getUniformLocation(program, 'uInk')
   const uBase = gl.getUniformLocation(program, 'uBase')
 
@@ -167,21 +178,52 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
   gl.enable(gl.BLEND)
   gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
+  // Window-level, because the canvas stays click-through for the buttons over
+  // it. Parked off-screen until the pointer actually arrives, so the field is
+  // undisturbed on load and on touch devices that never hover.
+  let targetX = -9
+  let targetY = -9
+  let easedX = -9
+  let easedY = -9
+  let aspect = 1
+
+  const onPointer = (event: PointerEvent) => {
+    const rect = canvas.getBoundingClientRect()
+    if (rect.width === 0 || rect.height === 0) return
+    targetX = ((event.clientX - rect.left) / rect.width) * 2 - 1
+    targetY = 1 - ((event.clientY - rect.top) / rect.height) * 2
+  }
+  const onLeave = () => {
+    targetX = -9
+    targetY = -9
+  }
+  window.addEventListener('pointermove', onPointer, { passive: true })
+  window.addEventListener('pointerdown', onPointer, { passive: true })
+  window.addEventListener('pointerleave', onLeave)
+
   return {
     resize(width, height) {
       gl.viewport(0, 0, width, height)
       // Points are sized in device pixels, so they have to follow the buffer.
       gl.uniform1f(uScale, Math.max(1.1, Math.min(height, width) / 430))
+      aspect = width / Math.max(height, 1)
+      gl.uniform1f(uAspect, aspect)
     },
     draw(seconds) {
       gl.clearColor(0, 0, 0, 0)
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.uniform1f(uTime, seconds)
+      easedX += (targetX - easedX) * 0.12
+      easedY += (targetY - easedY) * 0.12
+      gl.uniform2f(uPointer, easedX, easedY)
       gl.bindVertexArray(vao)
       gl.drawArrays(gl.POINTS, 0, count)
     },
     dispose() {
       themeObserver.disconnect()
+      window.removeEventListener('pointermove', onPointer)
+      window.removeEventListener('pointerdown', onPointer)
+      window.removeEventListener('pointerleave', onLeave)
       gl.deleteBuffer(buffer)
       gl.deleteVertexArray(vao)
       gl.deleteProgram(program)
@@ -200,7 +242,7 @@ export function ParticleBackdrop({ className }: { className?: string }) {
       ref={ref}
       aria-hidden
       className={cn(
-        'pointer-events-none absolute inset-0 h-full w-full opacity-95 dark:opacity-100',
+        'pointer-events-none absolute inset-0 h-full w-full',
         className,
       )}
     />

@@ -706,3 +706,37 @@ carry a control that would do nothing. Each button disables at its end of the
 page rather than disappearing, so the control never changes size under the
 pointer. Scrolling uses `behavior: 'auto'` when motion is reduced — which, per
 §29, is a setting worth remembering exists.
+
+## 31. Backdrops at full strength, pointer-driven, layers off
+
+Asked for the animations to behave as the source pens do, to respond to the
+pointer, and for the layers over them to come off. All three, with one
+consequence worth stating plainly.
+
+**The layers are gone.** The hero no longer renders `<HeroImage>` at all — its
+wash, tint, radial scrim, bottom fade and hairline grid were what kept the
+lattice dim, and with no hero photo in `public/hero/` it was contributing
+nothing else. The closing band's radial scrim is deleted. Both canvases now run
+at full opacity with nothing above them. `<HeroImage>` is untouched and still
+used by `PageHero` on every other page.
+
+**Legibility moved onto the type.** Instead of a layer over the animation, the
+hero `<h1>` and the closing `<h2>` carry
+`drop-shadow(0 2px 22px var(--bg-0)) drop-shadow(0 0 6px var(--bg-0))` — the
+page's own background colour as a token, no literal. This is weaker than a
+scrim: §27 could guarantee a measured 4:1 in the headline band and this cannot,
+because the shadow is a CSS filter over a live canvas rather than a compositing
+step that can be sampled. That trade was the explicit instruction; it is
+recorded here so it is a decision rather than a regression.
+
+**Pointer, without stealing clicks.** Both canvases keep `pointer-events-none`,
+so the hero's buttons and the closing CTAs stay clickable. The pointer is read
+from `window` and eased inside `draw()` — the lattice steers its camera by it
+(`uMove`, as the original pen does), and the particle field pushes away from it
+with an exponential falloff measured in aspect-corrected space so the influence
+is a circle on screen rather than an ellipse. The particle pointer parks
+off-screen until a real pointer arrives, so touch devices that never hover see
+an undisturbed field.
+
+**The lattice is brighter, not just unblocked.** Glow 0.055 → 0.10, falloff
+0.085 → 0.062, alpha 1.6 → 2.1, march 64 → 72 steps, resolution 0.5 → 0.6.
