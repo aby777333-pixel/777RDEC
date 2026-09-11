@@ -638,3 +638,27 @@ the field reads brightly above, below and either side of the text. Back to
 
 Worth stating plainly: a decorative backdrop is a contrast change. It is
 measurable before anyone looks at it, and on this site it has to be measured.
+
+## 28. A shorter hero, without touching the shared scale
+
+Hero height at 1440px: **1204 → 1032px**, a 14% cut, with no change to what the
+section contains.
+
+Most of it was the headline. Two blocks of `text-h1` wrap to four lines, and
+that scale is `clamp(3rem, 8vw, 8rem)` — 115px a line at 1440. But `text-h1` is
+also every other page's `<h1>` via `PageHero`, and the closing band's `<h2>`.
+Shrinking it globally would have quietly restyled the whole site to shorten one
+section.
+
+So the hero takes a local clamp, `clamp(2.625rem, 6.4vw, 6rem)` — 92px at 1440
+— and the shared token is untouched. Verified after: `/platform/terminal` and
+the closing `<h2>` still compute to 115px, the homepage `<h1>` to 92px.
+
+The rest came from spacing: section padding `pb-20 pt-12 md:pb-28 md:pt-16` →
+`pb-14 pt-6 md:pb-20 md:pt-10`, the stack gap 7 → 5 (6 at md), and the gap
+above the ecosystem grid 16 → 10 (12 at md). Still four lines, still no
+horizontal scroll at 390, 1440 or 1920, heading order unbroken.
+
+Mobile is unchanged in character and still tall — 1506px at 390px, and that is
+the six-tile ecosystem grid stacking, not the headline. Worth a separate look
+if the mobile hero needs to come down too.
