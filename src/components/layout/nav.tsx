@@ -29,7 +29,9 @@ export function Nav() {
           : 'border-b border-transparent bg-transparent',
       )}
     >
-      <div className="container-raptor flex h-20 items-center justify-between gap-3">
+      {/* 88px, to give the 64px mark room. Still under scroll-mt-24 (96px), so
+          in-page anchors clear the header unchanged. */}
+      <div className="container-raptor flex h-[5.5rem] items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-4">
           <RaptorLogoLink />
           <MegaMenu />

@@ -10,14 +10,20 @@ import { cn } from '@/lib/utils'
  * plus a tagline stacked into a ~2:1 frame, so height is what makes it legible:
  * at 40px the tagline was unreadable and the bird was a smudge.
  *
- * Sizes now: 48px in an 80px header, 96px in the footer, 36px in the mobile
+ * Sizes now: 64px in an 88px header, 96px in the footer, 40px in the mobile
  * drawer. The width cap is a backstop against a replacement file with a
  * different aspect ratio pushing the navigation into wrapping — at 2:1 the
  * height is what binds, not the cap.
+ *
+ * The header mark went 48 → 64px. At ~2:1 that is ~128px wide against ~96px
+ * before, which is spent out of the menu bar's horizontal budget — the same
+ * budget that was already negative once (see DECISIONS.md, "Bigger logos").
+ * Re-measured across widths from 1280 up before landing; the menu bar still
+ * only appears at xl.
  */
 const SCALE = {
-  sm: { type: 'text-[1.125rem]', wing: 'h-5 w-9', raster: 'h-9 max-w-[10rem]', tagline: 'text-[0.5rem]' },
-  md: { type: 'text-[1.5rem]', wing: 'h-7 w-12', raster: 'h-12 max-w-[13rem]', tagline: 'text-[0.5625rem]' },
+  sm: { type: 'text-[1.25rem]', wing: 'h-6 w-10', raster: 'h-10 max-w-[11rem]', tagline: 'text-[0.5rem]' },
+  md: { type: 'text-[2rem]', wing: 'h-9 w-16', raster: 'h-16 max-w-[17rem]', tagline: 'text-[0.625rem]' },
   lg: { type: 'text-[3rem]', wing: 'h-14 w-24', raster: 'h-24 max-w-[24rem]', tagline: 'text-[0.6875rem]' },
 } as const
 

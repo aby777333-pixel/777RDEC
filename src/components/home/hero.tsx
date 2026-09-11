@@ -2,6 +2,7 @@ import { ButtonLink } from '@/components/ui/button'
 import { Chip } from '@/components/ui/chip'
 import { WingMark } from '@/components/ui/wing-mark'
 import { HeroImage } from '@/components/layout/hero-image'
+import { LatticeBackdrop } from '@/components/backdrops/lattice-backdrop'
 import { ECOSYSTEM_PILLARS } from '@/lib/brand'
 import Link from 'next/link'
 
@@ -11,10 +12,16 @@ import Link from 'next/link'
  * The supplied renders sit behind the headline via <HeroImage>, which swaps
  * the light and dark variant with the theme and degrades to the gradient and
  * hairline grid when a file is absent. See public/hero/README.md.
+ *
+ * The lattice sits a layer below that, at -z-20, so <HeroImage>'s wash, tint
+ * and radial scrim still do the work of keeping the headline readable. Putting
+ * it on top would have meant re-solving legibility against a moving
+ * background.
  */
 export function Hero() {
   return (
     <section className="relative isolate overflow-hidden">
+      <LatticeBackdrop className="-z-20" />
       <HeroImage />
       <WingMark
         className="pointer-events-none absolute -left-32 top-10 h-[26rem] w-[46rem] text-steel-700 opacity-40"

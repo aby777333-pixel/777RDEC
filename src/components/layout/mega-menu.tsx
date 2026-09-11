@@ -14,7 +14,12 @@ export function MegaMenu() {
           <NavigationMenu.Item key={group.label}>
             <NavigationMenu.Trigger
               className={cn(
-                'group inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-ui px-2.5 text-[0.9375rem] text-steel-300',
+                // px-2 rather than px-2.5: the 64px logo spends ~36px more of
+                // the menu bar's horizontal budget than the 48px one did, and
+                // at 1280 that budget was already down to single digits. Four
+                // pixels back across seven triggers buys 28px — enough that
+                // "Developers" clears the search control again with room over.
+                'group inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-ui px-2 text-[0.9375rem] text-steel-300',
                 'transition-colors duration-200 hover:bg-bg-2 hover:text-steel-100 data-[state=open]:bg-bg-2 data-[state=open]:text-steel-100',
               )}
             >

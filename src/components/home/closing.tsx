@@ -1,9 +1,24 @@
 import { ButtonLink } from '@/components/ui/button'
 import { WingMark } from '@/components/ui/wing-mark'
+import { ParticleBackdrop } from '@/components/backdrops/particle-backdrop'
 
+/**
+ * Closing band. The particle drift sits at -z-10 under a radial scrim, so the
+ * headline is read against a settled centre rather than against movement —
+ * the same treatment <HeroImage> gives the hero.
+ */
 export function Closing() {
   return (
-    <section className="relative overflow-hidden py-28 md:py-36">
+    <section className="relative isolate overflow-hidden py-28 md:py-36">
+      <ParticleBackdrop className="-z-10" />
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        aria-hidden
+        style={{
+          background:
+            'radial-gradient(ellipse 62% 58% at 50% 50%, var(--bg-0) 12%, transparent 78%)',
+        }}
+      />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
       <WingMark
         className="pointer-events-none absolute -right-20 bottom-0 h-[24rem] w-[42rem] text-steel-700 opacity-40"

@@ -516,3 +516,81 @@ first for `funded accounts`; the index grew to 80 documents. Five columns at
 errors. The Platform mega-menu now carries six links plus the overview with no
 overlap and nothing offscreen — the §"Bigger logos" collision fix is untouched,
 since no top-level nav item was added.
+
+## 25. A bigger mark, and two backdrops written rather than copied
+
+### The logo, and the collision it brought back
+
+Nav mark 48 → **64px**, header 80 → **88px**, drawer 36 → 40px. `scroll-mt-24`
+is 96px, so in-page anchors still clear the header and nothing else was
+coupled to its height.
+
+At ~2:1 a 64px mark is ~132px wide against ~96px before, and those 36px come
+straight out of the menu bar's horizontal budget — the budget §"Bigger logos"
+already found to be negative once. Measuring at 1280 turned the bug up again:
+**"Developers" overlapped the search control by 3px.** Small, but it is the
+same failure, and 1280 is the width where the menu bar first appears, so it is
+the worst case by construction.
+
+Rather than give back the size that was asked for, the space came from the menu
+itself: trigger padding `px-2.5` → `px-2`, four pixels across seven triggers,
+28px recovered against 3px needed. Re-measured at 390, 1279, 1280, 1366, 1440,
+1920: **zero overlaps everywhere**, the drawer still appears at every width the
+menu bar is hidden, and the page still does not scroll horizontally at 390.
+
+### The two backdrops
+
+Supplied as CodePen links: "Grid Run" by Matthias Hurrle (@atzedent) for the
+hero, and "Day54: WebGL Particle Animation" by kenjiSpecial for the closing
+band. Both were implemented against the *idea* rather than copied.
+
+**Why not copy.** Two reasons, and the second is the load-bearing one.
+
+1. Neither pen carries a licence. CodePen does not blanket-license public pens
+   — authors keep copyright — so lifting either wholesale onto a commercial
+   site is a question for someone other than an engineer. Each component names
+   its source in a header comment.
+2. They would not have survived contact with this codebase. Grid Run marches
+   **400 steps per pixel** and runs soft shadows and ambient occlusion inside
+   that loop; it is a full-screen demo that ships its own code editor and
+   defaults to half resolution because it has to. Day54 keeps 40,000 particles
+   in JavaScript arrays and rewrites the entire vertex buffer every frame.
+   Either one, dropped under a marketing hero at full intensity, is a phone
+   with a hot battery and a wrecked Lighthouse score.
+
+**What was built instead.** `LatticeBackdrop` keeps the repeating strut-and-node
+cell and the travel along Z, but accumulates proximity glow rather than
+resolving surfaces: one 64-step loop, no shadow march, no AO. Behind a scrim at
+low opacity the difference is not visible. `ParticleBackdrop` uploads each
+particle's orbit once and advances it in the vertex shader, so per frame the CPU
+sets one uniform — the count also scales with the area it covers, so a phone
+draws a fraction of what a desktop does.
+
+**Neither is Three.js**, so §5 stands. Both pens were raw WebGL too, which is
+what made this possible; the pair costs **3 kB** of the homepage bundle.
+
+**They obey the rest of the system.** Colour is read from `--signal` and
+`--steel-700` through `tokenRgb`, re-read on theme change, so no literal reaches
+the GLSL and both themes stay correct. Output uses straight alpha so the page
+background shows through the gaps rather than the canvas painting its own
+ground. The shared hook pauses on `visibilitychange`, pauses when the canvas
+leaves the viewport, and draws a **single static frame** when motion is reduced
+— watching `data-reduce-motion` so the site's own toggle works without a
+reload. If `getContext` or either shader fails, the canvas stays blank and the
+section looks exactly as it does today.
+
+**Placement keeps legibility someone else's problem.** The lattice sits at
+`-z-20`, *below* `<HeroImage>`, so the existing wash, tint and radial scrim
+still do the work. The closing band got the same treatment with a radial scrim
+of its own rather than re-solving contrast against moving particles.
+
+**Verified.** Both shaders compile, link and render — tested in a fresh context
+with `preserveDrawingBuffer`, 80% of pixels lit for the lattice and all five
+attributes bound for the particles. Both live canvases take a WebGL2 context and
+get sized by their renderer. Build clean at 76 pages, homepage first load 177 →
+**180 kB** against the 350 kB budget. No console errors, no heading changes, no
+horizontal scroll.
+
+**Not verified: how any of it looks.** The preview pane could not paint in this
+environment, so everything above is structural and numeric. The backdrops need
+one human look before they are trusted in front of anyone.

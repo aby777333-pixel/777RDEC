@@ -147,3 +147,31 @@ and no existing section changed.* ✅
   is now a real page, in the nav, the sitemap and the search index. Its
   `modules` field is derived from `INDIGENOUS_MODULES`, so a module added to
   that list becomes searchable without touching a second list.
+
+## Phase 9 — Bigger mark, animated backdrops ✅
+
+Nav logo 48 → 64px in an 88px header, with the 1280px menu-bar collision it
+reintroduced fixed by trimming trigger padding. Two WebGL backdrops: a flying
+lattice under the homepage hero and a particle drift under the closing band,
+both written against the supplied CodePens rather than copied. See
+DECISIONS.md §25.
+
+*Done when: the mark is bigger, no header overlap at any width, both backdrops
+render, and neither costs more than a few kB.* ✅
+
+## Open items (added)
+
+- **Look at the backdrops on a real screen.** They are verified structurally —
+  shaders compile, link and render pixels — but the preview pane could not
+  paint during the build, so nobody has actually seen them. Check intensity in
+  both themes; `opacity-70 dark:opacity-90` on each canvas is the dial, and the
+  hero's scrim sits above the lattice.
+- **CodePen attribution is a judgement call.** `LatticeBackdrop` and
+  `ParticleBackdrop` credit Matthias Hurrle (@atzedent) and kenjiSpecial in
+  their header comments. Neither pen carries a licence and neither was copied,
+  but if the credit should be visible on the site rather than in the source,
+  that is a decision for someone else.
+- **Measure the backdrops on a mid-range phone.** The lattice is fill-bound and
+  renders at half resolution; the particle count scales with area. Both pause
+  offscreen and when the tab is hidden. Worth one pass on real hardware with
+  the battery unplugged.
