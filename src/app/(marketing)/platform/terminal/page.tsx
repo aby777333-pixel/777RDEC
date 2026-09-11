@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { StandardPage } from '@/components/layout/page-shell'
+import { WorkspaceMap } from '@/components/platform/workspace-map'
 import { terminal as copy } from '@/lib/copy/platform'
 import { pageMetadata } from '@/lib/seo'
 
@@ -10,5 +11,9 @@ export const metadata: Metadata = pageMetadata({
 })
 
 export default function TerminalPage() {
-  return <StandardPage copy={copy} modulesHeading="Inside the terminal" />
+  return (
+    <StandardPage copy={copy} modulesHeading="Inside the terminal">
+      <WorkspaceMap />
+    </StandardPage>
+  )
 }

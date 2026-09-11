@@ -122,3 +122,27 @@ favicon from the wing mark, status page backed by `/api/status`.
   candidates.
 - **Newsletter delivery.** Signups land in `newsletter_subscribers`. There is
   no sending integration yet — the list is captured, nothing is mailed.
+
+## Phase 8 — Modules and the workspace map ✅
+
+The twenty-module grid on the homepage, and the terminal's Trading / Portfolio
+/ Tools areas listed as capabilities on `/platform/terminal`. Both additive:
+one new copy dictionary, two new components, a `.hue-N` utility beside the
+existing `.tint-N`, and two one-line page insertions. See DECISIONS.md §23.
+
+*Done when: both surfaces render in both themes, verify and build are clean,
+and no existing section changed.* ✅
+
+## Open items (added)
+
+- **Module copy is unconfirmed.** `155+ indicators`, `40+ PSP connectors`,
+  `FIX 4.4/5.0`, `Claude-powered`, `Bloomberg, CNBC, Yahoo Finance`,
+  `TradingView widget suite` and `MT5/cTrader` are used exactly as supplied and
+  tagged TODO_CONFIRM in `src/lib/copy/modules.ts`. Third-party names in
+  particular need the same approval bar as the integrations directory.
+- **`RAPTOR AI` vs `EMIL`.** The module grid calls RAPTOR AI "the intelligence
+  layer"; every other surface gives that role to EMIL. Decide which is the
+  public name before this goes in front of buyers.
+- **The twenty modules are not searchable.** `lib/search.ts` indexes `PageCopy`
+  only, so module names do not appear in site search. Giving them a page would
+  fix that and give the grid somewhere to link to.

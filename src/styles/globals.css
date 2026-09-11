@@ -503,3 +503,21 @@ html[data-reduce-motion='true'] *::after {
 .tint-dot {
   background-color: var(--tint-ink, var(--signal));
 }
+
+/*
+  Hue without the surface wash.
+
+  `.tint-N` also sets `--panel-tint`, which repaints the whole card. These set
+  only the ink and rule variables, so a small element — a status dot, a rule, a
+  group heading — can carry a hue while the card keeps its default surface.
+  Same six hues, same per-theme tokens, so both themes stay correct.
+
+  Outside @layer for the same reason as the .tint-N rules above: these class
+  names are composed from an index at runtime.
+*/
+.hue-1 { --tint-rgb: var(--tint-1-rgb); --tint-ink: var(--tint-1-ink); }
+.hue-2 { --tint-rgb: var(--tint-2-rgb); --tint-ink: var(--tint-2-ink); }
+.hue-3 { --tint-rgb: var(--tint-3-rgb); --tint-ink: var(--tint-3-ink); }
+.hue-4 { --tint-rgb: var(--tint-4-rgb); --tint-ink: var(--tint-4-ink); }
+.hue-5 { --tint-rgb: var(--tint-5-rgb); --tint-ink: var(--tint-5-ink); }
+.hue-6 { --tint-rgb: var(--tint-6-rgb); --tint-ink: var(--tint-6-ink); }

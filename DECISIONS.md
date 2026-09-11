@@ -414,3 +414,63 @@ unaffected.
 Verified across sixteen widths from 360 to 2560: no overlap anywhere, the
 drawer opens at every width where the menu bar is hidden, and axe is still at
 0 violations.
+
+## 23. The twenty modules, and a hue that does not repaint the card
+
+Two surfaces were supplied as screenshots: a "20 Indigenous Modules" grid, and
+the terminal's own Trading / Portfolio / Tools menus. Both are additive — no
+existing section moved, and no existing component changed.
+
+**Where they went.** The module grid is a homepage section, between the
+ecosystem flow and the EMIL reveal: the flow says the pieces connect, the grid
+says what the pieces are. The workspace map went on `/platform/terminal`
+instead, because those three menus *are* the terminal's navigation and mean
+nothing away from it.
+
+**It lists, it does not simulate.** The workspace map renders labels and
+descriptions, not a fake application shell — §11 removed a simulated terminal
+and that decision stands. The section carries a visible note saying the
+terminal is supplied separately.
+
+**A new `.hue-N` alongside `.tint-N`.** The screenshots show a flat card with a
+single coloured dot. `.tint-N` could not express that: it also sets
+`--panel-tint`, which repaints the entire card surface. Twenty repainted cards
+in one grid is a rainbow, not a design.
+
+So `.hue-1` … `.hue-6` set only `--tint-rgb` and `--tint-ink` — the same six
+per-theme tokens, without the wash. `--panel-tint` then falls through to its
+`:root` default, so the card keeps its ordinary surface while the dot, the icon
+and the group rule carry the hue. Verified re-tinting with the theme: the first
+dot is `#7dd3fc` in dark and `#0369a1` in light, resolved from the tokens
+rather than written down anywhere.
+
+The rules sit outside `@layer` for the same reason as `.tint-N` — the class
+names are composed from an index at runtime, so Tailwind's content scan cannot
+see them.
+
+**Hues are assigned, not cycled.** Twenty cards through six hues in a five-column
+grid produces diagonal stripes. The hue is a field on each module instead, so
+related modules share a colour.
+
+**Icons are keyed, not imported into copy.** `WorkspaceIconKey` is a closed
+union in the copy dictionary and the component holds a `Record` over it, so an
+item added without an icon fails `tsc` rather than rendering an empty slot.
+The copy file stays a plain string dictionary, which is what makes translation
+a file swap.
+
+**Verified.** `npm run verify` clean; production build clean at 75 static pages;
+homepage first load 176 → **177 kB** against the 350 kB budget. All twenty
+modules and all twenty-three workspace items render, every icon resolves, no
+console errors, and heading order is unbroken on both pages. The page still
+does not scroll horizontally at 390px — `scrollX` stays 0, and removing the new
+section leaves `scrollWidth` unchanged at 564px, so the surplus is the
+pre-existing decorative `WingMark` and the correlation table inside its own
+scroll container, not this change.
+
+**Unconfirmed copy, carried as given.** The supplied text names third parties
+and specific figures — `155+ indicators`, `40+ PSP connectors`, `FIX 4.4/5.0`,
+`Claude-powered`, `Bloomberg, CNBC, Yahoo Finance`, `TradingView widget suite`,
+`MT5/cTrader`. It is used verbatim, and flagged `TODO_CONFIRM` in
+`copy/modules.ts`, on the same standard as the integrations directory. Note
+also that "RAPTOR AI — Claude-powered intelligence layer" sits alongside EMIL,
+which the rest of the site calls the intelligence layer; worth reconciling.

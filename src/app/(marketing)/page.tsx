@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Hero } from '@/components/home/hero'
 import { NotAnotherPlatform } from '@/components/home/not-another-platform'
 import { EcosystemFlow } from '@/components/home/ecosystem-flow'
+import { IndigenousModules } from '@/components/home/indigenous-modules'
 import { EmilReveal } from '@/components/home/emil-reveal'
 import { AudienceSwitcher } from '@/components/home/audience-switcher'
 import { CrossAsset } from '@/components/home/cross-asset'
@@ -24,6 +25,7 @@ export default function HomePage() {
       <Hero />
       <NotAnotherPlatform />
       <EcosystemFlow />
+      <IndigenousModules />
       <EmilReveal />
       <AudienceSwitcher />
       <CrossAsset />
