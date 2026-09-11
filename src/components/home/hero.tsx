@@ -20,7 +20,7 @@ import Link from 'next/link'
  */
 export function Hero() {
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="force-dark relative isolate overflow-hidden bg-bg-0">
       <LatticeBackdrop className="-z-10" />
       <WingMark
         className="pointer-events-none absolute -left-32 top-10 h-[26rem] w-[46rem] text-steel-700 opacity-40"

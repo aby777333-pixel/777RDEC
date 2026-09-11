@@ -8,7 +8,7 @@ import { LazySingularity } from '@/components/backdrops/lazy-singularity'
  */
 export function Closing() {
   return (
-    <section className="relative isolate overflow-hidden py-24 md:py-32">
+    <section className="force-dark relative isolate overflow-hidden bg-bg-0 py-24 md:py-32">
       <LazySingularity className="-z-10" />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
       <WingMark

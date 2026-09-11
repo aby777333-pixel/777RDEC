@@ -876,3 +876,25 @@ or not, with nothing smeared in between.
 
 The closing band is back to `py-28 md:py-36` and the shared `text-h1`. It was
 shortened in §34 and the larger version read better against the singularity.
+
+## 37. The animated bands are dark in both themes
+
+Light mode broke both backdrops. Their alpha was keyed off luminance so a white
+page could show through the gaps — which works as an idea and looks like a grey
+smear in practice, with the headline sitting on the wreckage.
+
+The pens both assume a black ground. So rather than fight that, the bands get
+one: `.force-dark` re-declares the dark palette on a subtree, and the hero and
+closing sections carry it. The animation gets the ground it was drawn for, and
+the copy over it gets the dark palette's light ink, in both themes.
+
+Verified by sampling computed styles with the theme toggled either way — the
+two are byte-identical: band `rgb(5,5,5)`, chrome gradient on its light values,
+lead copy at **12.66:1** against the band, tile titles at **16.91:1**.
+
+The lattice is now opaque unconditionally, which is what the pen is; the
+luminance-keyed alpha and its theme observer are gone.
+
+This is a real trade: two sections of the site no longer follow the page theme.
+It is the right one — a light-mode hero showing a grey smear is worse than a
+dark band on a light page, and every other section still themes normally.

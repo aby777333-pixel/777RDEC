@@ -116,7 +116,19 @@
   color-scheme: light;
 }
 
-.dark {
+/*
+  `.force-dark` re-declares the dark palette on a subtree, so a section can
+  render in dark tokens regardless of the page theme.
+
+  The animated bands need it. Both backdrops are the pens' own scenes and the
+  pens assume a black ground; keying their alpha off luminance so a white page
+  could show through turned them into grey smears in light mode, with the
+  headline sitting on top of the wreckage. Making the band itself dark is the
+  honest fix — the animation gets the ground it was drawn for, and the copy
+  over it gets the dark palette's light ink.
+*/
+.dark,
+.force-dark {
   /* ---- DARK (the logo's own environment) ---- */
   --bg-0: #050505;
   --bg-1: #0e1218; /* raised from #0b0c0e and cooled: one step off black read as flat */

@@ -247,12 +247,9 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
   const uTime = gl.getUniformLocation(program, 'uTime')
   const uMove = gl.getUniformLocation(program, 'uMove')
   const uOpaque = gl.getUniformLocation(program, 'uOpaque')
-  const syncTheme = () => {
-    gl.uniform1f(uOpaque, document.documentElement.classList.contains('dark') ? 1 : 0)
-  }
-  syncTheme()
-  const themeObserver = new MutationObserver(syncTheme)
-  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+  // The band is .force-dark in both themes, so this is always opaque — the
+  // pen's own black ground, never keyed against a white page.
+  gl.uniform1f(uOpaque, 1)
 
   // Read from the window, because the canvas has to stay click-through. The
   // target is set here and eased in draw(), so the camera glides.
@@ -290,7 +287,6 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     },
     dispose() {
-      themeObserver.disconnect()
       window.removeEventListener('pointermove', onPointer)
       window.removeEventListener('pointerdown', onPointer)
       window.removeEventListener('pointerleave', onLeave)
