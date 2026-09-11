@@ -8,7 +8,7 @@ import { LazySingularity } from '@/components/backdrops/lazy-singularity'
  */
 export function Closing() {
   return (
-    <section className="relative isolate overflow-hidden py-28 md:py-36">
+    <section className="relative isolate overflow-hidden py-24 md:py-32">
       <LazySingularity className="-z-10" />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
       <WingMark
@@ -16,9 +16,11 @@ export function Closing() {
         strokeWidth={1}
       />
       <div className="container-raptor relative">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-8 text-center">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-7 text-center">
           <h2
-            className="text-h1 uppercase"
+            /* Local clamp. The shared text-h1 caps at 8rem — 128px here. 7rem
+               is one step quieter, not a different size of headline. */
+            className="text-[clamp(1.875rem,6.6vw,7rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]"
             /* Same treatment as the hero: shadow on the type, no layer over
                the particles. */
             style={{ filter: 'drop-shadow(0 2px 22px var(--bg-0)) drop-shadow(0 0 6px var(--bg-0))' }}
