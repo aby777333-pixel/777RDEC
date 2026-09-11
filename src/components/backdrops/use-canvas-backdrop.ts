@@ -24,6 +24,9 @@ export type BackdropOptions = {
   maxDpr?: number
 }
 
+/** How far outside the viewport still counts as on screen. */
+const MARGIN = 120
+
 function motionIsReduced(): boolean {
   if (typeof window === 'undefined') return true
   return (
@@ -66,9 +69,24 @@ export function useCanvasBackdrop(
 
     let frame = 0
     let start = 0
-    let onScreen = true
     let running = false
     let disposed = false
+
+    /**
+     * Measured, never remembered.
+     *
+     * This used to be a flag the IntersectionObserver wrote. A hidden tab makes
+     * the observer report "not intersecting", so the flag latched false, and
+     * when the tab came back `visibilitychange` re-ran this check against the
+     * stale false and never restarted the loop. Switching windows once killed
+     * the canvas for good. Reading the rectangle costs nothing at the rate this
+     * is called, and cannot go stale.
+     */
+    const isOnScreen = () => {
+      const rect = canvas.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0) return false
+      return rect.bottom > -MARGIN && rect.top < window.innerHeight + MARGIN
+    }
 
     const scale = () => Math.min(window.devicePixelRatio || 1, maxDpr) * resolution
 
@@ -107,7 +125,7 @@ export function useCanvasBackdrop(
         return
       }
 
-      const shouldRun = onScreen && document.visibilityState === 'visible'
+      const shouldRun = isOnScreen() && document.visibilityState === 'visible'
       if (shouldRun && !running) {
         running = true
         // Rebase so a pause does not jump the animation forward by its length.
@@ -118,13 +136,11 @@ export function useCanvasBackdrop(
       }
     }
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        onScreen = entries.some((entry) => entry.isIntersecting)
-        sync()
-      },
-      { rootMargin: '120px' },
-    )
+    // Purely a trigger: it tells us *when* to re-check, never *what* the
+    // answer is.
+    const observer = new IntersectionObserver(() => sync(), {
+      rootMargin: `${MARGIN}px`,
+    })
     observer.observe(canvas)
 
     const resizeObserver = new ResizeObserver(() => sync())

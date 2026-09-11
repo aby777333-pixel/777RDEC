@@ -594,3 +594,47 @@ horizontal scroll.
 **Not verified: how any of it looks.** The preview pane could not paint in this
 environment, so everything above is structural and numeric. The backdrops need
 one human look before they are trusted in front of anyone.
+
+## 26. The backdrops were running perfectly and looked broken
+
+Two separate causes, reported as one symptom.
+
+**A latched flag.** `useCanvasBackdrop` kept `onScreen` as a boolean the
+IntersectionObserver wrote. A hidden tab makes the observer report *not
+intersecting*, so the flag latched `false`; when the tab came back,
+`visibilitychange` re-ran the check against that stale `false` and never
+restarted the loop. Switching windows once killed the canvas permanently.
+
+Caught by measurement, not by looking: with the tab reporting `visible`,
+reduce-motion off and WebGL2 available on a real Intel GPU, `requestAnimationFrame`
+was called **zero times in 700ms**. The observer now only says *when* to
+re-check; `isOnScreen()` measures the rectangle and cannot go stale.
+
+**Orbits nobody could see move.** Particle angular velocity was 0.035–0.10
+rad/s — one revolution every **63 to 180 seconds**. Running at full frame rate
+and indistinguishable from a still image. Now 0.14–0.40 rad/s, one revolution
+every 16–45s, with the lateral drift period shortened to match so movement
+reads near the centre too, where orbital travel is smallest.
+
+The lesson is the cheap one: "is it animating" is a question about frame
+callbacks, and it was answerable all along without being able to see the page.
+
+## 27. Turning the particles up, and the contrast it cost
+
+Asked to make the field more visible. Alpha multiplier .55 → .95, glow floor
+.18 → .26, size curve and count up, canvas opacity to full. Measured offscreen:
+lit coverage 5.5% → **25.4%**, mean alpha 1.7 → **26.2**, peak 89 → **242**.
+
+Easing the scrim at the same time was a mistake. Compositing the new field under
+it and measuring contrast against `--steel-100` in the headline band gave
+**2.54:1** — under the 3:1 large text needs, and this site has run at zero axe
+violations since the accessibility pass.
+
+The fix is not a dimmer field. The scrim is now shaped like the copy it
+protects: a flat core wide and short enough to cover the headline and both
+buttons — `ellipse 62% 46%`, solid to 42% — then a long falloff to nothing, so
+the field reads brightly above, below and either side of the text. Back to
+**5.1:1**.
+
+Worth stating plainly: a decorative backdrop is a contrast change. It is
+measurable before anyone looks at it, and on this site it has to be measured.

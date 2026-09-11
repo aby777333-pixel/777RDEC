@@ -161,11 +161,12 @@ render, and neither costs more than a few kB.* ✅
 
 ## Open items (added)
 
-- **Look at the backdrops on a real screen.** They are verified structurally —
-  shaders compile, link and render pixels — but the preview pane could not
-  paint during the build, so nobody has actually seen them. Check intensity in
-  both themes; `opacity-70 dark:opacity-90` on each canvas is the dial, and the
-  hero's scrim sits above the lattice.
+- **Look at the backdrops on a real screen.** The hero lattice has been seen
+  and reads correctly. The closing particle field has not — it is verified by
+  measurement only (coverage, alpha, contrast). Check intensity in both themes;
+  the alpha multiplier in the fragment shader is the main dial, then canvas
+  opacity. If the field is turned up again, re-measure contrast in the headline
+  band — see DECISIONS.md §27.
 - **CodePen attribution is a judgement call.** `LatticeBackdrop` and
   `ParticleBackdrop` credit Matthias Hurrle (@atzedent) and kenjiSpecial in
   their header comments. Neither pen carries a licence and neither was copied,

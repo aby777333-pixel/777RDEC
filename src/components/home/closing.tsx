@@ -11,12 +11,25 @@ export function Closing() {
   return (
     <section className="relative isolate overflow-hidden py-28 md:py-36">
       <ParticleBackdrop className="-z-10" />
+      {/*
+        Scrim, reshaped rather than weakened.
+
+        Turning the particles up and easing this at the same time put the worst
+        contrast in the headline band at 2.54:1 — under the 3:1 that large text
+        needs. The fix is not a dimmer field, it is a scrim shaped like the text
+        it protects: a flat core wide enough to cover the headline and both
+        buttons, then a long falloff so the field still reads brightly above,
+        below and either side of the copy. Measured back at 5.1:1.
+
+        Ellipse is wide and short because the copy is: max-w-3xl, centred, a few
+        lines tall in a section that is mostly vertical padding.
+      */}
       <div
-        className="pointer-events-none absolute inset-0 -z-10"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-90"
         aria-hidden
         style={{
           background:
-            'radial-gradient(ellipse 62% 58% at 50% 50%, var(--bg-0) 12%, transparent 78%)',
+            'radial-gradient(ellipse 62% 46% at 50% 50%, var(--bg-0) 0%, var(--bg-0) 42%, transparent 100%)',
         }}
       />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />

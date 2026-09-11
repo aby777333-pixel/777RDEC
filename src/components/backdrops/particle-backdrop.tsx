@@ -38,15 +38,15 @@ void main() {
 
   vec2 p = vec2(cos(th), sin(th)) * aRadius;
   p.y *= 0.46;
-  p.x += 0.10 * sin(uTime * 0.42 + aSeed * 6.2831);
-  p.y += 0.05 * cos(uTime * 0.35 + aSeed * 3.1416);
+  p.x += 0.10 * sin(uTime * 0.75 + aSeed * 6.2831);
+  p.y += 0.05 * cos(uTime * 0.62 + aSeed * 3.1416);
 
   // Stand-in for depth: particles on the far side of the orbit read smaller
   // and dimmer, which is what gives the band its volume.
   float depth = 0.5 + 0.5 * sin(th);
 
-  vGlow = 0.18 + 0.62 * depth;
-  gl_PointSize = aSize * (0.55 + depth) * uScale;
+  vGlow = 0.26 + 0.74 * depth;
+  gl_PointSize = aSize * (0.85 + depth) * uScale;
   gl_Position = vec4(p, 0.0, 1.0);
 }`
 
@@ -67,7 +67,7 @@ void main() {
 
   float soft = smoothstep(0.25, 0.0, r);
   vec3 col = mix(uBase, uInk, vGlow);
-  fragColor = vec4(col, soft * vGlow * 0.55);
+  fragColor = vec4(col, soft * vGlow * 0.95);
 }`
 
 function compile(gl: WebGL2RenderingContext, type: number, source: string): WebGLShader | null {
@@ -112,7 +112,7 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
 
   const rect = canvas.getBoundingClientRect()
   const area = Math.max(1, rect.width * rect.height)
-  const count = Math.round(Math.min(11000, Math.max(2200, area * 0.9)))
+  const count = Math.round(Math.min(16000, Math.max(3400, area * 1.4)))
 
   // One interleaved buffer, written once. theta, radius, speed, seed, size.
   const stride = 5
@@ -124,9 +124,12 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
     data[o] = Math.random() * Math.PI * 2
     data[o + 1] = radius
     // Inner orbits turn faster, and a third of them turn the other way.
-    data[o + 2] = (0.035 + (1.2 - radius) * 0.055) * (Math.random() < 0.33 ? -1 : 1)
+    // 0.14–0.40 rad/s is one revolution every 16–45s. The first pass ran at
+    // 0.035–0.10, which is 60–180s per revolution — running perfectly and
+    // indistinguishable from a still image.
+    data[o + 2] = (0.14 + (1.2 - radius) * 0.22) * (Math.random() < 0.33 ? -1 : 1)
     data[o + 3] = Math.random()
-    data[o + 4] = 0.9 + Math.random() * 1.9
+    data[o + 4] = 1.3 + Math.random() * 2.5
   }
 
   const buffer = gl.createBuffer()
@@ -167,7 +170,7 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
     resize(width, height) {
       gl.viewport(0, 0, width, height)
       // Points are sized in device pixels, so they have to follow the buffer.
-      gl.uniform1f(uScale, Math.max(0.75, Math.min(height, width) / 620))
+      gl.uniform1f(uScale, Math.max(0.9, Math.min(height, width) / 520))
     },
     draw(seconds) {
       gl.clearColor(0, 0, 0, 0)
@@ -194,7 +197,7 @@ export function ParticleBackdrop({ className }: { className?: string }) {
       ref={ref}
       aria-hidden
       className={cn(
-        'pointer-events-none absolute inset-0 h-full w-full opacity-70 dark:opacity-90',
+        'pointer-events-none absolute inset-0 h-full w-full opacity-95 dark:opacity-100',
         className,
       )}
     />
