@@ -33,8 +33,8 @@ export function Hero() {
         local clamp rather than a change to the shared scale, which every other
         page's <h1> and the closing <h2> also read from.
       */}
-      <div className="container-raptor relative pb-14 pt-6 md:pb-20 md:pt-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center gap-5 text-center md:gap-6">
+      <div className="container-raptor relative pb-10 pt-4 md:pb-14 md:pt-8">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 text-center md:gap-5">
           {/* self-start/center: a stretched chip in a flex column looks like a bar. */}
           <Chip tone="signal" dot className="self-center">
             Trading Technology. Evolved.
@@ -42,7 +42,7 @@ export function Hero() {
 
           {/* Local clamp: 8vw/8rem shared scale down to 6.4vw/6rem here. */}
           <h1
-            className="text-[clamp(2.625rem,6.4vw,6rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]"
+            className="text-[clamp(2.25rem,5.2vw,4.75rem)] font-display font-bold uppercase leading-[0.92] tracking-[-0.02em]"
             /* Legibility without a covering layer. Token, not a literal. */
             style={{ filter: 'drop-shadow(0 2px 22px var(--bg-0)) drop-shadow(0 0 6px var(--bg-0))' }}
           >
@@ -71,12 +71,12 @@ export function Hero() {
         </div>
 
         {/* The ecosystem, stated as the six things it is made of. */}
-        <ul className="surface-sheen mt-10 grid gap-px md:mt-12 overflow-hidden rounded-panel border border-line-2 bg-line-1 shadow-panel sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="surface-sheen mt-8 grid gap-px md:mt-10 overflow-hidden rounded-panel border border-line-2 bg-line-1 shadow-panel sm:grid-cols-2 lg:grid-cols-3">
           {ECOSYSTEM_PILLARS.map((pillar, index) => (
             <li key={pillar.id}>
               <Link
                 href={pillar.href}
-                className="lift group flex h-full flex-col gap-2 bg-bg-1/80 px-5 py-5 backdrop-blur-sm hover:bg-bg-2"
+                className="lift group flex h-full flex-col gap-1.5 bg-bg-1/80 px-5 py-4 backdrop-blur-sm hover:bg-bg-2"
               >
                 <span className="font-mono text-[0.6875rem] text-steel-500" data-numeric>
                   {String(index + 1).padStart(2, '0')}

@@ -740,3 +740,54 @@ an undisturbed field.
 
 **The lattice is brighter, not just unblocked.** Glow 0.055 → 0.10, falloff
 0.085 → 0.062, alpha 1.6 → 2.1, march 64 → 72 steps, resolution 0.5 → 0.6.
+
+## 32. The pens' own colours, and Three.js for exactly one section
+
+**Hero: Grid Run's grading, not the site's tokens.** Asked to keep the original
+colours. The pen's look is its grading — a warm `vec3(1.2, .95, .9)` tint, the
+`hue()` sweep, a double `tanh`/`sqrt` curve and an edge lift — and none of that
+survives being expressed in `--signal` and `--steel-700`. So this one component
+writes colour down, against the rule everything else on the site follows. It is
+the pen's palette; substituting the brand's would be a different picture.
+
+Alpha still comes from luminance rather than the pen's opaque output, so the
+void stays see-through and the light theme is not turned into a dark box.
+
+Aspect is untouched: like the original, `uv` divides by `min(uRes.x, uRes.y)`,
+so a shorter hero crops the view rather than squashing it.
+
+**Hero height: 1045 → 891px.** Headline clamp `6.4vw/6rem` → `5.2vw/4.75rem`,
+tighter section padding and stack gap, and the ecosystem tiles' vertical padding
+down a step. The shared `text-h1` token is still untouched.
+
+**Closing: the singularity, and the Three.js exception.** "The Life of a
+Singularity" by VoXelo replaces the particle field. It cannot be had without
+Three.js — it is an instanced mesh of 5,000 streaks with a noise-morphed
+vertex shader, a rim-lit horizon and ACES tone mapping — so §5 gets its first
+exception, deliberately and in one place.
+
+The cost is contained rather than accepted:
+
+- `next/dynamic` with `ssr: false` puts Three in its own chunk, so the
+  homepage's **First Load JS is unchanged at 180 kB**. The chunk is 348KB and
+  is not on the critical path.
+- The chunk is not even requested until the closing band is within 600px of the
+  viewport. A visitor who never scrolls that far never downloads it.
+- OrbitControls was dropped: a background that captures pointer events cannot
+  be scrolled past. The camera auto-orbits and takes an eased offset from the
+  pointer instead.
+- GSAP was dropped: the state transitions are four-second eases over seven
+  numbers, which is a lerp, not a reason to ship an animation library.
+- The HUD text is not reproduced, as asked.
+
+**Failure is non-fatal.** A refused context, a driver that rejects the
+instanced shader, a device that runs out of memory on 5,000 instances — all of
+it is caught and degrades to an empty canvas. Nothing in a decorative backdrop
+is worth taking a section down for.
+
+**Not verified: any of it running.** Every browser surface available here —
+the preview pane and a Chrome tab alike — freezes `requestAnimationFrame` *and*
+`IntersectionObserver` when the window is not focused, which was confirmed with
+a control that fired zero times for a fixed element at the top of the viewport.
+The build is clean and the shapes are right; whether the scene draws needs one
+look from a focused window.

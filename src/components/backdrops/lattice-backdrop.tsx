@@ -1,6 +1,6 @@
 'use client'
 
-import { useCanvasBackdrop, tokenRgb, type BackdropRenderer } from './use-canvas-backdrop'
+import { useCanvasBackdrop, type BackdropRenderer } from './use-canvas-backdrop'
 import { cn } from '@/lib/utils'
 
 /**
@@ -32,8 +32,9 @@ out vec4 fragColor;
 uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uMove;
-uniform vec3 uInk;
-uniform vec3 uBase;
+
+#define S smoothstep
+#define hue(a) (0.5 + 0.5 * sin(3.14 * (a) + vec3(1, 2, 3)))
 
 float sdBox(vec3 p, vec3 s, float r) {
   p = abs(p) - s + r;
@@ -65,13 +66,13 @@ void main() {
                  0.0);
   vec3 rd = normalize(vec3(uv, 1.05));
 
-  // The pointer steers; the drift keeps it alive when nothing is moving.
   rd.yz *= rot(uMove.y * 0.95 + 0.06 * sin(uTime * 0.11));
   rd.xz *= rot(-uMove.x * 1.25 + 0.08 * sin(uTime * 0.08));
 
   vec3 p = ro;
   float t = 0.0;
   float glow = 0.0;
+  float at = 0.0;
 
   for (int i = 0; i < 72; i++) {
     float d = map(p);
@@ -79,19 +80,33 @@ void main() {
     float step = max(d, 0.018);
     p += rd * step;
     t += step;
+    at += 0.05 * (0.05 / max(t, 1e-3));
     if (t > 26.0) break;
   }
 
-  float g = glow * 0.10 * exp(-t * 0.062);
-  vec3 col = mix(uBase, uInk, clamp(g * 1.1, 0.0, 1.0)) * g;
+  // Grading lifted from the pen: warm tint, the hue() sweep, the double
+  // tanh/sqrt curve and the edge lift. These are its colours, not the site's
+  // tokens — see DECISIONS.md.
+  float k = mix(max(0.2, 1.0 - t * 0.055), 0.25, 0.35);
+  float f = S(1.0, 0.0, clamp(t / 26.0, 0.0, 1.0));
+  vec3 tint = vec3(1.2, 0.95, 0.9);
+
+  vec3 col = vec3(0.0);
+  col += tint * at * k;
+  col += hue(3.14 * k + f * f * f) * k * k;
+  col += tanh(tint * glow * 0.085);
+
+  col = tanh(col * col);
+  col = sqrt(col);
+  col = mix(sqrt(col) * 1.2, col, clamp(S(-0.1, 0.2, dot(uv, uv)), 0.0, 1.0));
 
   vec2 c = gl_FragCoord.xy / uRes;
   c *= 1.0 - c.yx;
-  col *= pow(clamp(c.x * c.y * 26.0, 0.0, 1.0), 0.20);
+  col *= pow(clamp(c.x * c.y * 25.0, 0.0, 1.0), 0.25);
 
-  col = col / (1.0 + col * 0.8);
-
-  float a = clamp(max(col.r, max(col.g, col.b)) * 2.1, 0.0, 1.0);
+  // Alpha from luminance so the page still shows through the void and the
+  // light theme is not turned into a dark box.
+  float a = clamp(max(col.r, max(col.g, col.b)) * 1.9, 0.0, 1.0);
   fragColor = vec4(col, a);
 }`
 
@@ -138,20 +153,6 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
   const uRes = gl.getUniformLocation(program, 'uRes')
   const uTime = gl.getUniformLocation(program, 'uTime')
   const uMove = gl.getUniformLocation(program, 'uMove')
-  const uInk = gl.getUniformLocation(program, 'uInk')
-  const uBase = gl.getUniformLocation(program, 'uBase')
-
-  const palette = () => {
-    const ink = tokenRgb('--signal', [0.49, 0.83, 0.99])
-    const base = tokenRgb('--steel-700', [0.29, 0.31, 0.35])
-    gl.uniform3f(uInk, ink[0], ink[1], ink[2])
-    gl.uniform3f(uBase, base[0], base[1], base[2])
-  }
-  palette()
-
-  const themeObserver = new MutationObserver(palette)
-  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-
   // Read from the window, because the canvas has to stay click-through. The
   // target is set here and eased in draw(), so the camera glides.
   let targetX = 0
@@ -188,7 +189,6 @@ function createRenderer(canvas: HTMLCanvasElement): BackdropRenderer | null {
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     },
     dispose() {
-      themeObserver.disconnect()
       window.removeEventListener('pointermove', onPointer)
       window.removeEventListener('pointerdown', onPointer)
       window.removeEventListener('pointerleave', onLeave)

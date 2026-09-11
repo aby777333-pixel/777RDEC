@@ -1,16 +1,15 @@
 import { ButtonLink } from '@/components/ui/button'
 import { WingMark } from '@/components/ui/wing-mark'
-import { ParticleBackdrop } from '@/components/backdrops/particle-backdrop'
+import { LazySingularity } from '@/components/backdrops/lazy-singularity'
 
 /**
- * Closing band. The particle drift is the background outright — the radial
- * scrim that used to sit over it has been removed. The headline carries its
- * own drop-shadow instead, so nothing dims the field.
+ * Closing band. The singularity is the background outright — nothing sits over
+ * it. The headline carries its own drop-shadow instead of a scrim.
  */
 export function Closing() {
   return (
     <section className="relative isolate overflow-hidden py-28 md:py-36">
-      <ParticleBackdrop className="-z-10" />
+      <LazySingularity className="-z-10" />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
       <WingMark
         className="pointer-events-none absolute -right-20 bottom-0 h-[24rem] w-[42rem] text-steel-700 opacity-40"
