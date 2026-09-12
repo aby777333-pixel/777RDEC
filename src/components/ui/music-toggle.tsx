@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { initMusic, isMusicPlaying, onMusicChange, toggleMusic } from '@/lib/techno-loop'
+import { acquireMusic, isMusicPlaying, onMusicChange, releaseMusic, toggleMusic } from '@/lib/hero-music'
 import { cn } from '@/lib/utils'
 
 /**
@@ -10,25 +10,29 @@ import { cn } from '@/lib/utils'
  * The music is on by default, so this is mostly a way to turn it off — and
  * turning it off is remembered, or the next link followed would start it
  * again. It is not a floating widget: it belongs to the band, where the eye
- * already is, and it leaves with the hero.
+ * already is.
  *
- * Mounting is what asks for the music, through `initMusic`, which is written
- * to be called by every hero and to act only once. Whether it can start on
- * load at all is the browser's decision, not ours — see `@/lib/techno-loop`.
- *
- * The music itself is a module, not state in here, so it plays on across
- * client-side navigation and every hero's button shows the same truth.
+ * And it belongs to the page. Mounting takes the music and starts it;
+ * unmounting gives it back, which is what stops it on the way to another page,
+ * where that page's own hero starts again. Whether it can start on load at all
+ * is the browser's decision, not ours — see `@/lib/hero-music`.
  */
 export function MusicToggle({ className }: { className?: string }) {
   const [playing, setPlaying] = useState(false)
 
   useEffect(() => {
-    // The module may already be playing — this hero might be the second page
-    // of the visit — and if it is not, this is what asks it to.
+    // One token per mount, so this hero's cleanup can only ever stop this
+    // hero's music.
+    const token = Symbol('hero-music')
     setPlaying(isMusicPlaying())
     const unsubscribe = onMusicChange(setPlaying)
-    initMusic()
-    return unsubscribe
+    acquireMusic(token)
+    return () => {
+      // Unsubscribe first: the release announces a stop, and by then there is
+      // nothing here to tell.
+      unsubscribe()
+      releaseMusic(token)
+    }
   }, [])
 
   return (
@@ -61,7 +65,7 @@ export function MusicToggle({ className }: { className?: string }) {
           />
         ))}
       </span>
-      <span>{playing ? 'Sound on' : 'Sound'}</span>
+      <span>{playing ? 'Sound on' : 'Sound off'}</span>
     </button>
   )
 }
