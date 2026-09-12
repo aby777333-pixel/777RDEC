@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function ArchitecturePage() {
   return (
-    <StandardPage copy={copy} modulesHeading="Tier by tier">
+    <StandardPage copy={copy} modulesHeading="Tier by tier" heroBackdrop="stack">
       <Section grid className="border-b border-line-1">
         <SectionHeader
           eyebrow="Topology"

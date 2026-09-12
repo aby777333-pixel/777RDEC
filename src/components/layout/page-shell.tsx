@@ -19,15 +19,26 @@ import { LightburstBackdrop } from '@/components/backdrops/lightburst-backdrop'
 import { DancersBackdrop } from '@/components/backdrops/dancers-backdrop'
 import { LazyPyramids } from '@/components/backdrops/lazy-pyramids'
 import { TunnelBackdrop } from '@/components/backdrops/tunnel-backdrop'
+import { LatticeRouteBackdrop } from '@/components/backdrops/lattice-route-backdrop'
+import { StackBackdrop } from '@/components/backdrops/stack-backdrop'
+import { RiverBackdrop } from '@/components/backdrops/river-backdrop'
+import { RegionsBackdrop } from '@/components/backdrops/regions-backdrop'
+import { CipherBackdrop } from '@/components/backdrops/cipher-backdrop'
+import { HandshakeBackdrop } from '@/components/backdrops/handshake-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
 import { cn } from '@/lib/utils'
 
 /**
- * Every hero backdrop the site has. `image` is the themed wash almost every
- * page uses; the rest are ported CodePen scenes, one page each — except
- * `tunnel`, which is written for this site rather than ported.
+ * Every hero backdrop the site has. `image` is the themed wash; the rest are a
+ * scene per page.
+ *
+ * The broker and platform bands are ported CodePen scenes, each credited in
+ * its own file. From `tunnel` onward they are written for this site: the
+ * technology family draws that page's own subject — the routing, the stack,
+ * the round trip, the regions, the ciphertext, the handshake — which is what
+ * makes them worth having rather than decoration.
  *
  * `singularity` is the one that appears twice: it closes the home page, and
  * the white-label hero asks for the same scene. It is the same component in
@@ -51,6 +62,12 @@ export type PenBackdrop =
   | 'dancers'
   | 'pyramids'
   | 'tunnel'
+  | 'route'
+  | 'stack'
+  | 'river'
+  | 'regions'
+  | 'cipher'
+  | 'handshake'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -107,6 +124,12 @@ export function PageHero({
       {backdrop === 'dancers' ? <DancersBackdrop className="-z-10" /> : null}
       {backdrop === 'pyramids' ? <LazyPyramids className="-z-10" /> : null}
       {backdrop === 'tunnel' ? <TunnelBackdrop className="-z-10" /> : null}
+      {backdrop === 'route' ? <LatticeRouteBackdrop className="-z-10" /> : null}
+      {backdrop === 'stack' ? <StackBackdrop className="-z-10" /> : null}
+      {backdrop === 'river' ? <RiverBackdrop className="-z-10" /> : null}
+      {backdrop === 'regions' ? <RegionsBackdrop className="-z-10" /> : null}
+      {backdrop === 'cipher' ? <CipherBackdrop className="-z-10" /> : null}
+      {backdrop === 'handshake' ? <HandshakeBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"

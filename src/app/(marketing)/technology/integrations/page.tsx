@@ -32,7 +32,12 @@ export default function IntegrationsPage() {
 
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero
+        eyebrow={copy.eyebrow}
+        heading={copy.heading}
+        lead={copy.lead}
+        backdrop="handshake"
+      />
       <AnswerGrid answers={copy.answers} />
 
       <Section className="wash border-b border-line-1">

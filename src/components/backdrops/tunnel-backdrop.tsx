@@ -1,7 +1,12 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backdrop-canvas'
+import {
+  type BackdropScene,
+  tokenRgb,
+  trackPointer,
+  useBackdropCanvas,
+} from './use-backdrop-canvas'
 
 /**
  * A rotating square tunnel — and the one backdrop on this site that is not a
@@ -59,26 +64,6 @@ const PARALLAX = 0.055
 const EASE = 0.04
 
 const MAX_ALPHA = 0.85
-
-type Rgb = [number, number, number]
-
-/**
- * Reads a colour token off the band itself. The host is inside the hero's
- * `force-dark` subtree, so this is the dark palette's value even when the page
- * around it is light — which is what the band is painted in.
- */
-function tokenRgb(host: HTMLElement, name: string, fallback: Rgb): Rgb {
-  const raw = getComputedStyle(host).getPropertyValue(name).trim()
-  if (!raw) return fallback
-  const hex = raw.match(/^#([0-9a-f]{6})$/i)
-  if (hex) {
-    const n = parseInt(hex[1], 16)
-    return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-  }
-  const rgb = raw.match(/(-?[\d.]+)[,\s]+(-?[\d.]+)[,\s]+(-?[\d.]+)/)
-  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
-  return fallback
-}
 
 /** 0 below `from`, 1 above `to`, eased between. */
 function ramp(value: number, from: number, to: number) {

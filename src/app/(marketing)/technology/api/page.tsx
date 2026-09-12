@@ -12,7 +12,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function ApiPage() {
   return (
-    <StandardPage copy={copy} modulesHeading="Four transports">
+    <StandardPage copy={copy} modulesHeading="Four transports" heroBackdrop="river">
       <ApiSection />
     </StandardPage>
   )

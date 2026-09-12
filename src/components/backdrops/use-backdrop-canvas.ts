@@ -194,6 +194,43 @@ export function useBackdropCanvas(
   return { hostRef }
 }
 
+export type Rgb = [number, number, number]
+
+/**
+ * Reads a colour token off the band itself.
+ *
+ * Off the band, not off the document: a hero is a `force-dark` subtree, so the
+ * root would hand back the light palette's steel to be painted on a black
+ * band. Every scene here takes its colour from the element it draws into, so
+ * one definition serves them all and no scene carries a hex literal.
+ */
+export function tokenRgb(host: HTMLElement, name: string, fallback: Rgb): Rgb {
+  const raw = getComputedStyle(host).getPropertyValue(name).trim()
+  if (!raw) return fallback
+  const hex = raw.match(/^#([0-9a-f]{6})$/i)
+  if (hex) {
+    const n = parseInt(hex[1], 16)
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+  }
+  const rgb = raw.match(/(-?[\d.]+)[,\s]+(-?[\d.]+)[,\s]+(-?[\d.]+)/)
+  if (rgb) return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3])]
+  return fallback
+}
+
+/** `rgba()` from a token triple. */
+export function rgba(c: Rgb, alpha: number) {
+  return `rgba(${c[0]},${c[1]},${c[2]},${alpha})`
+}
+
+/** Mixes two token colours; `t` 0 gives `a`. */
+export function mixRgb(a: Rgb, b: Rgb, t: number): Rgb {
+  return [
+    Math.round(a[0] + (b[0] - a[0]) * t),
+    Math.round(a[1] + (b[1] - a[1]) * t),
+    Math.round(a[2] + (b[2] - a[2]) * t),
+  ]
+}
+
 /**
  * Anything the visitor might be pressing on purpose, rather than pressing the
  * band. Several pens answer to a click — a chain reaction, the next bloom, the
