@@ -34,6 +34,16 @@ import { MachinesBackdrop } from '@/components/backdrops/machines-backdrop'
 import { SwitchboardBackdrop } from '@/components/backdrops/switchboard-backdrop'
 import { SandboxBackdrop } from '@/components/backdrops/sandbox-backdrop'
 import { UptimeBackdrop } from '@/components/backdrops/uptime-backdrop'
+import { GapsBackdrop } from '@/components/backdrops/gaps-backdrop'
+import { InstrumentsBackdrop } from '@/components/backdrops/instruments-backdrop'
+import { CoverageBackdrop } from '@/components/backdrops/coverage-backdrop'
+import { OpenBackdrop } from '@/components/backdrops/open-backdrop'
+import { ChangelogBackdrop } from '@/components/backdrops/changelog-backdrop'
+import { DependsBackdrop } from '@/components/backdrops/depends-backdrop'
+import { TallyBackdrop } from '@/components/backdrops/tally-backdrop'
+import { ReachBackdrop } from '@/components/backdrops/reach-backdrop'
+import { RedactionBackdrop } from '@/components/backdrops/redaction-backdrop'
+import { SketchBackdrop } from '@/components/backdrops/sketch-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -86,6 +96,16 @@ export type PenBackdrop =
   | 'switchboard'
   | 'sandbox'
   | 'uptime'
+  | 'gaps'
+  | 'instruments'
+  | 'coverage'
+  | 'open'
+  | 'changelog'
+  | 'depends'
+  | 'tally'
+  | 'reach'
+  | 'redaction'
+  | 'sketch'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -157,6 +177,16 @@ export function PageHero({
       {backdrop === 'switchboard' ? <SwitchboardBackdrop className="-z-10" /> : null}
       {backdrop === 'sandbox' ? <SandboxBackdrop className="-z-10" /> : null}
       {backdrop === 'uptime' ? <UptimeBackdrop className="-z-10" /> : null}
+      {backdrop === 'gaps' ? <GapsBackdrop className="-z-10" /> : null}
+      {backdrop === 'instruments' ? <InstrumentsBackdrop className="-z-10" /> : null}
+      {backdrop === 'coverage' ? <CoverageBackdrop className="-z-10" /> : null}
+      {backdrop === 'open' ? <OpenBackdrop className="-z-10" /> : null}
+      {backdrop === 'changelog' ? <ChangelogBackdrop className="-z-10" /> : null}
+      {backdrop === 'depends' ? <DependsBackdrop className="-z-10" /> : null}
+      {backdrop === 'tally' ? <TallyBackdrop className="-z-10" /> : null}
+      {backdrop === 'reach' ? <ReachBackdrop className="-z-10" /> : null}
+      {backdrop === 'redaction' ? <RedactionBackdrop className="-z-10" /> : null}
+      {backdrop === 'sketch' ? <SketchBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"

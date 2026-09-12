@@ -16,7 +16,7 @@ export default function ProofPage() {
 
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="redaction" />
       <AnswerGrid answers={copy.answers} />
 
       {published.length > 0 ? (

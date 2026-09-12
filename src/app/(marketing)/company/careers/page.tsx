@@ -16,7 +16,7 @@ export const metadata: Metadata = pageMetadata({
 export default function CareersPage() {
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="open" />
       <AnswerGrid answers={copy.answers} />
 
       <Section className="wash border-b border-line-1">

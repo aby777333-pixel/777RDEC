@@ -33,6 +33,7 @@ export default function ContactPage() {
         eyebrow="Company · Contact"
         heading="Talk to a human."
         lead="Technical questions get technical answers. If your enquiry is about security due diligence, an integration or a partnership, say so and it goes straight to the right person."
+        backdrop="reach"
       />
 
       <Section>

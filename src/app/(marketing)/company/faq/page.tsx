@@ -33,7 +33,7 @@ function faqJsonLd() {
 export default function FaqPage() {
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="tally" />
 
       <Section className="border-b border-line-1">
         <nav aria-label="FAQ sections" className="mb-12 flex flex-wrap gap-2">
