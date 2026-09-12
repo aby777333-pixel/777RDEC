@@ -13,6 +13,7 @@
  * Icons are referenced by key rather than imported here, so this file stays a
  * plain string dictionary and remains swappable for translation (§1 i18n).
  */
+import { EMIL_EXPANSION } from '@/lib/brand'
 import { DEFAULT_CTA_ACTIONS, type PageCopy } from './types'
 
 /** One of the six card hues defined in `globals.css`. Never a colour literal. */
@@ -154,7 +155,7 @@ export const WORKSPACE_GROUPS: readonly WorkspaceGroup[] = [
       { label: 'ABIN', blurb: 'Advanced Brokerage Intelligence Network', icon: 'network' },
       { label: 'Live TV', blurb: 'Bloomberg, CNBC, Yahoo Finance and more', icon: 'tv' },
       { label: 'Live Chat', blurb: 'Traders community floor', icon: 'chat' },
-      { label: 'EMIL', blurb: 'EMIL Control Cockpit — opens the EMIL app', icon: 'emil' },
+      { label: 'EMIL', blurb: EMIL_EXPANSION, icon: 'emil' },
       { label: 'Markets', blurb: 'Market watch', icon: 'markets' },
       { label: 'Orders', blurb: 'Order management', icon: 'orders' },
       { label: 'Positions', blurb: 'Open positions', icon: 'positions' },
