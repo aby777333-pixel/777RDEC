@@ -19,7 +19,12 @@ export const metadata: Metadata = pageMetadata({
 export default function ModulesPage() {
   return (
     <div className="flex flex-col">
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero
+        eyebrow={copy.eyebrow}
+        heading={copy.heading}
+        lead={copy.lead}
+        backdrop="lightburst"
+      />
       <AnswerGrid answers={copy.answers} />
       <IndigenousModules variant="page" />
       <CtaBand heading={copy.ctaHeading} body={copy.ctaBody} actions={copy.ctaActions} />

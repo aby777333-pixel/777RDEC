@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function RiskPage() {
   return (
-    <StandardPage copy={copy} modulesHeading="Controls in the order path">
+    <StandardPage copy={copy} modulesHeading="Controls in the order path" heroBackdrop="exploder">
       <RiskSection />
 
       <Section className="wash border-b border-line-1">

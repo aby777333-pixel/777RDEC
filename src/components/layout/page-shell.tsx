@@ -12,6 +12,12 @@ import { KnotBackdrop } from '@/components/backdrops/knot-backdrop'
 import { DriftBackdrop } from '@/components/backdrops/drift-backdrop'
 import { LazyMorph } from '@/components/backdrops/lazy-morph'
 import { LazySingularity } from '@/components/backdrops/lazy-singularity'
+import { GravityBackdrop } from '@/components/backdrops/gravity-backdrop'
+import { ExploderBackdrop } from '@/components/backdrops/exploder-backdrop'
+import { BurstsBackdrop } from '@/components/backdrops/bursts-backdrop'
+import { LightburstBackdrop } from '@/components/backdrops/lightburst-backdrop'
+import { DancersBackdrop } from '@/components/backdrops/dancers-backdrop'
+import { LazyPyramids } from '@/components/backdrops/lazy-pyramids'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -36,6 +42,12 @@ export type PenBackdrop =
   | 'drift'
   | 'morph'
   | 'singularity'
+  | 'gravity'
+  | 'exploder'
+  | 'bursts'
+  | 'lightburst'
+  | 'dancers'
+  | 'pyramids'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -85,6 +97,12 @@ export function PageHero({
       {backdrop === 'drift' ? <DriftBackdrop className="-z-10" /> : null}
       {backdrop === 'morph' ? <LazyMorph className="-z-10" /> : null}
       {backdrop === 'singularity' ? <LazySingularity className="-z-10" /> : null}
+      {backdrop === 'gravity' ? <GravityBackdrop className="-z-10" /> : null}
+      {backdrop === 'exploder' ? <ExploderBackdrop className="-z-10" /> : null}
+      {backdrop === 'bursts' ? <BurstsBackdrop className="-z-10" /> : null}
+      {backdrop === 'lightburst' ? <LightburstBackdrop className="-z-10" /> : null}
+      {backdrop === 'dancers' ? <DancersBackdrop className="-z-10" /> : null}
+      {backdrop === 'pyramids' ? <LazyPyramids className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"

@@ -1242,6 +1242,18 @@ html[data-reduce-motion='true'] *::after {
   The ground is the pen's own Mistral background, so the band is that colour
   from the first paint instead of flashing black before the first frame lands.
 */
+/*
+  Two pens do not open on black. The gravitation swarm is drawn on the pen's
+  own dark blue, and the ring wake on its near-black grey — set here so the
+  band is that colour from the first paint rather than flashing black.
+*/
+.pen-scene--gravity {
+  background: #111a22;
+}
+.pen-scene--bursts {
+  background: #1e1e1e;
+}
+
 .pen-scene--drift {
   background: #0a121b;
 }

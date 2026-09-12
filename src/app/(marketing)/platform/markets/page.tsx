@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function Page() {
   return (
-    <StandardPage copy={copy}>
+    <StandardPage copy={copy} heroBackdrop="bursts">
       <Section className="border-b border-line-1">
         <SectionHeader
           eyebrow="Sessions"
