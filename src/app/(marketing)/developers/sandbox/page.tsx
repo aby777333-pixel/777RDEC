@@ -15,7 +15,7 @@ export const metadata: Metadata = pageMetadata({
 export default function SandboxAccessPage() {
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="sandbox" />
       <AnswerGrid answers={copy.answers} />
       <ModuleGrid modules={copy.modules} heading="What the sandbox gives you" />
 

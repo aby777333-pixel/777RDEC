@@ -109,17 +109,35 @@ export function useBackdropCanvas(
 
     let raf = 0
     let running = false
-    let start = 0
     let onScreen = false
+    /**
+     * Animation time delivered so far, in seconds, and the clock origin the
+     * current run is measured from.
+     *
+     * A scene gets a clock that only ever moves forward, and does not move
+     * while the scene is paused. Both halves matter: several scenes schedule
+     * against the time they are handed — the next handshake, the next move,
+     * the next sample — so a clock that restarts at zero on resume leaves them
+     * waiting for a deadline that has already passed, and one that keeps
+     * running through a pause jumps the scene forward by the length of it.
+     */
+    let elapsed = 0
+    let origin = 0
+    let rebase = true
 
     const tick = (now: number) => {
-      if (!start) start = now
-      live.frame((now - start) / 1000)
+      if (rebase) {
+        origin = now - elapsed * 1000
+        rebase = false
+      }
+      elapsed = (now - origin) / 1000
+      live.frame(elapsed)
       raf = requestAnimationFrame(tick)
     }
     const play = () => {
       if (running) return
       running = true
+      rebase = true
       raf = requestAnimationFrame(tick)
     }
     const pause = () => {
@@ -137,13 +155,11 @@ export function useBackdropCanvas(
         if (running) {
           pause()
           // Leave the band composed rather than mid-wipe.
-          live.frame(0)
+          live.frame(elapsed)
         }
         return
       }
       if (onScreen && document.visibilityState === 'visible') {
-        // Rebase so a pause does not jump the animation forward by its length.
-        if (!running) start = 0
         play()
       } else {
         pause()
@@ -173,7 +189,7 @@ export function useBackdropCanvas(
 
     // One frame regardless, so a reduced-motion visitor gets a composed band
     // rather than an empty one.
-    live.frame(0)
+    live.frame(elapsed)
 
     return () => {
       pause()

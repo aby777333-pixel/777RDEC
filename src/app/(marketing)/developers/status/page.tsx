@@ -27,7 +27,7 @@ export default function StatusPage() {
 
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="uptime" />
 
       <Section className="border-b border-line-1">
         <SectionHeader

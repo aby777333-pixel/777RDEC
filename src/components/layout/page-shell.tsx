@@ -29,6 +29,11 @@ import { AttentionBackdrop } from '@/components/backdrops/attention-backdrop'
 import { AnswerBackdrop } from '@/components/backdrops/answer-backdrop'
 import { TensionBackdrop } from '@/components/backdrops/tension-backdrop'
 import { ConstellationBackdrop } from '@/components/backdrops/constellation-backdrop'
+import { AssembleBackdrop } from '@/components/backdrops/assemble-backdrop'
+import { MachinesBackdrop } from '@/components/backdrops/machines-backdrop'
+import { SwitchboardBackdrop } from '@/components/backdrops/switchboard-backdrop'
+import { SandboxBackdrop } from '@/components/backdrops/sandbox-backdrop'
+import { UptimeBackdrop } from '@/components/backdrops/uptime-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -76,6 +81,11 @@ export type PenBackdrop =
   | 'answer'
   | 'tension'
   | 'constellation'
+  | 'assemble'
+  | 'machines'
+  | 'switchboard'
+  | 'sandbox'
+  | 'uptime'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -142,6 +152,11 @@ export function PageHero({
       {backdrop === 'answer' ? <AnswerBackdrop className="-z-10" /> : null}
       {backdrop === 'tension' ? <TensionBackdrop className="-z-10" /> : null}
       {backdrop === 'constellation' ? <ConstellationBackdrop className="-z-10" /> : null}
+      {backdrop === 'assemble' ? <AssembleBackdrop className="-z-10" /> : null}
+      {backdrop === 'machines' ? <MachinesBackdrop className="-z-10" /> : null}
+      {backdrop === 'switchboard' ? <SwitchboardBackdrop className="-z-10" /> : null}
+      {backdrop === 'sandbox' ? <SandboxBackdrop className="-z-10" /> : null}
+      {backdrop === 'uptime' ? <UptimeBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
