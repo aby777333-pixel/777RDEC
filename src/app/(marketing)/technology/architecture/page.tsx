@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { StandardPage } from '@/components/layout/page-shell'
 import { EcosystemDiagram } from '@/components/diagrams/ecosystem-diagram'
 import { Section, SectionHeader } from '@/components/ui/section'
+import { SpecGroups } from '@/components/ui/spec-groups'
+import { STACK_SPECS } from '@/lib/copy/app-capabilities'
 import { architecture as copy } from '@/lib/copy/technology'
 import { pageMetadata } from '@/lib/seo'
 
@@ -23,6 +25,15 @@ export default function ArchitecturePage() {
         <div className="mt-12">
           <EcosystemDiagram />
         </div>
+      </Section>
+
+      <Section className="border-b border-line-1">
+        <SectionHeader
+          eyebrow="The stack"
+          title="Four layers, and what each one owns."
+          lead="Named rather than gestured at, because an evaluator&rsquo;s next question is always which part was bought and which part was built."
+        />
+        <SpecGroups groups={STACK_SPECS} className="mt-12" />
       </Section>
     </StandardPage>
   )

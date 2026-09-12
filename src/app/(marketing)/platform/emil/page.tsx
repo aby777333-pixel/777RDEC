@@ -6,7 +6,10 @@ import { EmilModes } from '@/components/emil/emil-modes'
 import { SelfLearning } from '@/components/emil/self-learning'
 import { CapitalArchitecture } from '@/components/emil/capital-architecture'
 import { NotAnEa } from '@/components/emil/not-an-ea'
+import { AppShotFrame } from '@/components/platform/app-shot-frame'
 import { Section, SectionHeader } from '@/components/ui/section'
+import { SpecGroups } from '@/components/ui/spec-groups'
+import { COCKPIT_SPECS } from '@/lib/copy/app-capabilities'
 import { emil as copy } from '@/lib/copy/platform'
 import { pageMetadata } from '@/lib/seo'
 import { EMIL_EXPANSION, EMIL_SHORT } from '@/lib/brand'
@@ -73,6 +76,16 @@ export default function EmilPage() {
         <div className="mt-10">
           <EmilModes />
         </div>
+      </Section>
+
+      <Section grid className="border-b border-line-1">
+        <SectionHeader
+          eyebrow="Inside the cockpit"
+          title="A desk of forty, and one that can say no."
+          lead={`${EMIL_SHORT} is not one model with a long prompt. It is a coordinated desk of specialists, and an independent risk engine that sits outside that desk holding a veto the desk cannot argue with.`}
+        />
+        <AppShotFrame id="cockpit" eyebrow="The cockpit, running" className="mt-12" />
+        <SpecGroups groups={COCKPIT_SPECS} className="mt-12" columns={3} />
       </Section>
 
       <CtaBand heading={copy.ctaHeading} body={copy.ctaBody} actions={copy.ctaActions} />
