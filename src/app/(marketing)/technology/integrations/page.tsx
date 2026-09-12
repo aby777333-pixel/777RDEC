@@ -3,6 +3,8 @@ import { AnswerGrid, CtaBand, PageHero } from '@/components/layout/page-shell'
 import { Panel } from '@/components/ui/panel'
 import { Chip } from '@/components/ui/chip'
 import { Section, SectionHeader } from '@/components/ui/section'
+import { SpecGroups } from '@/components/ui/spec-groups'
+import { INTEGRATION_SPECS } from '@/lib/copy/app-capabilities'
 import { integrations as copy } from '@/lib/copy/technology'
 import {
   INTEGRATION_CATEGORIES,
@@ -106,6 +108,15 @@ export default function IntegrationsPage() {
           commercial relationships. Send us the specific vendors you use and we will tell you
           plainly which adapters exist today and which would be development work.
         </p>
+      </Section>
+
+      <Section grid className="border-b border-line-1">
+        <SectionHeader
+          eyebrow="Connectivity"
+          title="What it talks to, and what it does not depend on."
+          lead="The bridges to MT5 and cTrader are how a broker arrives, not how the platform works once they have."
+        />
+        <SpecGroups groups={INTEGRATION_SPECS} className="mt-12" />
       </Section>
 
       <CtaBand heading={copy.ctaHeading} body={copy.ctaBody} actions={copy.ctaActions} />

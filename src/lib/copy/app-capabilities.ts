@@ -69,6 +69,24 @@ export const TERMINAL_SPECS: readonly SpecGroup[] = [
       'Notes and screenshots attach to the trade, not to a separate document',
     ],
   },
+  {
+    label: 'The workspace',
+    items: [
+      'Saved workspaces, so a layout is a thing you return to rather than rebuild',
+      'Depth of market and a ladder beside the chart, not behind a tab',
+      'Chart and order templates, and a scanner for the setup you are looking for',
+      'One-click hedge, and an arming switch for automation that is always in reach',
+    ],
+  },
+  {
+    label: 'What it says about itself',
+    items: [
+      'Its own latency and bandwidth, on screen, next to the prices it is quoting',
+      'The session clocks — Sydney, Tokyo, London, New York — and whether the market is quiet',
+      'Positioning across the book as a percentage, rather than a sentiment adjective',
+      'Open, pending, history, messages and logs as tabs on one desk',
+    ],
+  },
 ]
 
 /**
@@ -283,6 +301,235 @@ export const SECURITY_SPECS: readonly SpecGroup[] = [
       'An append-only audit log: entries are added, never edited',
       'Seven-year retention, which is the horizon a regulator asks about',
       'Administrative actions recorded with the person, the time and the before-and-after',
+    ],
+  },
+]
+
+/**
+ * What can be traded, and when. `/platform/markets`.
+ */
+export const INSTRUMENT_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Coverage',
+    items: [
+      'Around five hundred instruments across six asset classes',
+      'Foreign exchange, metals, indices, crypto, equities and commodities',
+      'One watchlist, one ticket and one position view across all of them',
+      'Favourites separated from the full list, because a trader watches eight things and owns two',
+    ],
+  },
+  {
+    label: 'Sessions',
+    items: [
+      'The four session clocks kept on screen, not in a help page',
+      'Instruments carry their own trading hours rather than a single market calendar',
+      'The economic calendar sits in the toolbar, so an event is visible before it moves the price',
+    ],
+  },
+]
+
+/**
+ * Risk, as the platform enforces it rather than reports it. `/platform/risk`.
+ */
+export const RISK_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'In the order path',
+    items: [
+      'Every ticket checked before it routes, and refused with a reason rather than silently',
+      'Exposure aggregated across the account, not per position',
+      'Margin controls that act at the moment of the order',
+      'A drawdown guard that acts on the account, above whatever a strategy believes',
+    ],
+  },
+  {
+    label: 'Across the book',
+    items: [
+      'A- and B-book routing decided per client, per instrument, per session',
+      'Exposure monitored across the whole book with a hedging desk against it',
+      'Margin calls predicted before they trigger rather than reported after',
+      'Flow that behaves oddly surfaced as it happens',
+    ],
+  },
+]
+
+/**
+ * The ecosystem around the terminal. `/platform/trading-tools`.
+ */
+export const ECOSYSTEM_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Build',
+    items: [
+      'A scripting environment in the terminal rather than a separate application',
+      'Backtest and parameter optimisation against the platform’s own price history',
+      'Strategies and robots managed from a panel beside the chart',
+      'Templates for charts and for orders, so a setup is set up once',
+    ],
+  },
+  {
+    label: 'Buy and share',
+    items: [
+      'A marketplace for strategies, indicators, signal providers and plugins',
+      'Free and paid listings, with the performance record attached to the listing',
+      'A converted expert advisor can be listed, so migrating work can become work that pays',
+    ],
+  },
+]
+
+/**
+ * The client record. `/brokers/crm`.
+ */
+export const CRM_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'The record',
+    items: [
+      'One client profile carrying the trading record, the funding history and the conversations',
+      'Pipeline stages against that record rather than in a separate sales tool',
+      'Every communication logged where the account is, not in someone’s inbox',
+      'Verification state visible on the profile, because it is the thing that blocks everything else',
+    ],
+  },
+  {
+    label: 'What it notices',
+    items: [
+      'Churn risk scored from behaviour rather than from the last email opened',
+      'Client lifetime value estimated from the actual trading pattern',
+      'Drafts prepared for the desk to send, edit or discard',
+      'Cohorts compared, so a change in one month is visible against the others',
+    ],
+  },
+]
+
+/**
+ * Liquidity plumbing. `/brokers/liquidity`.
+ */
+export const LIQUIDITY_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Connectivity',
+    items: [
+      'FIX 4.4 and 5.0 to the venues and providers you have contracted with',
+      'Aggregation across them into one book',
+      'Smart routing on rules you set rather than a vendor default',
+      'Per-provider fill quality, rejection rate and latency measured continuously',
+    ],
+  },
+  {
+    label: 'Pricing',
+    items: [
+      'Spread construction and markup as a configuration, not a code change',
+      'The price the client sees derived from the aggregate, with the rule visible',
+      'Provider performance is reported to you; Raptor does not provide the liquidity itself',
+    ],
+  },
+]
+
+/**
+ * Administration and money movement. `/brokers/back-office`.
+ */
+export const BACK_OFFICE_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Money',
+    items: [
+      'Deposits and withdrawals across cards, wires, e-wallets and crypto',
+      'Forty-odd payment connectors, so a new market is a configuration rather than a project',
+      'Internal transfers between a client’s own accounts',
+      'Statements and tax summaries produced from the ledger rather than assembled by hand',
+    ],
+  },
+  {
+    label: 'Obligations',
+    items: [
+      'KYC and AML inside onboarding, where the client already is',
+      'Transaction monitoring with case management and regulatory filing',
+      'Reports generated from the record, with the record still available behind them',
+      'Every administrative action attributed to a person, with what changed',
+    ],
+  },
+]
+
+/**
+ * How a book grows: partners, copiers, allocators and funded traders.
+ * `/brokers/ib-affiliates`.
+ */
+export const DISTRIBUTION_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Introducing brokers',
+    items: [
+      'Multi-tier structures to unlimited depth',
+      'Commissions calculated from the same fills the trader sees',
+      'A portal where a partner can check their own numbers without asking you',
+      'Tracking links and attribution that survive the client changing device',
+    ],
+  },
+  {
+    label: 'Copy and allocate',
+    items: [
+      'Copy trading from verified providers, with allocation adjusted for risk rather than copied lot for lot',
+      'PAMM and MAM for managers running money on behalf of investors',
+      'Performance shown net, with the drawdown alongside the return',
+    ],
+  },
+  {
+    label: 'Funded accounts',
+    items: [
+      'Single-phase, two-phase and instant funding challenges',
+      'Rules enforced by the platform rather than checked by a human afterwards',
+      'Scaling plans and payout handling as part of the same engine',
+    ],
+  },
+]
+
+/**
+ * What a broker can give a client beyond a terminal.
+ * `/brokers/client-portal`.
+ */
+export const ENGAGEMENT_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Learning',
+    items: [
+      'Courses with progress, quizzes and a paper-trading account to practise in',
+      'Experience earned from education as well as from trading',
+      'A tutor that answers from the material rather than from the internet',
+    ],
+  },
+  {
+    label: 'Standing and community',
+    items: [
+      'Six tiers, badges and streaks, with the benefits at each tier set by the broker',
+      'Weekly challenges and competitions run by the platform',
+      'Leaderboards, shared trades and rooms, for the brokers who want a community',
+      'Referral rewards tracked in the same ledger as everything else',
+    ],
+  },
+  {
+    label: 'The coach',
+    items: [
+      'Overtrading, revenge trading and FOMO identified as patterns in the client’s own record',
+      'Loss aversion and early profit-taking measured rather than asserted',
+      'A weekly account of how the week went, sent to the client',
+      'Signposting to independent support, offered in the product',
+    ],
+  },
+]
+
+/**
+ * What it connects to. `/technology/integrations`.
+ */
+export const INTEGRATION_SPECS: readonly SpecGroup[] = [
+  {
+    label: 'Market and money',
+    items: [
+      'Liquidity over FIX 4.4 and 5.0',
+      'Payment service providers for cards, wires, e-wallets and crypto',
+      'Market data, economic calendar and news sentiment sources',
+    ],
+  },
+  {
+    label: 'Coming from somewhere else',
+    items: [
+      'Bridges to MT5 and cTrader, so a migration can be staged rather than cut over',
+      'Expert advisors converted rather than rewritten — see the migration pipeline',
+      'Client records, balances and open positions moved with the account',
+      'The bridges are a path in, not a dependency the platform keeps',
     ],
   },
 ]

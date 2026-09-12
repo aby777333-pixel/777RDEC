@@ -1247,20 +1247,6 @@ html[data-reduce-motion='true'] *::after {
   own dark blue, and the ring wake on its near-black grey — set here so the
   band is that colour from the first paint rather than flashing black.
 */
-/*
-  The sound button's level meter. Four bars on staggered delays, which is all
-  it takes to read as "playing" — and being a CSS animation, the site's
-  reduce-motion rules already flatten it like everything else.
-*/
-@keyframes music-bar {
-  0%, 100% { height: 3px; }
-  50% { height: 14px; }
-}
-.animate-music-bar {
-  height: 3px;
-  animation: music-bar 0.9s ease-in-out infinite;
-}
-
 .pen-scene--gravity {
   background: #111a22;
 }
