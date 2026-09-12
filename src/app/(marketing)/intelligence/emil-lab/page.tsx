@@ -17,7 +17,8 @@ export const metadata: Metadata = pageMetadata({
 export default function EmilLabPage() {
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} imageVariant="emil">
+      {/* The marionette lives here and nowhere else on the site. */}
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="puppet">
         <div className="max-w-2xl">
           <RiskLine />
         </div>

@@ -749,3 +749,245 @@ html[data-reduce-motion='true'] *::after {
 .swing-scene i:nth-child(4) { width: var(--depth); height: 100%; transform: translate(-50%, -50%) rotateY(270deg) translateZ(calc(var(--width) * 0.5)); }
 .swing-scene i:nth-child(5) { width: var(--width); height: var(--depth); transform: translate(-50%, -50%) rotateX(90deg) translateZ(calc(var(--height) * 0.5)); }
 .swing-scene i:nth-child(6) { width: var(--width); height: var(--depth); transform: translate(-50%, -50%) rotateX(270deg) translateZ(calc(var(--height) * 0.5)); }
+
+/*
+  "Puppet On Strings" by wolfscot, ported.
+
+  Faithful to the pen: its bone gradient, its gold (#d4af37), its conic
+  spotlight, its timings. Four changes were needed to turn a page into a hero
+  backdrop — see the component for why each one was unavoidable:
+
+  1. Scoped under `.puppet-scene`. The pen styles `body, html` and a bare `*`,
+     and sets `cursor: none` on the document.
+  2. The button grid and its `cursor: none` are gone. The moods cycle on a
+     timer instead, so nothing here is focusable or clickable.
+  3. `#string-svg` was `position: fixed` at `100vw/100vh`. It is now the rig's
+     own box, so the strings stay on the puppet when the band scrolls.
+  4. The rig keeps the pen's 500x780 px and is scaled as a whole, which holds
+     the pen's proportions at any hero size. The scale itself is set from
+     JavaScript, since the rig is px and no CSS unit gives a bare number.
+*/
+.puppet-scene {
+  --bone: #e0e0e0;
+  --bone-dark: #b0b0b0;
+  --string: rgba(255, 255, 255, 0.18);
+  --accent: #d4af37;
+  --mood-color: rgba(212, 175, 55, 0.3);
+  /* Where the rig's centre sits across the band. The hero copy is shifted
+     clear of it on the same breakpoints — see <PageHero>. */
+  --rig-x: 50%;
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at var(--rig-x) 40%, #1a2a2d 0%, #050505 100%);
+  perspective: 1200px;
+}
+.puppet-scene * { box-sizing: border-box; }
+
+@media (min-width: 1024px) {
+  .puppet-scene { --rig-x: 21%; }
+}
+/* Below `lg` the copy runs the full column and the rig recentres under it,
+   so it steps back to being weather rather than a figure the paragraph has
+   to compete with. */
+@media (max-width: 1023px) {
+  .puppet-scene .rig { opacity: 0.4; }
+}
+
+/* The rig: the pen's own 500x780, scaled to whatever band it lands in. */
+.puppet-scene .rig {
+  position: absolute;
+  top: 50%;
+  left: var(--rig-x);
+  width: 500px;
+  height: 780px;
+  margin: -390px 0 0 -250px;
+  transform: scale(var(--s, 1));
+  transform-origin: 50% 50%;
+}
+
+.puppet-scene .spotlight {
+  position: absolute;
+  width: 400px; height: 700px;
+  background: conic-gradient(from 170deg at 50% 0%, transparent 0deg, var(--mood-color) 15deg, transparent 30deg);
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+  transition: background 1.2s ease, opacity 0.5s;
+  filter: blur(10px);
+}
+
+.puppet-scene .particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.puppet-scene .visualizer {
+  position: absolute;
+  /* The pen centres the bars under the puppet. The rig moved left, so they
+     follow it: twice the rig's offset puts their midpoint back under it. */
+  bottom: 0; left: 0;
+  width: calc(var(--rig-x) * 2);
+  height: 80px;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  padding: 0 20px;
+  opacity: 0.4;
+}
+.puppet-scene .v-bar {
+  width: 6px;
+  min-height: 3px;
+  background: linear-gradient(to top, var(--accent), transparent);
+  border-radius: 3px 3px 0 0;
+  transition: height 0.1s ease;
+}
+
+.puppet-scene .controller-hand {
+  position: absolute;
+  top: 40px; left: 50%;
+  width: 320px;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.8));
+  z-index: 10;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.puppet-scene .string-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 6;
+  overflow: visible;
+}
+.puppet-scene .string-path {
+  stroke: var(--string);
+  stroke-width: 1px;
+  fill: none;
+  transition: stroke 0.3s;
+}
+
+/* PUPPET */
+.puppet-scene .puppet-wrapper {
+  position: absolute;
+  top: 470px; left: 50%;
+  transform-style: preserve-3d;
+  transition: filter 0.8s ease;
+  z-index: 7;
+}
+.puppet-scene .part {
+  position: absolute;
+  background: linear-gradient(135deg, var(--bone), var(--bone-dark));
+  border-radius: 10px;
+  box-shadow: inset -1px -1px 4px rgba(0, 0, 0, 0.3), 2px 4px 12px rgba(0, 0, 0, 0.4);
+}
+.puppet-scene .head { width: 30px; height: 40px; left: -15px; top: -145px; border-radius: 45% 45% 50% 50%; }
+.puppet-scene .neck { width: 8px; height: 12px; left: -4px; top: -108px; }
+.puppet-scene .chest { width: 46px; height: 58px; left: -23px; top: -98px; border-radius: 12px 12px 18px 18px; }
+.puppet-scene .abs { width: 32px; height: 28px; left: -16px; top: -40px; border-radius: 5px; }
+.puppet-scene .pelvis { width: 42px; height: 22px; left: -21px; top: -12px; border-radius: 4px 4px 15px 15px; }
+.puppet-scene .upper-limb { width: 14px; height: 48px; transform-origin: top center; }
+.puppet-scene .lower-limb { width: 12px; height: 48px; top: 45px; transform-origin: top center; }
+.puppet-scene .hand-foot { width: 10px; height: 14px; top: 45px; border-radius: 50% 50% 3px 3px; }
+.puppet-scene .shoulder-l { left: -34px; top: -92px; }
+.puppet-scene .shoulder-r { left: 20px; top: -92px; }
+.puppet-scene .hip-l { left: -18px; top: 8px; }
+.puppet-scene .hip-r { left: 6px; top: 8px; }
+
+/* GLITCH */
+.puppet-scene .glitch-active .part { animation: puppet-glitch-color 0.2s infinite; }
+@keyframes puppet-glitch-color {
+  0% { filter: none; }
+  33% { filter: hue-rotate(90deg) saturate(3); }
+  66% { filter: hue-rotate(200deg) saturate(2); }
+  100% { filter: none; }
+}
+
+.puppet-scene .mood-label {
+  position: absolute;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-stage), ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 5px;
+  color: rgba(255, 255, 255, 0.25);
+  text-transform: uppercase;
+  z-index: 20;
+  white-space: nowrap;
+  transition: color 0.5s, letter-spacing 0.5s;
+}
+
+.puppet-scene .quote-display {
+  position: absolute;
+  bottom: 60px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-stage), ui-monospace, monospace;
+  font-size: 0.7rem;
+  color: rgba(212, 175, 55, 0.5);
+  letter-spacing: 2px;
+  text-align: center;
+  width: 500px;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 0.5s;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.puppet-scene .scanlines {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.15) 2px, rgba(0, 0, 0, 0.15) 4px);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.puppet-scene .shadow {
+  position: absolute;
+  bottom: 155px; left: 50%;
+  transform: translateX(-50%);
+  width: 80px; height: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 50%;
+  filter: blur(8px);
+  z-index: 5;
+  transition: width 0.5s, opacity 0.5s;
+}
+
+.puppet-scene .streaks {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.puppet-scene .streak {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+  animation: puppet-streak-fall linear infinite;
+}
+@keyframes puppet-streak-fall {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(200%); }
+}
+
+.puppet-scene .fog {
+  position: absolute;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at var(--rig-x) 50%, transparent 20%, rgba(0, 0, 0, 0.55) 100%);
+  pointer-events: none;
+  z-index: 8;
+}

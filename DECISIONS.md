@@ -970,3 +970,50 @@ Three things had to follow the size up:
 Below `md` it drops back to about its old size. The headline wraps to the full
 column there, so there is no right-hand margin to stand in and a full-size rig
 sits straight through the text.
+
+## 40. The marionette, on the EMIL Lab hero
+
+"Puppet On Strings" by wolfscot now backs the hero on
+`/intelligence/emil-lab`, and nowhere else. `PageHero` gained a third
+`backdrop` value beside §39's two.
+
+**Faithful to the pen**: its bone gradient, its gold `#d4af37`, its conic
+spotlight, its dust, its fifteen moods with their own poses, tempos, filters,
+spotlight colours and dialogue. The mood table and the animation maths are the
+pen's, unchanged.
+
+Four things had to change to turn a page into a hero backdrop.
+
+1. **It drives itself.** The pen is operated by a fifteen-button panel and the
+   keys `q w e r t y u i a s d f g h j`. A panel of buttons behind a headline
+   is neither readable nor clickable, and a document-level key handler would
+   have swallowed every keystroke on the site, the search box included. The
+   moods cycle on a seven-second timer instead. Nothing here is focusable.
+2. **No cursor takeover.** The pen sets `cursor: none` on `body` and draws its
+   own dot. The system cursor stays. The pointer still leans the puppet and
+   parallaxes the fog, but on this element's own listener, so it does nothing
+   anywhere else on the page.
+3. **Container coordinates, not viewport.** The strings and the dust were
+   measured against the window — `position: fixed`, `100vw/100vh`, `clientX`,
+   `innerWidth`. Strings drawn that way come off the puppet the moment the band
+   scrolls. Everything is measured against the backdrop element now, and the
+   string maths divides out the rig's scale to get back to SVG units.
+4. **Scaled to the band.** The pen is laid out in px for a full window. The rig
+   keeps its natural 500x780 and is scaled as a whole, so the proportions are
+   the pen's at any hero height. The scale is set from JavaScript: the rig is
+   px and no CSS unit yields the bare number `scale()` needs.
+
+**The copy steps aside.** The rig hangs at 21% across the band, so from `lg` up
+the hero column is indented past it. Below `lg` the copy runs full width, the
+rig recentres, and it drops to 0.4 opacity — weather behind the paragraph
+rather than a figure competing with it.
+
+**It stops when it should.** Unlike §38's swing this one is JavaScript, so it
+does not get the site's reduce-motion rules for free: the loop never starts
+under `prefers-reduced-motion`, and the scene is posed and strung by a single
+frame so a reduced-motion visitor still gets a stage rather than nothing. An
+`IntersectionObserver` suspends it while the band is scrolled away, and the
+timers, observers, listeners and the nodes it builds are all torn down on
+unmount.
+
+It costs 3.3 kB on that one route, and nothing anywhere else.

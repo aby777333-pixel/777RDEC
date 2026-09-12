@@ -4,6 +4,7 @@ import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { WingMark } from '@/components/ui/wing-mark'
 import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
+import { PuppetBackdrop } from '@/components/backdrops/puppet-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -25,37 +26,51 @@ export function PageHero({
   lead: string
   /** `emil` prefers the cockpit render. Only read by the `image` backdrop. */
   imageVariant?: 'default' | 'emil'
-  /** The swinging robot is a single-page flourish — `/brokers` asks for it and
-   *  nothing else does, so every other hero keeps the themed wash. */
-  backdrop?: 'image' | 'swing'
+  /** Both pens are single-page flourishes — `/brokers` asks for the swing and
+   *  `/intelligence/emil-lab` for the puppet. Every other hero keeps the
+   *  themed wash. */
+  backdrop?: 'image' | 'swing' | 'puppet'
   children?: React.ReactNode
 }) {
-  const swinging = backdrop === 'swing'
+  const pen = backdrop === 'swing' || backdrop === 'puppet'
   return (
     <section
       className={cn(
         'relative isolate overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28',
-        // The pen assumes a black ground, so the band it backs stops following
-        // the theme. Only that band — the image hero themes as it always did.
-        swinging && 'force-dark bg-bg-0',
+        // Both pens assume a black ground, so the band they back stops
+        // following the theme. Only that band — the image hero themes as it
+        // always did.
+        pen && 'force-dark bg-bg-0',
       )}
     >
-      {swinging ? (
-        <SwingBackdrop className="-z-10" />
-      ) : (
-        <HeroImage variant={imageVariant ?? 'default'} />
-      )}
+      {backdrop === 'swing' ? <SwingBackdrop className="-z-10" /> : null}
+      {backdrop === 'puppet' ? <PuppetBackdrop className="-z-10" /> : null}
+      {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}
       />
       <div className="container-raptor relative">
-        <div className="flex max-w-4xl flex-col gap-6">
+        <div
+          className={cn(
+            'flex max-w-4xl flex-col gap-6',
+            // The marionette hangs in the left fifth of the band, so on the
+            // widths where it has room the copy steps aside for it. Below
+            // `lg` the rig recentres and sits behind, like any other backdrop.
+            backdrop === 'puppet' && 'lg:ml-[20rem] lg:max-w-2xl xl:ml-[24rem] xl:max-w-3xl',
+          )}
+        >
           <Eyebrow>{eyebrow}</Eyebrow>
           <h1 className="text-h1 uppercase text-chrome">{heading}</h1>
           <p className="max-w-2xl text-body text-steel-300">{lead}</p>
         </div>
-        {children ? <div className="mt-12">{children}</div> : null}
+        {children ? (
+          <div
+            className={cn('mt-12', backdrop === 'puppet' && 'lg:ml-[20rem] xl:ml-[24rem]')}
+          >
+            {children}
+          </div>
+        ) : null}
       </div>
     </section>
   )
