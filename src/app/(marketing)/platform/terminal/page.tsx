@@ -12,7 +12,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function TerminalPage() {
   return (
-    <StandardPage copy={copy} modulesHeading="Inside the terminal">
+    <StandardPage copy={copy} modulesHeading="Inside the terminal" heroBackdrop="tunnel">
       <WorkspaceMap />
     </StandardPage>
   )

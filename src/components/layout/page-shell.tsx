@@ -18,6 +18,7 @@ import { BurstsBackdrop } from '@/components/backdrops/bursts-backdrop'
 import { LightburstBackdrop } from '@/components/backdrops/lightburst-backdrop'
 import { DancersBackdrop } from '@/components/backdrops/dancers-backdrop'
 import { LazyPyramids } from '@/components/backdrops/lazy-pyramids'
+import { TunnelBackdrop } from '@/components/backdrops/tunnel-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -25,7 +26,8 @@ import { cn } from '@/lib/utils'
 
 /**
  * Every hero backdrop the site has. `image` is the themed wash almost every
- * page uses; the rest are ported CodePen scenes, one broker page each.
+ * page uses; the rest are ported CodePen scenes, one page each — except
+ * `tunnel`, which is written for this site rather than ported.
  *
  * `singularity` is the one that appears twice: it closes the home page, and
  * the white-label hero asks for the same scene. It is the same component in
@@ -48,6 +50,7 @@ export type PenBackdrop =
   | 'lightburst'
   | 'dancers'
   | 'pyramids'
+  | 'tunnel'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -103,6 +106,7 @@ export function PageHero({
       {backdrop === 'lightburst' ? <LightburstBackdrop className="-z-10" /> : null}
       {backdrop === 'dancers' ? <DancersBackdrop className="-z-10" /> : null}
       {backdrop === 'pyramids' ? <LazyPyramids className="-z-10" /> : null}
+      {backdrop === 'tunnel' ? <TunnelBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
