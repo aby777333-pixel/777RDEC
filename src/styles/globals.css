@@ -579,7 +579,7 @@ html[data-reduce-motion='true'] *::after {
   /* A full turn swings the frame ~20em either side of centre, so an inset in
      `em` parks it against the right edge at every scale without ever letting
      the frame cross it. */
-  --swing-inset-right: 21em;
+  --swing-inset-right: 25em;
   --duration: 2s;
   --delay: -3s;
 }
