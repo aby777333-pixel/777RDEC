@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function MarketIntelligencePage() {
   return (
-    <StandardPage copy={copy} modulesHeading="What it tells you">
+    <StandardPage copy={copy} modulesHeading="What it tells you" heroBackdrop="answer">
       <Section className="border-b border-line-1">
         <SectionHeader
           eyebrow="Cross-asset"

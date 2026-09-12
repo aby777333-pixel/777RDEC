@@ -17,7 +17,7 @@ export default function ResearchIndexPage() {
 
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="constellation" />
       <Section className="border-b border-line-1">
         <SectionHeader eyebrow="Notes" title="Published research" />
         <div className="mt-10">

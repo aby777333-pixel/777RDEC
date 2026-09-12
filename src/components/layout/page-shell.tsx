@@ -25,6 +25,10 @@ import { RiverBackdrop } from '@/components/backdrops/river-backdrop'
 import { RegionsBackdrop } from '@/components/backdrops/regions-backdrop'
 import { CipherBackdrop } from '@/components/backdrops/cipher-backdrop'
 import { HandshakeBackdrop } from '@/components/backdrops/handshake-backdrop'
+import { AttentionBackdrop } from '@/components/backdrops/attention-backdrop'
+import { AnswerBackdrop } from '@/components/backdrops/answer-backdrop'
+import { TensionBackdrop } from '@/components/backdrops/tension-backdrop'
+import { ConstellationBackdrop } from '@/components/backdrops/constellation-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -68,6 +72,10 @@ export type PenBackdrop =
   | 'regions'
   | 'cipher'
   | 'handshake'
+  | 'attention'
+  | 'answer'
+  | 'tension'
+  | 'constellation'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -130,6 +138,10 @@ export function PageHero({
       {backdrop === 'regions' ? <RegionsBackdrop className="-z-10" /> : null}
       {backdrop === 'cipher' ? <CipherBackdrop className="-z-10" /> : null}
       {backdrop === 'handshake' ? <HandshakeBackdrop className="-z-10" /> : null}
+      {backdrop === 'attention' ? <AttentionBackdrop className="-z-10" /> : null}
+      {backdrop === 'answer' ? <AnswerBackdrop className="-z-10" /> : null}
+      {backdrop === 'tension' ? <TensionBackdrop className="-z-10" /> : null}
+      {backdrop === 'constellation' ? <ConstellationBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
