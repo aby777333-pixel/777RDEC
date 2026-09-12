@@ -1206,3 +1206,29 @@ html[data-reduce-motion='true'] *::after {
   50% { --bloom-amplitude: 1em; --bloom-scale: 3; }
   100% { --bloom-amplitude: 1.5em; --bloom-scale: 3; }
 }
+
+/*
+  The canvas pens behind the broker hero bands.
+
+  Three of them draw to a canvas rather than the DOM, so unlike the swing, the
+  marionette and the bloom there is almost nothing to style: the canvas is the
+  band, and the picture inside it belongs to the pen. What is here is only what
+  every one of them needs.
+
+  `pointer-events: none` is the important line. Several of these answer to the
+  pointer — the swarm follows it, the two shaders turn under a drag — but they
+  listen on the section, never on this element, so the backdrop can never take
+  a click meant for the page.
+*/
+.pen-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #000;
+}
+.pen-scene > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}

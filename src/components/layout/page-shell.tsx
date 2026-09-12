@@ -6,10 +6,19 @@ import { WingMark } from '@/components/ui/wing-mark'
 import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
 import { PuppetBackdrop } from '@/components/backdrops/puppet-backdrop'
 import { BloomBackdrop } from '@/components/backdrops/bloom-backdrop'
+import { SwarmBackdrop } from '@/components/backdrops/swarm-backdrop'
+import { TorusBackdrop } from '@/components/backdrops/torus-backdrop'
+import { LiquidBackdrop } from '@/components/backdrops/liquid-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
 import { cn } from '@/lib/utils'
+
+/**
+ * Every hero backdrop the site has. `image` is the themed wash almost every
+ * page uses; the rest are ported CodePen scenes, one page each.
+ */
+export type PenBackdrop = 'image' | 'swing' | 'puppet' | 'bloom' | 'swarm' | 'torus' | 'liquid'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -27,13 +36,13 @@ export function PageHero({
   lead: string
   /** `emil` prefers the cockpit render. Only read by the `image` backdrop. */
   imageVariant?: 'default' | 'emil'
-  /** Each pen is a single-page flourish — `/brokers` asks for the swing,
-   *  `/intelligence/emil-lab` for the puppet, `/brokers/platform` for the
-   *  bloom. Every other hero keeps the themed wash. */
-  backdrop?: 'image' | 'swing' | 'puppet' | 'bloom'
+  /** Each pen backs exactly one page; every other hero keeps the themed wash.
+   *  Adding one is a new value here, a component, and one opt-in on the page —
+   *  nothing else in the site changes. */
+  backdrop?: PenBackdrop
   children?: React.ReactNode
 }) {
-  const pen = backdrop === 'swing' || backdrop === 'puppet' || backdrop === 'bloom'
+  const pen = backdrop !== 'image'
   return (
     <section
       className={cn(
@@ -53,6 +62,9 @@ export function PageHero({
           on DOM order instead. */}
       {backdrop === 'puppet' ? <PuppetBackdrop /> : null}
       {backdrop === 'bloom' ? <BloomBackdrop className="-z-10" /> : null}
+      {backdrop === 'swarm' ? <SwarmBackdrop className="-z-10" /> : null}
+      {backdrop === 'torus' ? <TorusBackdrop className="-z-10" /> : null}
+      {backdrop === 'liquid' ? <LiquidBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
@@ -186,9 +198,8 @@ export function StandardPage({
 }: {
   copy: PageCopy
   modulesHeading?: React.ReactNode
-  /** Passed through to <PageHero>; only `/brokers` and `/brokers/platform`
-   *  ask for anything here. */
-  heroBackdrop?: 'image' | 'swing' | 'puppet' | 'bloom'
+  /** Passed through to <PageHero>; only the pages that carry a pen pass it. */
+  heroBackdrop?: PenBackdrop
   children?: React.ReactNode
   className?: string
 }) {
