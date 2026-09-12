@@ -1,5 +1,5 @@
 /**
- * Fragment shader for the crm hero band — "Wobbly Torus" by Matthias Hurrle
+ * Fragment shader for the crm hero band — "Dark City Ambience" by Matthias Hurrle
  * (@atzedent), https://codepen.io/atzedent/pen/zxKmgpj
  *
  * Verbatim from the pen. Every `time`, `resolution`, `move` and `wheel` it

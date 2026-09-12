@@ -4,7 +4,8 @@ import { cn } from '@/lib/utils'
 import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backdrop-canvas'
 
 /**
- * "Canvas particles" by hakimel, ported.
+ * "Trail" by Hakim El Hattab, ported.
+ * https://codepen.io/hakimel/pen/DKKxeo
  *
  * Twenty-five particles orbit the pointer, each on its own radius and at its
  * own speed, chasing it with lag and drawing the line from where they were to

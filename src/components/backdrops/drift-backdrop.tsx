@@ -5,6 +5,7 @@ import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
 
 /**
  * "Mediterranean Drift V3 (WebGL)" by Luis Lessrain, ported.
+ * https://codepen.io/luis-lessrain/pen/emgBwPj
  *
  * Fourteen thousand tracers advected through a wind field built from six
  * pressure systems, each a rotating vortex with a little inflow. Every frame

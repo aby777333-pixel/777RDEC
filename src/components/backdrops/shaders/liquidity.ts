@@ -1,5 +1,5 @@
 /**
- * Fragment shader for the liquidity hero band — "Liquid Metal" by Matthias Hurrle
+ * Fragment shader for the liquidity hero band — "Not a Mobius Knot" by Matthias Hurrle
  * (@atzedent), https://codepen.io/atzedent/pen/QwdOWmZ
  *
  * Verbatim from the pen. Every `time`, `resolution`, `move` and `wheel` it

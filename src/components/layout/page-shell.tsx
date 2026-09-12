@@ -7,8 +7,8 @@ import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
 import { PuppetBackdrop } from '@/components/backdrops/puppet-backdrop'
 import { BloomBackdrop } from '@/components/backdrops/bloom-backdrop'
 import { SwarmBackdrop } from '@/components/backdrops/swarm-backdrop'
-import { TorusBackdrop } from '@/components/backdrops/torus-backdrop'
-import { LiquidBackdrop } from '@/components/backdrops/liquid-backdrop'
+import { CityBackdrop } from '@/components/backdrops/city-backdrop'
+import { KnotBackdrop } from '@/components/backdrops/knot-backdrop'
 import { DriftBackdrop } from '@/components/backdrops/drift-backdrop'
 import { LazyMorph } from '@/components/backdrops/lazy-morph'
 import { LazySingularity } from '@/components/backdrops/lazy-singularity'
@@ -31,8 +31,8 @@ export type PenBackdrop =
   | 'puppet'
   | 'bloom'
   | 'swarm'
-  | 'torus'
-  | 'liquid'
+  | 'city'
+  | 'knot'
   | 'drift'
   | 'morph'
   | 'singularity'
@@ -80,8 +80,8 @@ export function PageHero({
       {backdrop === 'puppet' ? <PuppetBackdrop /> : null}
       {backdrop === 'bloom' ? <BloomBackdrop className="-z-10" /> : null}
       {backdrop === 'swarm' ? <SwarmBackdrop className="-z-10" /> : null}
-      {backdrop === 'torus' ? <TorusBackdrop className="-z-10" /> : null}
-      {backdrop === 'liquid' ? <LiquidBackdrop className="-z-10" /> : null}
+      {backdrop === 'city' ? <CityBackdrop className="-z-10" /> : null}
+      {backdrop === 'knot' ? <KnotBackdrop className="-z-10" /> : null}
       {backdrop === 'drift' ? <DriftBackdrop className="-z-10" /> : null}
       {backdrop === 'morph' ? <LazyMorph className="-z-10" /> : null}
       {backdrop === 'singularity' ? <LazySingularity className="-z-10" /> : null}

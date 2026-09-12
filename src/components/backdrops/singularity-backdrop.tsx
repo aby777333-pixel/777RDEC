@@ -20,7 +20,8 @@ import { useCanvasBackdrop, type BackdropRenderer } from './use-canvas-backdrop'
 import { cn } from '@/lib/utils'
 
 /**
- * "The Life of a Singularity" by VoXelo, ported.
+ * "Cosmic Anomaly Visualizer" by VoXelo, ported.
+ * https://codepen.io/VoXelo/pen/KwNXwxY
  *
  * Event horizon, a rim aura, and five thousand instanced streaks orbiting as
  * an accretion disk — morphed by simplex noise, coloured by a Doppler term,

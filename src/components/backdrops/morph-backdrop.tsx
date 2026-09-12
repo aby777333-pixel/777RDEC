@@ -17,6 +17,7 @@ import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backd
 
 /**
  * "Three.js + GLSL Particle Animation" by VoXelo, ported.
+ * https://codepen.io/VoXelo/pen/NPbGqrx
  *
  * A hundred thousand points, each given an id and three random numbers and
  * then told where to be by the vertex shader. Three figures are defined there
