@@ -932,3 +932,41 @@ ground and now gets one in both themes.
 feature of this repo and removing it is a bigger decision than this change. The
 `imageVariant` prop on `PageHero` is likewise kept, inert, because two EMIL
 pages still pass it.
+
+## 39. The robot is /brokers only, and sized to the hero it stands in
+
+§38 put the swinging robot behind every inner hero. It is a single-page
+flourish, not a house style, so it is now behind exactly one: `/brokers`.
+
+`PageHero` takes a `backdrop` prop — `'image'` by default, `'swing'` where it
+is asked for — and `StandardPage` passes a `heroBackdrop` through. That turns
+`<HeroImage>` back on for the other forty-odd pages, which means their heroes
+follow the page theme again; `.force-dark` now rides on the swing branch alone,
+so §37's trade applies to the one band that actually needs a black ground.
+`imageVariant` is live again rather than inert.
+
+**Scale.** `clamp(2.2px, 0.52vw, 6.5px)` sat the rig at roughly 210 px in a
+hero two to four times that tall. It is now `clamp(3.4px, 1.2vw, 16px)`, about
+540 px — the height of the headline block rather than a third of it.
+
+Three things had to follow the size up:
+
+1. **Perspective in `em`.** The pen's `800px` against its `6.5px` text is
+   `123em`. Left at `800px`, tripling the scale would have tripled the
+   distortion; in `em` the projection is the pen's at any scale.
+2. **Capped by the hero.** Heroes run from ~600 px (`/company/partners`) to
+   ~835 px (`/brokers`) depending on how the headline wraps, and 540 px does
+   not fit the short ones. `.swing-scene` is a `container-type: size` box — its
+   height comes from `inset`, never from the rig, so containment cannot
+   collapse it — and the inner `.fit` scales at `min(clamp(…), 2.7cqh)`. The
+   rig shrinks to fit rather than clipping; checked down to a 300 px hero. The
+   plain `clamp` is declared first as the fallback where `cqh` is unsupported.
+3. **Parked right, not centred.** `place-items: center end` with a `21em`
+   inset, `perspective-origin` following it across or the projection shears off
+   the section's centre. 21em is just past the widest point of the scene's
+   48-second turn, measured across 24 angles × 9 swing phases, so the frame
+   reaches the right edge without ever crossing it.
+
+Below `md` it drops back to about its old size. The headline wraps to the full
+column there, so there is no right-hand margin to stand in and a full-size rig
+sits straight through the text.

@@ -10,5 +10,6 @@ export const metadata: Metadata = pageMetadata({
 })
 
 export default function Page() {
-  return <StandardPage copy={copy} />
+  /* The swinging robot lives here and nowhere else on the site. */
+  return <StandardPage copy={copy} heroBackdrop="swing" />
 }

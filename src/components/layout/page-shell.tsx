@@ -4,6 +4,7 @@ import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { WingMark } from '@/components/ui/wing-mark'
 import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
+import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
 import { cn } from '@/lib/utils'
@@ -15,20 +16,35 @@ export function PageHero({
   eyebrow,
   heading,
   lead,
-  imageVariant: _imageVariant,
+  imageVariant,
+  backdrop = 'image',
   children,
 }: {
   eyebrow: string
   heading: string
   lead: string
-  /** Kept for the two EMIL pages that still pass it; the hero backdrop no
-   *  longer varies by page. */
+  /** `emil` prefers the cockpit render. Only read by the `image` backdrop. */
   imageVariant?: 'default' | 'emil'
+  /** The swinging robot is a single-page flourish — `/brokers` asks for it and
+   *  nothing else does, so every other hero keeps the themed wash. */
+  backdrop?: 'image' | 'swing'
   children?: React.ReactNode
 }) {
+  const swinging = backdrop === 'swing'
   return (
-    <section className="force-dark relative isolate overflow-hidden border-b border-line-1 bg-bg-0 pb-16 pt-20 md:pb-24 md:pt-28">
-      <SwingBackdrop className="-z-10" />
+    <section
+      className={cn(
+        'relative isolate overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28',
+        // The pen assumes a black ground, so the band it backs stops following
+        // the theme. Only that band — the image hero themes as it always did.
+        swinging && 'force-dark bg-bg-0',
+      )}
+    >
+      {swinging ? (
+        <SwingBackdrop className="-z-10" />
+      ) : (
+        <HeroImage variant={imageVariant ?? 'default'} />
+      )}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}
@@ -144,17 +160,25 @@ export function CtaBand({
 export function StandardPage({
   copy,
   modulesHeading,
+  heroBackdrop,
   children,
   className,
 }: {
   copy: PageCopy
   modulesHeading?: React.ReactNode
+  /** Passed through to <PageHero>; only `/brokers` asks for anything here. */
+  heroBackdrop?: 'image' | 'swing'
   children?: React.ReactNode
   className?: string
 }) {
   return (
     <div className={cn('flex flex-col', className)}>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} />
+      <PageHero
+        eyebrow={copy.eyebrow}
+        heading={copy.heading}
+        lead={copy.lead}
+        backdrop={heroBackdrop}
+      />
       <AnswerGrid answers={copy.answers} />
       {children}
       {copy.modules.length > 0 ? (

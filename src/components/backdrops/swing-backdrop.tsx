@@ -43,46 +43,50 @@ function Leg() {
 export function SwingBackdrop({ className }: { className?: string }) {
   return (
     <div className={cn('swing-scene', className)} aria-hidden>
-      <div className="scene">
-        <div className="floor">
-          <div className="shadow" />
-        </div>
-
-        <div className="swing">
-          <div className="structure">
-            <Box className="top" />
-            <Leg />
-            <Leg />
+      {/* The outer box is the size container; `.fit` reads the hero's height
+          off it and picks the scale the whole rig is measured in. */}
+      <div className="fit">
+        <div className="scene">
+          <div className="floor">
+            <div className="shadow" />
           </div>
 
-          <div className="moving">
-            <div className="line" />
-            <div className="line" />
-            <Box className="seat" />
+          <div className="swing">
+            <div className="structure">
+              <Box className="top" />
+              <Leg />
+              <Leg />
+            </div>
 
-            <div className="robot">
-              <Box className="thigh">
-                <Box className="calf">
-                  <Box className="foot" />
-                </Box>
-              </Box>
-              <Box className="thigh">
-                <Box className="calf">
-                  <Box className="foot" />
-                </Box>
-              </Box>
+            <div className="moving">
+              <div className="line" />
+              <div className="line" />
+              <Box className="seat" />
 
-              <Box className="thorax">
-                <Box className="neck">
-                  <Box className="head" />
+              <div className="robot">
+                <Box className="thigh">
+                  <Box className="calf">
+                    <Box className="foot" />
+                  </Box>
                 </Box>
-                <Box className="arm">
-                  <Box className="hand" />
+                <Box className="thigh">
+                  <Box className="calf">
+                    <Box className="foot" />
+                  </Box>
                 </Box>
-                <Box className="arm">
-                  <Box className="hand" />
+
+                <Box className="thorax">
+                  <Box className="neck">
+                    <Box className="head" />
+                  </Box>
+                  <Box className="arm">
+                    <Box className="hand" />
+                  </Box>
+                  <Box className="arm">
+                    <Box className="hand" />
+                  </Box>
                 </Box>
-              </Box>
+              </div>
             </div>
           </div>
         </div>

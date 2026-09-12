@@ -546,20 +546,51 @@ html[data-reduce-motion='true'] *::after {
      PostCSS chain is Tailwind + autoprefixer with no nesting plugin, so
      relying on it would have depended on a build step that is not there.
 
-  Scale is a font-size on the container, since the whole scene is in `em`.
+  Scale is a font-size on `.fit`, since the whole scene is in `em`.
   No JavaScript at all — which also means the site's reduce-motion rules
   already stop it, like any other CSS animation.
 */
 .swing-scene {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
   overflow: hidden;
-  perspective: 800px;
-  font-size: clamp(2.2px, 0.52vw, 6.5px);
+  /* The height here comes from `inset`, never from the rig, so size
+     containment cannot collapse it — and it gives `.fit` inside a `cqh`,
+     which is the hero's own height, to scale itself against. */
+  container-type: size;
+}
+.swing-scene .fit {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  /* Parked on the right so it reads beside the headline, not through it. */
+  place-items: center end;
+  padding-right: var(--swing-inset-right);
+  /* The pen's 800px against its 6.5px text is 123em, so keeping it in `em`
+     holds the pen's exact projection at any scale. The origin follows the
+     rig right, or the whole thing shears off the section's centre. */
+  perspective: 123em;
+  perspective-origin: calc(100% - var(--swing-inset-right)) 50%;
+  /* Sized off the viewport, then capped by the hero it sits in: the rig
+     stands ~34em tall, so 2.7cqh keeps it inside even the shortest hero.
+     The plain clamp first is the fallback where `cqh` is unsupported. */
+  font-size: clamp(3.4px, 1.2vw, 16px);
+  font-size: min(clamp(3.4px, 1.2vw, 16px), 2.7cqh);
+  /* A full turn swings the frame ~20em either side of centre, so an inset in
+     `em` parks it against the right edge at every scale without ever letting
+     the frame cross it. */
+  --swing-inset-right: 21em;
   --duration: 2s;
   --delay: -3s;
+}
+/* Below `md` the headline wraps to the full column and there is no right-hand
+   margin left to stand in, so the rig steps back to the size it was before it
+   was given one. */
+@media (max-width: 767px) {
+  .swing-scene .fit {
+    font-size: clamp(2.2px, 0.8vw, 6px);
+    font-size: min(clamp(2.2px, 0.8vw, 6px), 2.7cqh);
+  }
 }
 .swing-scene * {
   transform-style: preserve-3d;
