@@ -75,7 +75,7 @@ export function PageHero({
   return (
     <section
       className={cn(
-        'relative isolate overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28',
+        'relative isolate overflow-hidden border-b border-line-1 pb-12 pt-14 md:pb-16 md:pt-20',
         // The rig needs a band deep enough to hang in and still clear its
         // control panel; the shorter headline alone does not leave one.
         backdrop === 'puppet' && 'lg:min-h-[40rem]',
@@ -111,7 +111,7 @@ export function PageHero({
       <div className="container-raptor relative">
         <div
           className={cn(
-            'flex max-w-4xl flex-col gap-6',
+            'flex max-w-5xl flex-col gap-6',
             // The marionette is a figure with a control panel and has to be
             // cleared properly: a share of the column rather than a fixed cap,
             // because its column is a share too, so the gap holds at every
@@ -122,7 +122,7 @@ export function PageHero({
           )}
         >
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="text-h1 uppercase text-chrome">{heading}</h1>
+          <h1 className="text-hero uppercase text-chrome">{heading}</h1>
           <p className="max-w-2xl text-body text-steel-300">{lead}</p>
         </div>
         {children ? <div className="mt-12">{children}</div> : null}

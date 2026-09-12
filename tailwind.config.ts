@@ -44,6 +44,11 @@ const config: Config = {
         body: ['1.0625rem', { lineHeight: '1.6' }],
         h2: ['clamp(2.25rem, 5vw, 4.5rem)', { lineHeight: '0.98', letterSpacing: '-0.02em' }],
         h1: ['clamp(3rem, 8vw, 8rem)', { lineHeight: '0.92', letterSpacing: '-0.02em' }],
+        // The inner pages' hero, a step under `h1`. Same face and tracking,
+        // less of it: at `h1` a four-line heading made a band taller than the
+        // fold, which left the backdrop behind it half unseen. The home hero
+        // keeps `h1` — it is the one that should be the largest thing anywhere.
+        hero: ['clamp(2.5rem, 5.6vw, 5.5rem)', { lineHeight: '0.95', letterSpacing: '-0.02em' }],
       },
       borderRadius: {
         ui: '6px',

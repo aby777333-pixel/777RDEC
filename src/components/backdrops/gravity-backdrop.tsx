@@ -17,15 +17,20 @@ import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backd
  * The particles, the gravity, the spawn rate, the damping, the two types and
  * their colours are the pen's, values included.
  *
- * Its nature is that it answers to the pointer: the swarm forms wherever the
- * pointer is, and when the pointer leaves, spawning and gravity both stop and
- * what is already out there coasts away. Both kept, read against the band
- * instead of the window.
+ * Its nature is that it answers to the pointer, and it does: the swarm forms
+ * wherever the pointer is in the band, and follows it.
  *
- * One placement change. The pen opens with the swarm in the middle of the
- * window; the middle of this band is under the headline, so it opens right of
- * centre, where the copy is not. After that it is wherever the pointer is,
- * which is the pen's own behaviour.
+ * What is not kept is the pen's idle state. When the pointer leaves its canvas
+ * the pen stops spawning and switches gravity off, so the swarm flies apart
+ * and the screen empties. That reads correctly when the canvas *is* the
+ * window — the pointer leaving means the visitor has gone — but this canvas is
+ * a band a few hundred pixels tall that the pointer is outside of almost all
+ * the time. Taken literally it emptied the hero and left it empty. So the
+ * swarm eases back to its resting place and keeps turning there instead, and
+ * the band is alive whether or not anyone is pointing at it.
+ *
+ * That resting place is right of centre rather than the middle of the window,
+ * because the middle of this band is under the headline.
  */
 
 /** The pen's gravity constant, spawn interval in ms, and particle ceiling. */
@@ -33,9 +38,11 @@ const GRAVITY = 10
 const SPAWN_INTERVAL = 10
 const MAX_PARTICLES = 700
 
-/** Where the swarm waits before the pointer has been anywhere, 0..1 of the band. */
+/** Where the swarm rests when the pointer is elsewhere, 0..1 of the band. */
 const REST_X = 0.66
 const REST_Y = 0.5
+/** How quickly it drifts back there, per frame. */
+const RETURN_EASE = 0.02
 
 type Particle = {
   x: number
@@ -55,7 +62,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   let height = Math.max(1, host.clientHeight)
   let mouseX = width * REST_X
   let mouseY = height * REST_Y
-  let away = false
+  let away = true
   let type = 0
   let spawnTimer = 0
   let last = -1
@@ -101,6 +108,13 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     },
     frame(seconds) {
+      if (away) {
+        // Ease home rather than snap, so a pointer leaving the band hands the
+        // swarm back to its corner instead of teleporting it.
+        mouseX += (width * REST_X - mouseX) * RETURN_EASE
+        mouseY += (height * REST_Y - mouseY) * RETURN_EASE
+      }
+
       // The pen integrates in whole frames at whatever rate it is given; this
       // is the same step, with the clock reset when the band comes back on
       // screen and hands it a jump.
@@ -118,28 +132,24 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       }
       ctx.globalAlpha = 1
 
-      if (!away) {
-        // The pen's own guard: a long frame spawns at most a hundred
-        // milliseconds' worth rather than a thousand particles at once.
-        spawnTimer += dtMs < 100 ? dtMs : 100
-        for (; spawnTimer > 0; spawnTimer -= SPAWN_INTERVAL) spawn()
-      }
+      // The pen's own guard: a long frame spawns at most a hundred
+      // milliseconds' worth rather than a thousand particles at once.
+      spawnTimer += dtMs < 100 ? dtMs : 100
+      for (; spawnTimer > 0; spawnTimer -= SPAWN_INTERVAL) spawn()
 
       const overflow = particles.length - MAX_PARTICLES
       if (overflow > 0) particles.splice(0, overflow)
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
-        if (!away) {
-          const dx = mouseX - p.x
-          const dy = mouseY - p.y
-          const d2 = dx * dx + dy * dy
-          // Close in, gravity is held at its value 10px out, so a particle
-          // passing through the centre is flung rather than sent to infinity.
-          const a = d2 > 100 ? GRAVITY / d2 : GRAVITY / 100
-          p.xv = (p.xv + a * dx) * 0.99
-          p.yv = (p.yv + a * dy) * 0.99
-        }
+        const dx = mouseX - p.x
+        const dy = mouseY - p.y
+        const d2 = dx * dx + dy * dy
+        // Close in, gravity is held at its value 10px out, so a particle
+        // passing through the centre is flung rather than sent to infinity.
+        const a = d2 > 100 ? GRAVITY / d2 : GRAVITY / 100
+        p.xv = (p.xv + a * dx) * 0.99
+        p.yv = (p.yv + a * dy) * 0.99
         p.x += p.xv
         p.y += p.yv
         p.alpha *= 0.99
