@@ -56,20 +56,23 @@ const SHAPE_EXTENT = 38
 /**
  * How far right of centre the figure sits, as a fraction of the half-width the
  * camera can see. The pen centres it in the window; this band has the hero's
- * copy down its left, so the figure moves out from under the headline. Taken
- * as a fraction rather than in pixels so it lands in the same place at every
- * width.
+ * copy down its left, so the figure moves over to the right of the band —
+ * far enough that the halo of orbiting points clears the headline, not just
+ * the bright core. Taken as a fraction rather than in pixels so it lands in
+ * the same place at every width.
+ *
+ * At this distance the widest figure runs past the right edge of the band, and
+ * that is intended: the backdrops here bleed rather than sit in frame, as the
+ * wing mark does one layer up.
  */
-const OFFSET_RIGHT = 0.38
+const OFFSET_RIGHT = 0.56
 
 /**
- * How much room to leave the figure on its right, in the shader's own units.
- * The astrolabe's outer ring is the widest of the three at about 27, and a
- * morph breathes every point outward from there. A band that is barely wider
- * than it is tall has less half-width than the offset above would ask for, so
- * the offset is clamped to whatever is left after this.
+ * The one thing worth protecting: the centre of the figure, which is where the
+ * bright core is, stays inside the band. Without this, a band only a little
+ * wider than it is tall would push the core itself off the right edge.
  */
-const KEEP_CLEAR = 30
+const CORE_LIMIT = 0.62
 
 const VERTEX_SRC = `
 uniform float uTime;
@@ -334,9 +337,8 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       // Landscape only: a portrait band carries its copy across the full width
       // and has nothing to clear, so it keeps the pen's own centring.
       const halfWidth = camera.aspect >= 1 ? SHAPE_EXTENT * camera.aspect : SHAPE_EXTENT
-      const room = Math.max(0, halfWidth - KEEP_CLEAR)
       particles.position.x =
-        camera.aspect >= 1 ? Math.min(OFFSET_RIGHT * halfWidth, room) : 0
+        camera.aspect >= 1 ? Math.min(OFFSET_RIGHT, CORE_LIMIT) * halfWidth : 0
     },
     frame(elapsed) {
       const delta = Math.min(Math.max(elapsed - seconds, 0), 0.1)
