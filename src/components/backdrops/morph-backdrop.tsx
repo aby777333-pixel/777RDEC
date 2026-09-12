@@ -37,7 +37,8 @@ import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backd
  *
  * The one thing moved rather than kept is where the figure sits: the pen puts
  * it in the middle of the window, and the middle of this band is under the
- * headline. See OFFSET_RIGHT.
+ * headline. It sits right of centre instead, and never past the band's right
+ * edge. See OFFSET_RIGHT.
  *
  * The pen's own button, a glass pill reading "click to morph", is left behind
  * with the rest of the demo's furniture.
@@ -56,23 +57,27 @@ const SHAPE_EXTENT = 38
 /**
  * How far right of centre the figure sits, as a fraction of the half-width the
  * camera can see. The pen centres it in the window; this band has the hero's
- * copy down its left, so the figure moves over to the right of the band —
- * far enough that the halo of orbiting points clears the headline, not just
- * the bright core. Taken as a fraction rather than in pixels so it lands in
- * the same place at every width.
+ * copy down its left, so the figure moves right — far enough that the halo of
+ * orbiting points clears the headline, not just the bright core. Taken as a
+ * fraction rather than in pixels so it lands in the same place at every width.
  *
- * At this distance the widest figure runs past the right edge of the band, and
- * that is intended: the backdrops here bleed rather than sit in frame, as the
- * wing mark does one layer up.
+ * Whatever this asks for, the cap below wins: the whole figure stays inside
+ * the band.
  */
-const OFFSET_RIGHT = 0.48
+const OFFSET_RIGHT = 0.42
 
 /**
- * The one thing worth protecting: the centre of the figure, which is where the
- * bright core is, stays inside the band. Without this, a band only a little
- * wider than it is tall would push the core itself off the right edge.
+ * The margin left between the figure and the right edge of the band, on top of
+ * the figure's own radius.
+ *
+ * SHAPE_EXTENT *is* that radius as the band sees it — it is the half-height the
+ * camera is pulled back to frame, which is why the pen picked it — so the
+ * offset can never exceed `halfWidth - SHAPE_EXTENT`, and this keeps the
+ * outermost ring of points off the edge rather than on it. The rings are
+ * tilted in three dimensions, so their near side projects wider than its
+ * radius; the margin covers that too.
  */
-const CORE_LIMIT = 0.62
+const EDGE_MARGIN = 6
 
 const VERTEX_SRC = `
 uniform float uTime;
@@ -337,8 +342,9 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       // Landscape only: a portrait band carries its copy across the full width
       // and has nothing to clear, so it keeps the pen's own centring.
       const halfWidth = camera.aspect >= 1 ? SHAPE_EXTENT * camera.aspect : SHAPE_EXTENT
+      const room = Math.max(0, halfWidth - SHAPE_EXTENT - EDGE_MARGIN)
       particles.position.x =
-        camera.aspect >= 1 ? Math.min(OFFSET_RIGHT, CORE_LIMIT) * halfWidth : 0
+        camera.aspect >= 1 ? Math.min(OFFSET_RIGHT * halfWidth, room) : 0
     },
     frame(elapsed) {
       const delta = Math.min(Math.max(elapsed - seconds, 0), 0.1)
