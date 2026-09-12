@@ -23,7 +23,13 @@ export const metadata: Metadata = pageMetadata({
 export default function EmilPage() {
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="dancers">
+      <PageHero
+        eyebrow={copy.eyebrow}
+        heading={copy.heading}
+        lead={copy.lead}
+        actions={copy.heroActions}
+        backdrop="dancers"
+      >
         <div className="max-w-2xl">
           <RiskLine />
         </div>

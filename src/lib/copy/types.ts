@@ -31,6 +31,13 @@ export type PageCopy = {
   eyebrow: string
   heading: string
   lead: string
+  /**
+   * Buttons in the hero itself. Optional and opt-in: most pages want the
+   * visitor to read the five answers before being asked for anything, so only
+   * the pages that are a destination in their own right set this. The closing
+   * CtaBand is separate and every page still has one.
+   */
+  heroActions?: readonly NextStep[]
   /** Body */
   answers: FiveAnswers
   modules: readonly Module[]

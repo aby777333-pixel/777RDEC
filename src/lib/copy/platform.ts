@@ -8,6 +8,12 @@ export const platformHub: PageCopy = {
   eyebrow: 'Platform',
   heading: 'One surface. Every decision.',
   lead: 'A trader should not have to leave the chart to understand exposure, or leave the terminal to understand why a market is moving. Raptor puts analysis, execution, risk and intelligence in one place, sharing one state.',
+  // Not the closing pair: the second of those points back at this page, and a
+  // hero button that reloads the page you are on is not a next step.
+  heroActions: [
+    { label: 'Request a demo', href: '/request-demo', variant: 'primary' },
+    { label: 'See the terminal', href: '/platform/terminal', variant: 'ghost' },
+  ],
   answers: {
     what: 'A multi-asset trading platform built as one application: charting and execution, market context, exposure and limits, and an intelligence layer that observes all of it.',
     who: 'Individual and professional traders, prop desks, and the brokers and institutions who put a platform in front of them.',
@@ -64,6 +70,12 @@ export const emil: PageCopy = {
   eyebrow: `Platform · ${EMIL_SHORT}`,
   heading: 'Intelligence that lives inside the terminal.',
   lead: `${EMIL_SHORT} is the ${EMIL_EXPANSION.toLowerCase()}. It adjusts its own inputs from what the market is actually doing, so nobody has to re-optimise it every quarter. Armed, it takes trades — strictly inside a mandate you wrote and confirmed. And it holds the capital boundaries you set, in the order path, where the intelligence layer cannot reach them.`,
+  // The same two next steps the page closes on. Repeated at the top because
+  // this page is long, and the Lab is where the claims can be tried out.
+  heroActions: [
+    { label: `Open ${EMIL_SHORT} Lab`, href: '/intelligence/emil-lab', variant: 'primary' },
+    { label: 'Request a demo', href: '/request-demo', variant: 'ghost' },
+  ],
   answers: {
     what: `A self-adjusting intelligence layer inside the platform. It observes market and account state, classifies the regime, re-scores its own inputs from live outcomes, enforces your capital boundaries, and — when armed — opens, closes, modifies and hedges positions inside an explicit mandate.`,
     who: 'Traders who want context and controls rather than signals, and desks that need automation that adapts on its own but still has an audit trail and a hard stop a human can reach.',

@@ -114,6 +114,7 @@ export function PageHero({
   eyebrow,
   heading,
   lead,
+  actions,
   imageVariant,
   backdrop = 'image',
   children,
@@ -121,6 +122,8 @@ export function PageHero({
   eyebrow: string
   heading: string
   lead: string
+  /** Buttons under the lead. See `heroActions` in the copy types. */
+  actions?: readonly NextStep[]
   /** `emil` prefers the cockpit render. Only read by the `image` backdrop. */
   imageVariant?: 'default' | 'emil'
   /** Each pen backs exactly one page; every other hero keeps the themed wash.
@@ -188,6 +191,20 @@ export function PageHero({
       {backdrop === 'redaction' ? <RedactionBackdrop className="-z-10" /> : null}
       {backdrop === 'sketch' ? <SketchBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
+      {/* A scrim over the copy side of a pen band. It has to come after the
+          backdrops to paint on top of them, since both sit at -z-10 and DOM
+          order is what separates them there. The reason it exists is the
+          buttons: a headline can hold its own against a busy scene because it
+          is huge and bright, and a ghost-variant button — a thin border and a
+          transparent middle — cannot. Two stops rather than a mid-point with
+          an alpha, because these colours are CSS variables without an
+          <alpha-value> and the opacity modifier does not reach them. */}
+      {pen ? (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-full max-w-[52rem] bg-gradient-to-r from-bg-0 to-transparent"
+        />
+      ) : null}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}
@@ -208,6 +225,20 @@ export function PageHero({
           <Eyebrow>{eyebrow}</Eyebrow>
           <h1 className="text-hero uppercase text-chrome">{heading}</h1>
           <p className="max-w-2xl text-body text-steel-300">{lead}</p>
+          {actions && actions.length > 0 ? (
+            <div className="flex flex-wrap gap-3">
+              {actions.map((action) => (
+                <ButtonLink
+                  key={action.href}
+                  href={action.href}
+                  variant={action.variant ?? 'ghost'}
+                  size="lg"
+                >
+                  {action.label}
+                </ButtonLink>
+              ))}
+            </div>
+          ) : null}
         </div>
         {children ? <div className="mt-12">{children}</div> : null}
       </div>
@@ -331,6 +362,7 @@ export function StandardPage({
         eyebrow={copy.eyebrow}
         heading={copy.heading}
         lead={copy.lead}
+        actions={copy.heroActions}
         backdrop={heroBackdrop}
       />
       <AnswerGrid answers={copy.answers} />
