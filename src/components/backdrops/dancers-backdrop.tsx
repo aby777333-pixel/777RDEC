@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
+import { type BackdropScene, isInteractiveTarget, useBackdropCanvas } from './use-backdrop-canvas'
 
 /**
  * "The Last Experience" by ge1doot, ported.
@@ -399,15 +399,9 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   }
 
   const onMove = (e: PointerEvent) => toLocal(e.clientX, e.clientY)
-  /** Anything the visitor might be pressing on purpose. */
-  const INTERACTIVE = 'a, button, input, select, textarea, summary, [role="button"], [tabindex]'
   const onDown = (e: PointerEvent) => {
-    // A press on a link or a button belongs to the link or the button. The
-    // grab below calls preventDefault, which in some browsers takes the click
-    // with it, so the dancers do not reach for anything a visitor may have
-    // meant to press.
-    const target = e.target
-    if (target instanceof Element && target.closest(INTERACTIVE)) return
+    // A press on a link or a button belongs to the link or the button.
+    if (isInteractiveTarget(e.target)) return
     toLocal(e.clientX, e.clientY)
     for (const dancer of dancers) {
       for (const point of dancer.points) {

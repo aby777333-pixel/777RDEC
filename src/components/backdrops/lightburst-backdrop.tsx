@@ -1,7 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
+import { type BackdropScene, isInteractiveTarget, useBackdropCanvas } from './use-backdrop-canvas'
 
 /**
  * "Canvas Light Explosion" by Jack Rugile, ported.
@@ -104,7 +104,8 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   // The pen listens on the window; this listens on the section, so only a
   // click in the band strikes the next one.
   const section = host.parentElement ?? host
-  const onClick = () => {
+  const onClick = (e: MouseEvent) => {
+    if (isInteractiveTarget(e.target)) return
     hue += 60
     strike()
   }

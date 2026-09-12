@@ -19,6 +19,7 @@ import { LightburstBackdrop } from '@/components/backdrops/lightburst-backdrop'
 import { DancersBackdrop } from '@/components/backdrops/dancers-backdrop'
 import { LazyPyramids } from '@/components/backdrops/lazy-pyramids'
 import { TunnelBackdrop } from '@/components/backdrops/tunnel-backdrop'
+import { MusicToggle } from '@/components/ui/music-toggle'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -131,6 +132,7 @@ export function PageHero({
         </div>
         {children ? <div className="mt-12">{children}</div> : null}
       </div>
+      <MusicToggle />
     </section>
   )
 }

@@ -1,6 +1,7 @@
 import { ButtonLink } from '@/components/ui/button'
 import { Chip } from '@/components/ui/chip'
 import { WingMark } from '@/components/ui/wing-mark'
+import { MusicToggle } from '@/components/ui/music-toggle'
 import { LatticeBackdrop } from '@/components/backdrops/lattice-backdrop'
 import { ECOSYSTEM_PILLARS } from '@/lib/brand'
 import Link from 'next/link'
@@ -90,6 +91,7 @@ export function Hero() {
           ))}
         </ul>
       </div>
+          <MusicToggle />
     </section>
   )
 }

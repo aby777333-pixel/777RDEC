@@ -195,6 +195,20 @@ export function useBackdropCanvas(
 }
 
 /**
+ * Anything the visitor might be pressing on purpose, rather than pressing the
+ * band. Several pens answer to a click — a chain reaction, the next bloom, the
+ * next figure — and the hero also carries real controls: the sound button, and
+ * whatever links a page puts in its hero. A pen must not fire on those, and
+ * must never call `preventDefault` over them, which in some browsers takes the
+ * click with it.
+ */
+const INTERACTIVE = 'a, button, input, select, textarea, summary, [role="button"], [tabindex]'
+
+export function isInteractiveTarget(target: EventTarget | null) {
+  return target instanceof Element && target.closest(INTERACTIVE) !== null
+}
+
+/**
  * Pointer position over the band, normalised to 0..1, for the pens whose
  * nature is to answer to it. Listens on the section rather than the backdrop,
  * because the backdrop is `pointer-events: none` and must stay that way.

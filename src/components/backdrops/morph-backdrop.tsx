@@ -13,7 +13,12 @@ import {
   WebGLRenderer,
 } from 'three'
 import { cn } from '@/lib/utils'
-import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backdrop-canvas'
+import {
+  type BackdropScene,
+  isInteractiveTarget,
+  trackPointer,
+  useBackdropCanvas,
+} from './use-backdrop-canvas'
 
 /**
  * "Three.js + GLSL Particle Animation" by VoXelo, ported.
@@ -312,7 +317,8 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   })
 
   const section = host.parentElement ?? host
-  const advance = () => {
+  const advance = (e: Event) => {
+    if (isInteractiveTarget(e.target)) return
     if (transitioning) return
     targetShape = (targetShape + 1) % TOTAL_SHAPES
     transitioning = true
