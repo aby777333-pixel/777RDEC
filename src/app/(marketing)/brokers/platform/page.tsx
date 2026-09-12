@@ -10,5 +10,6 @@ export const metadata: Metadata = pageMetadata({
 })
 
 export default function Page() {
-  return <StandardPage copy={copy} />
+  /* The blooming circles live here and nowhere else on the site. */
+  return <StandardPage copy={copy} heroBackdrop="bloom" />
 }

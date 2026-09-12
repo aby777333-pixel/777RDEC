@@ -1080,3 +1080,53 @@ and the gap between the headline and the rig runs 18px at the tightest and
 With the copy capped at a share of the column (54%) rather than a fixed `2xl`,
 the headline goes back to the site's own `text-h1` at full size, the way every
 other hero has it.
+
+## 43. The blooming circles, on the broker platform hero
+
+"6 Circles" by inclushe now backs the hero on `/brokers/platform`, and nowhere
+else. `PageHero` takes a fourth `backdrop` value.
+
+Six discs on the points of a hexagon, each placed by trigonometry in CSS —
+`translate(cos(a) * amplitude, sin(a) * amplitude)` — so one pair of custom
+properties drives the whole arrangement and `mix-blend-mode: lighten` does the
+rest where they overlap. Its oklch blues, its hexagon, its 4.01s cubic-bezier,
+all the pen's.
+
+**The registration is the load-bearing part.** `--bloom-amplitude` and
+`--bloom-scale` are only animatable because `@property` gives them a type;
+untyped, the keyframes would jump rather than interpolate and there would be no
+effect at all. `@property` is document-scoped by nature, which is why the names
+carry a prefix rather than the rule carrying a selector.
+
+**Its nature is the pointer taking it over**, and that is kept exactly: while
+the pointer is in the band the ambient animation is switched off and the two
+properties are driven directly — x throws the discs out, y swells them — and
+letting go gives the animation back. Read against this band rather than the
+window, so the discs answer to where the pointer is in the hero rather than
+where it is on the screen. Verified across the cycle: 1.26em/1.10 at the top
+left, 3.91em/5.27 at the lower right, animation restored on leaving.
+
+That takeover overruns the copy at the top of its range. That is the pen, not a
+defect — the discs are meant to swallow the surface — and the headline's chrome
+gradient still reads over them.
+
+Three changes, the usual three. Scoped, because the pen styles `html` and
+`body` including `overflow: hidden`. The band's coordinates rather than the
+window's. And sized in `em`, one `em` to the pen's 100px disc, capped at
+`min(90px, 7cqw, 14cqh)` so the arrangement holds at any hero size — 7cqw
+tracks the same 42% column the marionette uses, so the bloom sits in it without
+the column having to be restated.
+
+**It is the cheapest of the three.** No loop, no JavaScript animation, no
+observers: the ambient state is a CSS keyframe, so the site's reduce-motion
+rules already stop it and a hidden tab already stops compositing it. The only
+JavaScript is four pointer listeners: the route went 405 B to 411 B, and
+its first load 106 kB to 107 kB.
+
+Unlike §41's marionette the copy is not capped clear of it. The marionette is a
+figure with a control panel and needs a berth; the bloom is soft-edged and
+overrunning its bounds is the whole of what it does. Capping the copy at 54%
+here pushed this page's long headline to six lines for no gain.
+
+Below `lg`, as with the other two: the bloom recentres under the full-width
+copy and drops to 0.45 opacity.

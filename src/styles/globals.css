@@ -1095,3 +1095,114 @@ html[data-reduce-motion='true'] *::after {
   pointer-events: none;
   z-index: 8;
 }
+
+/*
+  "6 Circles" by inclushe, ported.
+
+  Faithful to the pen: its oklch blues, its hexagon, its `lighten` blend, its
+  4.01s cubic-bezier, and its pointer takeover — x throws the discs out, y
+  swells them, and letting go gives the animation back.
+
+  The registered properties are the load-bearing part. `--bloom-amplitude` and
+  `--bloom-scale` are only animatable because `@property` gives them a type;
+  untyped, the keyframes would jump rather than interpolate. `@property` is
+  document-scoped by nature, so the names carry the prefix instead.
+
+  Three changes to make a page into a hero backdrop, and they are the usual
+  three — see the component for the reasoning. Scoped, because the pen styles
+  `html` and `body` including `overflow: hidden`. Read against this band rather
+  than the window. And sized in `em`, one `em` to the pen's 100px disc, capped
+  against both its column and the band's height.
+
+  No JavaScript animation: the ambient state is a CSS keyframe, so the site's
+  reduce-motion rules already stop it for free.
+*/
+@property --bloom-amplitude {
+  syntax: '<length>';
+  initial-value: 0px;
+  inherits: false;
+}
+@property --bloom-scale {
+  syntax: '<number>';
+  initial-value: 1;
+  inherits: false;
+}
+
+.bloom-scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* The pen's own ground. The discs are blended against it, so it comes with
+     them rather than being left to the band's near-black. */
+  background: #0d0f1e;
+  container-type: size;
+  /* One `em` is one of the pen's 100px discs. The ambient arrangement reaches
+     three `em` from the centre, so 7cqw keeps it inside the column it shares
+     with the copy, and 14cqh inside the band. */
+  font-size: min(90px, 14cqh);
+  font-size: min(90px, 7cqw, 14cqh);
+}
+
+/* A zero-size anchor the discs are arranged around; the pen centres them in a
+   flex container, which is the same point. */
+.bloom-scene .bloom-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+@media (min-width: 1024px) {
+  .bloom-scene .bloom-core {
+    /* Anchored to the page's own right gutter, the way the marionette is, so
+       it squares up with the margin the copy is set against at every width. */
+    left: auto;
+    right: calc(var(--gutter) + var(--bloom-col) / 2);
+    --gutter: max(1.5rem, calc((100% - 1440px) / 2 + 1.5rem));
+    --bloom-col: min(34rem, 42%);
+  }
+}
+/* Below `lg` the copy runs the full column and the bloom recentres under it,
+   so it steps back to being weather rather than a shape the headline has to be
+   read through. */
+@media (max-width: 1023px) {
+  .bloom-scene .bloom-core { opacity: 0.45; }
+}
+
+.bloom-scene .circle {
+  position: absolute;
+  left: -0.5em;
+  top: -0.5em;
+  height: 1em;
+  width: 1em;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 0%,
+    oklch(0.1186 0.0248 260.66),
+    oklch(0.3133 0.1419 260.73),
+    oklch(0.6061 0.2122 260.66)
+  );
+  --angle: 90deg;
+  --bloom-amplitude: 1.75em;
+  --bloom-scale: 1.5;
+  --offset: 30deg;
+  transform: translate(
+      calc(cos(var(--angle)) * var(--bloom-amplitude)),
+      calc(sin(var(--angle)) * var(--bloom-amplitude) * -1)
+    )
+    scale(var(--bloom-scale)) rotate(calc(-1 * var(--angle) + 17deg));
+  mix-blend-mode: lighten;
+  animation: bloom-expand 4.01s cubic-bezier(0.8, 0, 0.2, 1) infinite alternate;
+}
+
+.bloom-scene .circle:nth-child(1) { --angle: calc(0deg + var(--offset)); }
+.bloom-scene .circle:nth-child(2) { --angle: calc(60deg + var(--offset)); }
+.bloom-scene .circle:nth-child(3) { --angle: calc(120deg + var(--offset)); }
+.bloom-scene .circle:nth-child(4) { --angle: calc(180deg + var(--offset)); }
+.bloom-scene .circle:nth-child(5) { --angle: calc(240deg + var(--offset)); }
+.bloom-scene .circle:nth-child(6) { --angle: calc(300deg + var(--offset)); }
+
+@keyframes bloom-expand {
+  0% { --bloom-amplitude: 1.5em; --bloom-scale: 1; }
+  50% { --bloom-amplitude: 1em; --bloom-scale: 3; }
+  100% { --bloom-amplitude: 1.5em; --bloom-scale: 3; }
+}

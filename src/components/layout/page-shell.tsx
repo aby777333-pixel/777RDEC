@@ -5,6 +5,7 @@ import { Section, SectionHeader } from '@/components/ui/section'
 import { WingMark } from '@/components/ui/wing-mark'
 import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
 import { PuppetBackdrop } from '@/components/backdrops/puppet-backdrop'
+import { BloomBackdrop } from '@/components/backdrops/bloom-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -26,13 +27,13 @@ export function PageHero({
   lead: string
   /** `emil` prefers the cockpit render. Only read by the `image` backdrop. */
   imageVariant?: 'default' | 'emil'
-  /** Both pens are single-page flourishes — `/brokers` asks for the swing and
-   *  `/intelligence/emil-lab` for the puppet. Every other hero keeps the
-   *  themed wash. */
-  backdrop?: 'image' | 'swing' | 'puppet'
+  /** Each pen is a single-page flourish — `/brokers` asks for the swing,
+   *  `/intelligence/emil-lab` for the puppet, `/brokers/platform` for the
+   *  bloom. Every other hero keeps the themed wash. */
+  backdrop?: 'image' | 'swing' | 'puppet' | 'bloom'
   children?: React.ReactNode
 }) {
-  const pen = backdrop === 'swing' || backdrop === 'puppet'
+  const pen = backdrop === 'swing' || backdrop === 'puppet' || backdrop === 'bloom'
   return (
     <section
       className={cn(
@@ -51,6 +52,7 @@ export function PageHero({
           context and trap its control panel behind the copy. It paints behind
           on DOM order instead. */}
       {backdrop === 'puppet' ? <PuppetBackdrop /> : null}
+      {backdrop === 'bloom' ? <BloomBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
@@ -60,12 +62,12 @@ export function PageHero({
         <div
           className={cn(
             'flex max-w-4xl flex-col gap-6',
-            // The marionette hangs in the right of the band, so the copy stays
-            // left and is capped narrow enough to clear it. Below `lg` the rig
-            // recentres and dims, like any other backdrop.
-            // A share of the column rather than a fixed cap: the rig's own
-            // column is a share too, so the two keep their gap at every width
-            // instead of closing up at the bottom of the range.
+            // The marionette is a figure with a control panel and has to be
+            // cleared properly: a share of the column rather than a fixed cap,
+            // because its column is a share too, so the gap holds at every
+            // width instead of closing up at the bottom of the range. The
+            // bloom needs no such berth — it is soft-edged, and overrunning
+            // its bounds is the whole of what it does under the pointer.
             backdrop === 'puppet' && 'lg:max-w-[54%]',
           )}
         >
@@ -184,8 +186,9 @@ export function StandardPage({
 }: {
   copy: PageCopy
   modulesHeading?: React.ReactNode
-  /** Passed through to <PageHero>; only `/brokers` asks for anything here. */
-  heroBackdrop?: 'image' | 'swing'
+  /** Passed through to <PageHero>; only `/brokers` and `/brokers/platform`
+   *  ask for anything here. */
+  heroBackdrop?: 'image' | 'swing' | 'puppet' | 'bloom'
   children?: React.ReactNode
   className?: string
 }) {
