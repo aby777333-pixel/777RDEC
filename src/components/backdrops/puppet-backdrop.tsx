@@ -170,12 +170,15 @@ export function PuppetBackdrop({ className }: { className?: string }) {
     }
 
     /* ── the rig keeps the pen's 500x780 and is scaled to the band ────── */
+    const colProbe = q<HTMLDivElement>('.rig-col')
     function layout() {
       const h = root!.clientHeight
       const w = root!.clientWidth
-      // Height first, so it never outgrows the hero; width second, so it never
-      // spills out of the left column it was given.
-      const scale = Math.min(h / RIG_H, (w * 0.62) / RIG_W)
+      // Height first, so it never outgrows the band; then the width of its own
+      // column, so it can never reach past the panel it shares that column
+      // with — or past the edge of the page.
+      const col = colProbe?.offsetWidth || w * 0.62
+      const scale = Math.min(h / RIG_H, col / RIG_W)
       rig!.style.setProperty('--s', String(scale))
     }
 
@@ -533,6 +536,7 @@ export function PuppetBackdrop({ className }: { className?: string }) {
 
   return (
     <div ref={rootRef} className={cn('puppet-scene', stageType.variable, className)}>
+      <div className="rig-col" aria-hidden />
       <div className="stage-layer" aria-hidden>
       <div className="fog" />
       <canvas className="particle-canvas" />

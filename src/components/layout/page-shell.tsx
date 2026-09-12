@@ -63,22 +63,14 @@ export function PageHero({
             // The marionette hangs in the right of the band, so the copy stays
             // left and is capped narrow enough to clear it. Below `lg` the rig
             // recentres and dims, like any other backdrop.
-            backdrop === 'puppet' && 'lg:max-w-2xl',
+            // A share of the column rather than a fixed cap: the rig's own
+            // column is a share too, so the two keep their gap at every width
+            // instead of closing up at the bottom of the range.
+            backdrop === 'puppet' && 'lg:max-w-[54%]',
           )}
         >
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1
-            className={cn(
-              'uppercase text-chrome',
-              // `text-h1` runs to 8rem, which no longer fits a column that has
-              // to share the band with the rig.
-              backdrop === 'puppet'
-                ? 'text-[clamp(2.5rem,5.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em]'
-                : 'text-h1',
-            )}
-          >
-            {heading}
-          </h1>
+          <h1 className="text-h1 uppercase text-chrome">{heading}</h1>
           <p className="max-w-2xl text-body text-steel-300">{lead}</p>
         </div>
         {children ? <div className="mt-12">{children}</div> : null}

@@ -1053,3 +1053,30 @@ clears its panel.
 
 Below `lg` none of this applies: no panel, rig recentred and dimmed, copy full
 width, moods still cycling.
+
+## 42. The rig is anchored to the page's margin, not to a percentage
+
+§41 put the marionette at 78% across the band and centred its panel there. That
+holds at 1600 and breaks below it: the panel is a fixed 34rem, so its right
+edge is `0.78W + 272`, which crosses the page edge on any window under about
+1345px — and `lg` starts at 1024.
+
+Both the rig and the panel are now anchored to the right gutter rather than
+centred on a percentage. `--gutter` reproduces `.container-raptor`'s own inset
+(`max(1.5rem, (100% - 1440px) / 2 + 1.5rem)`), so the panel's right edge lands
+exactly on the margin the hero copy is set against, at every width, and the rig
+shares that column's centre-line.
+
+The rig's scale is capped by that column too, not by a share of the whole band,
+so it can no longer reach past the panel beside it or the edge of the page. The
+column is measured off a zero-height stand-in carrying `width: var(--rig-col)`,
+which keeps the definition in CSS instead of restating the number in
+JavaScript.
+
+Measured at 1009, 1085, 1265, 1585 and 1905: nothing overflows the right edge,
+and the gap between the headline and the rig runs 18px at the tightest and
+156px at the widest — where before it was **-8px**, an overlap.
+
+With the copy capped at a share of the column (54%) rather than a fixed `2xl`,
+the headline goes back to the site's own `text-h1` at full size, the way every
+other hero has it.
