@@ -1,7 +1,7 @@
-import Image from 'next/image'
 import { appShot, type AppShot } from '@/lib/app-shots'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { cn } from '@/lib/utils'
+import { AppShotZoom } from './app-shot-zoom'
 
 /**
  * A capture of the running application, framed.
@@ -14,6 +14,10 @@ import { cn } from '@/lib/utils'
  * The frame is the site's own surface rather than a browser chrome mock: a
  * hairline, the card radius, and the shadow every other panel carries. A fake
  * address bar around a real product is a costume.
+ *
+ * The presence check has to stay on the server and the zoom has to run on the
+ * client, so this component is the seam: it resolves the slot and hands the
+ * resolved paths to <AppShotZoom>.
  */
 export function AppShotFrame({
   id,
@@ -34,20 +38,7 @@ export function AppShotFrame({
   return (
     <figure className={cn('flex flex-col gap-4', className)}>
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <div className="overflow-hidden rounded-card border border-line-2 bg-bg-1 shadow-soft">
-        {/* 16:10 holds a trading screen without cropping the order desk off
-            the bottom, which is the half an evaluator wants to see. */}
-        <div className="relative aspect-[16/10]">
-          <Image
-            src={shot.src}
-            alt={shot.caption}
-            fill
-            priority={priority}
-            sizes="(min-width: 1280px) 1100px, (min-width: 768px) 90vw, 100vw"
-            className="object-cover object-left-top"
-          />
-        </div>
-      </div>
+      <AppShotZoom src={shot.src} alt={shot.caption} priority={priority} />
       <figcaption className="max-w-3xl text-data text-steel-500">{shot.caption}</figcaption>
     </figure>
   )
