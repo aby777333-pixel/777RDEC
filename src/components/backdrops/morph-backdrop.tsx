@@ -65,7 +65,7 @@ const SHAPE_EXTENT = 38
  * that is intended: the backdrops here bleed rather than sit in frame, as the
  * wing mark does one layer up.
  */
-const OFFSET_RIGHT = 0.56
+const OFFSET_RIGHT = 0.48
 
 /**
  * The one thing worth protecting: the centre of the figure, which is where the
