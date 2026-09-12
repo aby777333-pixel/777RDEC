@@ -18,8 +18,12 @@ import { useEffect, useRef } from 'react'
  *   not.
  * - `frame` runs only while the band is on screen. A pen left running under
  *   three screens of scrolled-past page is a GPU bill for nothing.
- * - Under `prefers-reduced-motion` the loop never starts. One frame is drawn so
- *   the band is composed rather than blank, and that is where it stays.
+ * - Motion stops when it should. That means the OS setting *and* the site's own
+ *   "Reduce motion" toggle, which writes `data-reduce-motion` on <html> rather
+ *   than firing an event, so it has to be watched; either one draws a single
+ *   frame, so the band is composed rather than blank, and leaves it there.
+ * - The loop also stops while the tab is hidden. Browsers throttle animation
+ *   frames in a background tab but do not promise to stop them.
  * - `dispose` runs on unmount, and the canvas it drew on is thrown away with
  *   it. Client-side navigation away from one of these pages must hand back the
  *   WebGL context; browsers keep only a handful and silently drop the oldest.
@@ -100,9 +104,13 @@ export function useBackdropCanvas(
     applySize()
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const motionIsReduced = () =>
+      reduced.matches || document.documentElement.dataset.reduceMotion === 'true'
+
     let raf = 0
     let running = false
     let start = 0
+    let onScreen = false
 
     const tick = (now: number) => {
       if (!start) start = now
@@ -110,7 +118,7 @@ export function useBackdropCanvas(
       raf = requestAnimationFrame(tick)
     }
     const play = () => {
-      if (running || reduced.matches) return
+      if (running) return
       running = true
       raf = requestAnimationFrame(tick)
     }
@@ -119,17 +127,49 @@ export function useBackdropCanvas(
       cancelAnimationFrame(raf)
     }
 
+    /**
+     * One place decides whether the loop should be running, so a visitor who
+     * reduces motion and then scrolls, or scrolls and then switches tabs, gets
+     * the same answer either way round.
+     */
+    const sync = () => {
+      if (motionIsReduced()) {
+        if (running) {
+          pause()
+          // Leave the band composed rather than mid-wipe.
+          live.frame(0)
+        }
+        return
+      }
+      if (onScreen && document.visibilityState === 'visible') {
+        // Rebase so a pause does not jump the animation forward by its length.
+        if (!running) start = 0
+        play()
+      } else {
+        pause()
+      }
+    }
+
     const resizeObserver = new ResizeObserver(applySize)
     resizeObserver.observe(host)
 
     const visibility = new IntersectionObserver(
-      ([entry]) => (entry.isIntersecting ? play() : pause()),
+      ([entry]) => {
+        onScreen = entry?.isIntersecting ?? false
+        sync()
+      },
       { rootMargin: '128px' },
     )
     visibility.observe(host)
 
-    const onReducedChange = () => (reduced.matches ? pause() : play())
-    reduced.addEventListener('change', onReducedChange)
+    reduced.addEventListener('change', sync)
+    document.addEventListener('visibilitychange', sync)
+    // The site's toggle flips an attribute rather than firing an event.
+    const motionObserver = new MutationObserver(sync)
+    motionObserver.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-reduce-motion'],
+    })
 
     // One frame regardless, so a reduced-motion visitor gets a composed band
     // rather than an empty one.
@@ -139,7 +179,9 @@ export function useBackdropCanvas(
       pause()
       resizeObserver.disconnect()
       visibility.disconnect()
-      reduced.removeEventListener('change', onReducedChange)
+      motionObserver.disconnect()
+      reduced.removeEventListener('change', sync)
+      document.removeEventListener('visibilitychange', sync)
       try {
         live.dispose?.()
       } catch {

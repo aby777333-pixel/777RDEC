@@ -1232,3 +1232,33 @@ html[data-reduce-motion='true'] *::after {
   width: 100%;
   height: 100%;
 }
+
+/*
+  The drift pen draws its wind field on the canvas but rules its map in CSS: a
+  1px grid every 84px in the pen's paper white at 18%, the whole thing at half
+  opacity. Reproduced here rather than in GL because that is where the pen has
+  it, and because it must sit over the canvas rather than under it.
+
+  The ground is the pen's own Mistral background, so the band is that colour
+  from the first paint instead of flashing black before the first frame lands.
+*/
+.pen-scene--drift {
+  background: #0a121b;
+}
+.pen-scene--drift::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      rgba(240, 236, 227, 0.18) 0 1px,
+      transparent 1px 84px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(240, 236, 227, 0.18) 0 1px,
+      transparent 1px 84px
+    );
+  opacity: 0.5;
+}

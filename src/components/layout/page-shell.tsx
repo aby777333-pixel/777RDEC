@@ -9,6 +9,9 @@ import { BloomBackdrop } from '@/components/backdrops/bloom-backdrop'
 import { SwarmBackdrop } from '@/components/backdrops/swarm-backdrop'
 import { TorusBackdrop } from '@/components/backdrops/torus-backdrop'
 import { LiquidBackdrop } from '@/components/backdrops/liquid-backdrop'
+import { DriftBackdrop } from '@/components/backdrops/drift-backdrop'
+import { LazyMorph } from '@/components/backdrops/lazy-morph'
+import { LazySingularity } from '@/components/backdrops/lazy-singularity'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -16,9 +19,23 @@ import { cn } from '@/lib/utils'
 
 /**
  * Every hero backdrop the site has. `image` is the themed wash almost every
- * page uses; the rest are ported CodePen scenes, one page each.
+ * page uses; the rest are ported CodePen scenes, one broker page each.
+ *
+ * `singularity` is the one that appears twice: it closes the home page, and
+ * the white-label hero asks for the same scene. It is the same component in
+ * both places, mounted once per page.
  */
-export type PenBackdrop = 'image' | 'swing' | 'puppet' | 'bloom' | 'swarm' | 'torus' | 'liquid'
+export type PenBackdrop =
+  | 'image'
+  | 'swing'
+  | 'puppet'
+  | 'bloom'
+  | 'swarm'
+  | 'torus'
+  | 'liquid'
+  | 'drift'
+  | 'morph'
+  | 'singularity'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -65,6 +82,9 @@ export function PageHero({
       {backdrop === 'swarm' ? <SwarmBackdrop className="-z-10" /> : null}
       {backdrop === 'torus' ? <TorusBackdrop className="-z-10" /> : null}
       {backdrop === 'liquid' ? <LiquidBackdrop className="-z-10" /> : null}
+      {backdrop === 'drift' ? <DriftBackdrop className="-z-10" /> : null}
+      {backdrop === 'morph' ? <LazyMorph className="-z-10" /> : null}
+      {backdrop === 'singularity' ? <LazySingularity className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"

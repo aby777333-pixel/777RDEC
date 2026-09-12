@@ -12,7 +12,7 @@ export const metadata: Metadata = pageMetadata({
 
 export default function WhiteLabelPage() {
   return (
-    <StandardPage copy={copy} modulesHeading="What carries your brand">
+    <StandardPage copy={copy} modulesHeading="What carries your brand" heroBackdrop="singularity">
       <BrokersSection />
     </StandardPage>
   )
