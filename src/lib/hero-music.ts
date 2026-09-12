@@ -149,6 +149,14 @@ let playing = false
 /** Set while waiting for the first gesture, so it is only ever armed once. */
 let disarm: (() => void) | null = null
 let started = false
+/**
+ * True while a start is in flight. `startMusic` awaits the context resuming,
+ * and two overlapping calls would both sail past the `playing` check and leave
+ * two schedulers running against one timer handle — one of them orphaned. That
+ * happens for real: where autoplay was refused, the first press is both the
+ * gesture that releases audio and the click on this very button.
+ */
+let starting = false
 /** The hero currently holding the music. See the note about tokens above. */
 let owner: symbol | null = null
 
@@ -456,11 +464,24 @@ function scheduler() {
  */
 export async function startMusic(): Promise<boolean> {
   if (playing) return true
+  if (starting) return false
+  starting = true
+  try {
+    return await begin()
+  } finally {
+    starting = false
+  }
+}
+
+async function begin(): Promise<boolean> {
   if (!ctx && !build()) return false
   if (!ctx || !master) return false
 
   await ctx.resume().catch(() => undefined)
   if (ctx.state !== 'running') return false
+
+  // Belt and braces: never leave a scheduler behind.
+  if (timer !== null) window.clearInterval(timer)
 
   step = 0
   nextStepTime = ctx.currentTime + 0.08
