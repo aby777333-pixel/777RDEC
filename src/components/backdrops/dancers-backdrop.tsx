@@ -15,9 +15,21 @@ import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
  *
  * The skeleton, the joint pushes, the constraint solver, the damping, gravity,
  * the six hues and the pre-rendered rounded strokes with their offset shadows
- * are all the pen's, values included. So is the stage: the dark bars across
- * the top and bottom of the band, and the floor line at 85% that appears only
- * when the band is tall enough to have one.
+ * are all the pen's, values included.
+ *
+ * Its staging is not, because the pen is staged for a window and this is a
+ * band inside a page:
+ *
+ * - **No letterbox.** The pen fills the top and bottom fifteen percent of the
+ *   canvas with `#222`. Full screen that reads as a stage; in a hero it is a
+ *   grey bar across the top of the section, over the eyebrow, with no visible
+ *   reason for being there.
+ * - **Sized to the band, not to the viewport.** The pen's `sqrt(min(w,h))/6`
+ *   is tuned for a window as tall as it is usable. A hero band is wider than
+ *   it is tall and runs past the fold, so the same figures stood on a floor at
+ *   85% with their feet below the fold. They are now a fixed share of the
+ *   band's height and stand on a floor inside it, so the whole line is visible
+ *   at every size.
  *
  * Its nature is that you can take hold of one. Press within sixty pixels of a
  * joint and it follows the pointer, the body hanging off it, until you let go
@@ -42,9 +54,43 @@ import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
 
 /** How close a press must be to a joint to catch it. */
 const GRAB_RADIUS = 60
-/** The pen's own dancer count and lightness. */
+/** The pen's own dancer count. */
 const DANCERS = 6
-const LIGHT = 80
+
+/**
+ * The dancers' lightness, below the pen's 80.
+ *
+ * The pen stands them on black with nothing else in the frame, so pale limbs
+ * are right. Here they stand behind a headline set in light grey, and at 80
+ * the headline disappears into them wherever they cross. At this level they
+ * are still plainly the pen's six colours and still the brightest thing in
+ * the band, and the copy reads over them. Restore `80` for the pen's own
+ * palette.
+ */
+const LIGHT = 48
+
+/**
+ * The figure, in skeleton units: the head's top sits 26 above the origin once
+ * its disk is counted, the feet 64 below it, so a dancer is 90 units tall.
+ */
+const UNITS_ABOVE = 26
+const UNITS_BELOW = 64
+const UNITS_TALL = UNITS_ABOVE + UNITS_BELOW
+
+/** How much of the band's height one dancer takes, and where the floor is. */
+const FIGURE_SHARE = 0.45
+const GROUND = 0.82
+
+/**
+ * The band's width divided by this is the widest a dancer may be, and it is
+ * the pen's own proportion: at the window it is drawn for, the gap between two
+ * dancers is about thirty-three times their scale, and the line spaces itself
+ * across ninths of the width. Without this the height rule alone would put six
+ * full-height figures across a phone, shoulder through shoulder.
+ */
+const WIDTH_PER_SIZE = 297
+/** The drop they settle through on arrival, in pixels. */
+const DROP = 40
 
 type PointSpec = {
   x: number
@@ -326,20 +372,22 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
   const pointer: Pointer = { x: 0, y: 0, dancerDrag: null, pointDrag: null }
 
+  /**
+   * A dancer's scale: FIGURE_SHARE of the band's height, unless the band is
+   * too narrow to line six of them up at that size, in which case the width
+   * decides.
+   */
+  const sizeForBand = () =>
+    Math.max(1, Math.min((height * FIGURE_SHARE) / UNITS_TALL, width / WIDTH_PER_SIZE))
+
   const seed = () => {
     dancers = []
-    ground = height > 500 ? 0.85 : 1
-    const size = Math.sqrt(Math.min(width, height)) / 6
+    ground = GROUND
+    const size = sizeForBand()
+    // Stand them on the floor, less the drop they settle through.
+    const origin = height * ground - UNITS_BELOW * size - DROP
     for (let i = 0; i < DANCERS; i++) {
-      dancers.push(
-        new Robot(
-          (i * 360) / 7,
-          LIGHT,
-          size,
-          ((i + 2) * width) / 9,
-          height * 0.5 - 100,
-        ),
-      )
+      dancers.push(new Robot((i * 360) / 7, LIGHT, size, ((i + 2) * width) / 9, origin))
     }
   }
 
@@ -471,12 +519,15 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
   return {
     resize(w, h) {
+      const resized = Math.abs(h - height) > 1 || Math.abs(w - width) > 1
       width = w
       height = h
-      ground = height > 500 ? 0.85 : 1
-      // The pen only re-spaces the line on resize; the dancers themselves, and
-      // the limb images sized at birth, carry over.
-      if (dancers.length === 0) seed()
+      ground = GROUND
+      // The pen only re-spaces the line on resize, because its dancers are
+      // sized once. These are sized to the band, and a limb's image is
+      // rendered at the size it was born at — so a resize is a new line
+      // rather than a stretched one.
+      if (resized || dancers.length === 0) seed()
       else for (let i = 0; i < dancers.length; i++) dancers[i].x = ((i + 2) * width) / 9
     },
     frame(seconds) {
@@ -491,9 +542,6 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       lastSeconds = seconds
 
       ctx.clearRect(0, 0, width, height)
-      ctx.fillStyle = '#222'
-      ctx.fillRect(0, 0, width, height * 0.15)
-      ctx.fillRect(0, height * 0.85, width, height * 0.15)
 
       for (const dancer of dancers) {
         update(dancer)
