@@ -1017,3 +1017,39 @@ timers, observers, listeners and the nodes it builds are all torn down on
 unmount.
 
 It costs 3.3 kB on that one route, and nothing anywhere else.
+
+## 41. The marionette keeps its panel, and changes sides
+
+§40 dropped the pen's control panel and put the rig on the left with the hero
+copy indented past it. Both are reversed.
+
+**The panel is back, and it works.** Fifteen buttons, three rows of five —
+which is what fifteen moods divide into, and what clears the puppet's feet
+where the pen's four columns did not. They are real `<button>`s in the markup,
+so they tab and they take Enter. The pen's key row (`q w e r t y u i a s d f g
+h j`) is back too, but bound to `window` only while focus is inside this hero:
+on the document, as the pen has it, it would have swallowed every keystroke on
+the site. Verified both ways — `j` poses the rig while a button holds focus,
+and does nothing once focus leaves the band.
+
+The rig still cycles on its own, and stops the moment anyone works the panel.
+An inert stage is worse than a moving one, and a stage that wanders off under
+someone's hand is worse than both.
+
+**Layering.** The panel has to sit above the hero copy to be clickable, which
+means the backdrop can no longer be `-z-10`: a negative z-index makes a
+stacking context and nothing inside it can rise. It paints behind on DOM order
+instead. The pen's `perspective` moved off the root for the same reason — it
+creates a stacking context too — and now sits on an inner scenery layer. The
+backdrop is `pointer-events: none` throughout except the panel, so it never
+swallows a click meant for the page.
+
+**Sides.** The rig hangs at 78% now and the copy is back on the left where it
+was, capped to `max-w-2xl` from `lg`. `text-h1` clamps up to 8rem, which will
+not share a band with anything, so this hero's headline clamps to 4.5rem — the
+reduction is what lets the copy stay left rather than be pushed aside. The band
+takes a `40rem` minimum from `lg` so the rig has somewhere to hang that still
+clears its panel.
+
+Below `lg` none of this applies: no panel, rig recentred and dimmed, copy full
+width, moods still cycling.

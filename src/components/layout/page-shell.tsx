@@ -37,6 +37,9 @@ export function PageHero({
     <section
       className={cn(
         'relative isolate overflow-hidden border-b border-line-1 pb-16 pt-20 md:pb-24 md:pt-28',
+        // The rig needs a band deep enough to hang in and still clear its
+        // control panel; the shorter headline alone does not leave one.
+        backdrop === 'puppet' && 'lg:min-h-[40rem]',
         // Both pens assume a black ground, so the band they back stops
         // following the theme. Only that band — the image hero themes as it
         // always did.
@@ -44,7 +47,10 @@ export function PageHero({
       )}
     >
       {backdrop === 'swing' ? <SwingBackdrop className="-z-10" /> : null}
-      {backdrop === 'puppet' ? <PuppetBackdrop className="-z-10" /> : null}
+      {/* No `-z-10` on this one: a negative z-index would make it a stacking
+          context and trap its control panel behind the copy. It paints behind
+          on DOM order instead. */}
+      {backdrop === 'puppet' ? <PuppetBackdrop /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
@@ -54,23 +60,28 @@ export function PageHero({
         <div
           className={cn(
             'flex max-w-4xl flex-col gap-6',
-            // The marionette hangs in the left fifth of the band, so on the
-            // widths where it has room the copy steps aside for it. Below
-            // `lg` the rig recentres and sits behind, like any other backdrop.
-            backdrop === 'puppet' && 'lg:ml-[20rem] lg:max-w-2xl xl:ml-[24rem] xl:max-w-3xl',
+            // The marionette hangs in the right of the band, so the copy stays
+            // left and is capped narrow enough to clear it. Below `lg` the rig
+            // recentres and dims, like any other backdrop.
+            backdrop === 'puppet' && 'lg:max-w-2xl',
           )}
         >
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="text-h1 uppercase text-chrome">{heading}</h1>
+          <h1
+            className={cn(
+              'uppercase text-chrome',
+              // `text-h1` runs to 8rem, which no longer fits a column that has
+              // to share the band with the rig.
+              backdrop === 'puppet'
+                ? 'text-[clamp(2.5rem,5.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em]'
+                : 'text-h1',
+            )}
+          >
+            {heading}
+          </h1>
           <p className="max-w-2xl text-body text-steel-300">{lead}</p>
         </div>
-        {children ? (
-          <div
-            className={cn('mt-12', backdrop === 'puppet' && 'lg:ml-[20rem] xl:ml-[24rem]')}
-          >
-            {children}
-          </div>
-        ) : null}
+        {children ? <div className="mt-12">{children}</div> : null}
       </div>
     </section>
   )

@@ -14,11 +14,13 @@ import { cn } from '@/lib/utils'
  *
  * Four things had to change to make a page into a hero backdrop:
  *
- * 1. **It drives itself.** The pen is operated by a fifteen-button panel and
- *    the keys q-w-e-r-t-y-u-i-a-s-d-f-g-h-j. A panel of buttons behind a
- *    headline is unreadable, and a document-level key handler would have eaten
- *    every keystroke on the site, the search box included. The moods now cycle
- *    on a timer; nothing is bound to the keyboard.
+ * 1. **It cycles until it is touched.** The pen's fifteen-button panel is kept
+ *    and works, but the rig also moves through the moods on its own until
+ *    someone takes it over, so the band is never inert. The pen's key
+ *    shortcuts (q-w-e-r-t-y-u-i-a-s-d-f-g-h-j) are kept too, but bound only
+ *    while focus is inside this hero — on the document, as the pen has them,
+ *    they would have eaten every keystroke on the site, the search box
+ *    included.
  * 2. **No cursor takeover.** The pen sets `cursor: none` on `body` and draws
  *    its own dot. Here the system cursor stays; the pointer still leans the
  *    puppet and parallaxes the fog, but only while it is over this section.
@@ -84,7 +86,10 @@ const MOODS: Record<string, Mood> = {
 
 const MOOD_KEYS = Object.keys(MOODS)
 
-/** How long each mood holds before the rig moves on. */
+/** The pen's own shortcut row, in the order the moods are declared. */
+const KEYS = 'qwertyuiasdfghjk'.split('')
+
+/** How long each mood holds before the rig moves on, until someone takes over. */
 const MOOD_MS = 7000
 
 const BAR_COUNT = 40
@@ -109,6 +114,7 @@ export function PuppetBackdrop({ className }: { className?: string }) {
     const ctx = canvas?.getContext('2d')
     if (!rig || !master || !hand || !stringSvg || !canvas || !ctx) return
 
+    const grid = q<HTMLDivElement>('.button-grid')!
     const spotlight = q<HTMLDivElement>('.spotlight')!
     const scanlines = q<HTMLDivElement>('.scanlines')!
     const shadow = q<HTMLDivElement>('.shadow')!
@@ -248,6 +254,9 @@ export function PuppetBackdrop({ className }: { className?: string }) {
     function setMood(moodKey: string) {
       state.mood = moodKey
       const mood = MOODS[moodKey]
+
+      grid.querySelectorAll('.cmd-btn').forEach((b) => b.classList.remove('active'))
+      grid.querySelector(`[data-mood="${moodKey}"]`)?.classList.add('active')
 
       // Burst at the puppet, in this element's pixels.
       const p = master!.getBoundingClientRect()
@@ -451,6 +460,9 @@ export function PuppetBackdrop({ className }: { className?: string }) {
     )
     visibility.observe(root)
 
+    // The scene itself is `pointer-events: none` so it never swallows a click
+    // meant for the page, which means the section is what hears the pointer.
+    const section = root.parentElement ?? root
     const onPointerMove = (e: PointerEvent) => {
       const r = root.getBoundingClientRect()
       state.mouseX = e.clientX - r.left
@@ -459,10 +471,34 @@ export function PuppetBackdrop({ className }: { className?: string }) {
       const y = (state.mouseY / Math.max(1, r.height) - 0.5) * 30
       fog.style.transform = `translate(${x}px, ${y}px)`
     }
-    root.addEventListener('pointermove', onPointerMove)
+    section.addEventListener('pointermove', onPointerMove)
 
     const onReducedChange = () => (reduced.matches ? stop() : start())
     reduced.addEventListener('change', onReducedChange)
+
+    /* ── the controls ─────────────────────────────────────────────────── */
+    let manual = false
+    const onGridClick = (e: Event) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-mood]')
+      if (!btn?.dataset.mood) return
+      manual = true
+      setMood(btn.dataset.mood)
+    }
+    grid.addEventListener('click', onGridClick)
+
+    // The pen binds these to the document. Scoped to focus inside the hero,
+    // they cannot reach the search box or anything else on the page.
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      if (!section.contains(document.activeElement)) return
+      const idx = KEYS.indexOf(e.key.toLowerCase())
+      const moodKey = idx >= 0 ? MOOD_KEYS[idx] : undefined
+      if (!moodKey) return
+      e.preventDefault()
+      manual = true
+      setMood(moodKey)
+    }
+    window.addEventListener('keydown', onKeyDown)
 
     setMood('idle')
     // One frame regardless, so a reduced-motion visitor still gets the scene
@@ -471,7 +507,9 @@ export function PuppetBackdrop({ className }: { className?: string }) {
 
     let moodIndex = 0
     const cycle = setInterval(() => {
-      if (!running) return
+      // Once someone has worked the panel the rig is theirs; it stops
+      // wandering off to the next mood under their hand.
+      if (!running || manual) return
       moodIndex = (moodIndex + 1) % MOOD_KEYS.length
       setMood(MOOD_KEYS[moodIndex])
     }, MOOD_MS)
@@ -479,6 +517,8 @@ export function PuppetBackdrop({ className }: { className?: string }) {
     return () => {
       stop()
       clearInterval(cycle)
+      grid.removeEventListener('click', onGridClick)
+      window.removeEventListener('keydown', onKeyDown)
       timers.forEach(clearTimeout)
       // The bars and streaks are built here, so they have to be taken down
       // here too, or a remount leaves two of everything.
@@ -486,13 +526,14 @@ export function PuppetBackdrop({ className }: { className?: string }) {
       streaks.replaceChildren()
       resizeObserver.disconnect()
       visibility.disconnect()
-      root.removeEventListener('pointermove', onPointerMove)
+      section.removeEventListener('pointermove', onPointerMove)
       reduced.removeEventListener('change', onReducedChange)
     }
   }, [])
 
   return (
-    <div ref={rootRef} className={cn('puppet-scene', stageType.variable, className)} aria-hidden>
+    <div ref={rootRef} className={cn('puppet-scene', stageType.variable, className)}>
+      <div className="stage-layer" aria-hidden>
       <div className="fog" />
       <canvas className="particle-canvas" />
       <div className="streaks" />
@@ -559,6 +600,20 @@ export function PuppetBackdrop({ className }: { className?: string }) {
         </div>
 
         <div className="quote-display" />
+      </div>
+      </div>
+
+      <div className="input-ritual">
+        <div className="button-grid">
+          {MOOD_KEYS.map((moodKey, i) => (
+            <button key={moodKey} type="button" className="cmd-btn" data-mood={moodKey}>
+              {moodKey}
+              <span className="key-hint" aria-hidden>
+                {KEYS[i] ?? ''}
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )

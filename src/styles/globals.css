@@ -773,26 +773,109 @@ html[data-reduce-motion='true'] *::after {
   --string: rgba(255, 255, 255, 0.18);
   --accent: #d4af37;
   --mood-color: rgba(212, 175, 55, 0.3);
-  /* Where the rig's centre sits across the band. The hero copy is shifted
-     clear of it on the same breakpoints — see <PageHero>. */
+  /* Where the rig's centre sits across the band. The hero headline is capped
+     narrow on the same breakpoints so the two never meet — see <PageHero>. */
   --rig-x: 50%;
 
   position: absolute;
   inset: 0;
   overflow: hidden;
+  /* No z-index and no stacking context here: the panel inside has to be able
+     to rise above the hero copy, or its buttons cannot be clicked. The scene
+     still paints behind, because it comes first in the section. */
+  pointer-events: none;
   background: radial-gradient(circle at var(--rig-x) 40%, #1a2a2d 0%, #050505 100%);
-  perspective: 1200px;
 }
 .puppet-scene * { box-sizing: border-box; }
+/* The pen's perspective belongs to the scene, but it creates a stacking
+   context, so it sits on the layer that holds the scenery rather than on the
+   element the panel is a child of. */
+.puppet-scene .stage-layer {
+  position: absolute;
+  inset: 0;
+  perspective: 1200px;
+}
 
 @media (min-width: 1024px) {
-  .puppet-scene { --rig-x: 21%; }
+  .puppet-scene { --rig-x: 78%; }
 }
 /* Below `lg` the copy runs the full column and the rig recentres under it,
    so it steps back to being weather rather than a figure the paragraph has
    to compete with. */
 @media (max-width: 1023px) {
   .puppet-scene .rig { opacity: 0.4; }
+}
+
+/* CONTROLS — the pen's panel, minus its `cursor: none`. */
+.puppet-scene .input-ritual {
+  position: absolute;
+  bottom: 16px;
+  left: var(--rig-x);
+  transform: translateX(-50%);
+  width: min(34rem, calc(100% - 2rem));
+  /* Above the hero copy, and the only part of the backdrop that takes a
+     pointer. Everything else lets clicks through to the page. */
+  z-index: 5;
+  pointer-events: auto;
+  /* Below `lg` the band has no room for it and the rig is dimmed scenery, so
+     the panel is gone and the moods just cycle. */
+  display: none;
+}
+@media (min-width: 1024px) {
+  .puppet-scene .input-ritual { display: block; }
+}
+.puppet-scene .button-grid {
+  /* Fifteen moods is exactly three rows of five, which clears the puppet's
+     feet where four columns did not. */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+.puppet-scene .cmd-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.35);
+  padding: 8px 6px;
+  cursor: pointer;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.25s ease;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+.puppet-scene .cmd-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  z-index: -1;
+  opacity: 0.08;
+}
+.puppet-scene .cmd-btn:hover::before { transform: scaleX(1); }
+.puppet-scene .cmd-btn:hover { border-color: rgba(212, 175, 55, 0.5); color: #fff; }
+.puppet-scene .cmd-btn:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.4);
+}
+.puppet-scene .cmd-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(212, 175, 55, 0.05);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.12), inset 0 0 10px rgba(212, 175, 55, 0.05);
+}
+.puppet-scene .key-hint {
+  position: absolute;
+  top: 3px; right: 5px;
+  font-size: 0.45rem;
+  color: rgba(255, 255, 255, 0.2);
 }
 
 /* The rig: the pen's own 500x780, scaled to whatever band it lands in. */
@@ -829,10 +912,12 @@ html[data-reduce-motion='true'] *::after {
 
 .puppet-scene .visualizer {
   position: absolute;
-  /* The pen centres the bars under the puppet. The rig moved left, so they
-     follow it: twice the rig's offset puts their midpoint back under it. */
-  bottom: 0; left: 0;
-  width: calc(var(--rig-x) * 2);
+  /* The pen centres the bars under the puppet, so they follow the rig across
+     rather than staying in the middle of the band. */
+  bottom: 0;
+  left: var(--rig-x);
+  transform: translateX(-50%);
+  width: min(36rem, 100%);
   height: 80px;
   z-index: 3;
   display: flex;
