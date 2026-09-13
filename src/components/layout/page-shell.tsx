@@ -2,7 +2,6 @@ import { ButtonLink } from '@/components/ui/button'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
-import { WingMark } from '@/components/ui/wing-mark'
 import { SwingBackdrop } from '@/components/backdrops/swing-backdrop'
 import { PuppetBackdrop } from '@/components/backdrops/puppet-backdrop'
 import { BloomBackdrop } from '@/components/backdrops/bloom-backdrop'
@@ -218,10 +217,6 @@ export function PageHero({
           className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-full max-w-[52rem] bg-gradient-to-r from-bg-0 to-transparent"
         />
       ) : null}
-      <WingMark
-        className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
-        strokeWidth={1}
-      />
       <div className="container-raptor relative">
         <div
           className={cn(

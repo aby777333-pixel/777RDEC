@@ -1,5 +1,4 @@
 import { ButtonLink } from '@/components/ui/button'
-import { WingMark } from '@/components/ui/wing-mark'
 import { LazySingularity } from '@/components/backdrops/lazy-singularity'
 
 /**
@@ -11,10 +10,6 @@ export function Closing() {
     <section className="force-dark relative isolate overflow-hidden bg-bg-0 py-24 md:py-32">
       <LazySingularity className="-z-10" />
       <div className="grid-field pointer-events-none absolute inset-0" aria-hidden />
-      <WingMark
-        className="pointer-events-none absolute -right-20 bottom-0 h-[24rem] w-[42rem] text-steel-700 opacity-40"
-        strokeWidth={1}
-      />
       <div className="container-raptor relative">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-7 text-center">
           <h2

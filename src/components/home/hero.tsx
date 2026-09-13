@@ -1,6 +1,5 @@
 import { ButtonLink } from '@/components/ui/button'
 import { Chip } from '@/components/ui/chip'
-import { WingMark } from '@/components/ui/wing-mark'
 import { LatticeBackdrop } from '@/components/backdrops/lattice-backdrop'
 import { ECOSYSTEM_PILLARS } from '@/lib/brand'
 import Link from 'next/link'
@@ -22,10 +21,6 @@ export function Hero() {
   return (
     <section className="force-dark relative isolate overflow-hidden bg-bg-0">
       <LatticeBackdrop className="-z-10" />
-      <WingMark
-        className="pointer-events-none absolute -left-32 top-10 h-[26rem] w-[46rem] text-steel-700 opacity-40"
-        strokeWidth={1}
-      />
 
       {/*
         Tightened to bring the hero's overall height down. The headline is the
@@ -90,6 +85,6 @@ export function Hero() {
           ))}
         </ul>
       </div>
-        </section>
+    </section>
   )
 }
