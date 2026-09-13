@@ -26,15 +26,15 @@ import { type BackdropScene, isInteractiveTarget, useBackdropCanvas } from './us
  *
  * - **The background is black**, where the pen's is cream, so the wordmark is
  *   outlined in white and the panel's ink is inverted to stay legible.
- * - **The strings land on the 777 RAPTOR wordmark** in place of the pen's
- *   CodePen logo: the same outline stroke and the same collision mask built
- *   from it, so the strands catch on these letters exactly as they caught on
- *   those.
+ * - **The strings land on the 777 Raptor logo** — the falcon, wordmark and
+ *   tagline from the header — in place of the pen's CodePen logo. The
+ *   collision mask is built from the logo's own shape, the way the pen builds
+ *   it from its logo, so the strands catch on the bird and the letters.
  *
  * What changed:
  *
  * - **The pen's calculatequick.com link is left out.**
- * - **The wordmark sits right of the copy on a wide band**, at a width the
+ * - **The logo sits right of the copy on a wide band**, at a width the
  *   band can hold, rather than across the middle of the window.
  * - **The band, not the window.** The can follows the pointer over the hero,
  *   and spraying starts from a press there — not on a link, a button or the
@@ -52,46 +52,15 @@ const mono = DM_Mono({
   variable: '--font-sillystring-mono',
 })
 
-/**
- * 777 RAPTOR, in the pen's 138 x 26 box and its stroke language: capitals on
- * the same 6–20 baseline and cap height as the letters in the pen's logo.
- */
-const glyph7 = (x: number) => `M${x} 6h9L${x + 3} 20`
-const glyphR = (x: number) =>
-  `M${x} 20V6h5.5c2 0 3.5 1.6 3.5 3.5s-1.5 3.5-3.5 3.5h-5.5 M${x + 5} 13l4 7`
-const glyphA = (x: number) => `M${x} 20l4.5-14 4.5 14 M${x + 1.6} 15h5.8`
-const glyphP = (x: number) => `M${x} 20V6h5.5c2 0 3.5 1.6 3.5 3.5s-1.5 3.5-3.5 3.5h-5.5`
-const glyphT = (x: number) => `M${x} 6h9 M${x + 4.5} 6v14`
-const glyphO = (x: number) => `M${x} 13a4.5 7 0 1 0 9 0a4.5 7 0 1 0-9 0`
-const SVG_PATH = [
-  glyph7(9.5),
-  glyph7(22.5),
-  glyph7(35.5),
-  glyphR(54.5),
-  glyphA(67.5),
-  glyphP(80.5),
-  glyphT(93.5),
-  glyphO(106.5),
-  glyphR(119.5),
-].join(' ')
+/** The 777 Raptor logo, the same master file the header shows. */
+const LOGO_SRC = '/brand/raptor-logo.png'
 
-function makeSVG(sw: number, stroke: string) {
-  return (
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 138 26" fill="none" stroke="' +
-    stroke +
-    '" stroke-width="' +
-    sw +
-    '" stroke-linecap="round" stroke-linejoin="round"><path d="' +
-    SVG_PATH +
-    '"/></svg>'
-  )
-}
-
-function loadImg(svg: string) {
-  return new Promise<HTMLImageElement>((resolve) => {
+function loadImg(src: string) {
+  return new Promise<HTMLImageElement | null>((resolve) => {
     const img = new Image()
     img.onload = () => resolve(img)
-    img.src = 'data:image/svg+xml;base64,' + btoa(svg)
+    img.onerror = () => resolve(null)
+    img.src = src
   })
 }
 
@@ -111,9 +80,11 @@ const DEFAULT_DIALS: Dials = { pressure: 50, gravity: 30, curl: 50, thick: 40, c
 const STEP_RATE = 60
 const MAX_STEPS = 4
 const WIDE_FROM = 1024
-/** On a wide band the wordmark is centred here and this wide, clear of the copy. */
+/** On a wide band the logo is centred here and this wide, clear of the copy. */
 const WIDE_CENTRE_X = 0.7
-const WIDE_LOGO_WIDTH = 0.32
+const WIDE_LOGO_WIDTH = 0.34
+/** The logo is never taller than this share of the band. */
+const MAX_LOGO_HEIGHT = 0.7
 
 function rr(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath()
@@ -158,7 +129,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   const dialObserver = new MutationObserver(onDials)
   dialObserver.observe(host, { attributes: true, attributeFilter: ['data-dials'] })
 
-  // ---- the wordmark and its collision mask ----
+  // ---- the logo and its collision mask ----
   let logoImg: HTMLImageElement | null = null
   let collData: Uint8ClampedArray | null = null
   let LOX = 0
@@ -170,15 +141,14 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
   const buildLogo = async () => {
     const id = ++buildId
-    const img = await loadImg(makeSVG(2.3, '#f2f3f5'))
-    const ci = await loadImg(makeSVG(2.5, '#000'))
-    if (id !== buildId) return
+    const img = await loadImg(LOGO_SRC)
+    if (id !== buildId || !img) return
     const wide = W >= WIDE_FROM
     // The pen sizes the logo to 55% of the window; on a wide band it sits
     // right of the copy, so it is sized to the space there.
-    LW = wide ? W * WIDE_LOGO_WIDTH : W * 0.55
-    const LS = LW / 138
-    LH = 26 * LS
+    const aspect = img.naturalHeight / img.naturalWidth
+    LW = Math.min(wide ? W * WIDE_LOGO_WIDTH : W * 0.55, (H * MAX_LOGO_HEIGHT) / aspect)
+    LH = LW * aspect
     LOX = (wide ? W * WIDE_CENTRE_X : W / 2) - LW / 2
     LOY = (H - LH) / 2
     const cc = document.createElement('canvas')
@@ -186,7 +156,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
     cc.height = H
     const cx = cc.getContext('2d')
     if (!cx) return
-    cx.drawImage(ci, LOX, LOY, LW, LH)
+    cx.drawImage(img, LOX, LOY, LW, LH)
     collData = cx.getImageData(0, 0, W, H).data
     logoImg = img
     ready = true
