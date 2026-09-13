@@ -23,6 +23,7 @@ export default function Page() {
       <PageHero
         eyebrow="Search"
         heading="Find it"
+        backdrop="pylons"
         lead="Everything published on this site — platform pages, blog posts, research notes, company news and the legal notices — in one index. It runs entirely in your browser; nothing you type is sent anywhere."
       />
       <Section>

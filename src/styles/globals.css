@@ -2223,3 +2223,251 @@ html[data-reduce-motion='true'] *::after {
   transform: rotateX(-90deg) translateZ(calc(var(--diamond-size) / 2));
 }
 
+/*
+  CSS multicolor particule explosion (`particules`). The pen's page colour, and
+  its dots and keyframes; the band is the size container its vw/vh became.
+*/
+.pen-scene--particules {
+  container-type: size;
+  background: #191919;
+}
+.particules-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 5px;
+  opacity: 0;
+  border-radius: 50%;
+}
+@keyframes particules-move {
+  0% {
+    opacity: 1;
+    transform: translate(50cqw, 50cqh);
+  }
+  25% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.4;
+  }
+}
+
+/* Infinite tunnel (`boxtunnel`): the renderer's black from the first paint. */
+.pen-scene--boxtunnel {
+  background: #000;
+}
+
+/*
+  Tunnel (`squares`), compiled from the pen's LESS: the wrapper's perspective
+  and ground, and each square's size, border, glow and keyframes.
+*/
+.pen-scene--squares {
+  perspective: 25px;
+  background-color: #1c1c1c;
+}
+.squares-square {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, -100px);
+  opacity: 0;
+  width: 40%;
+  height: 0;
+  padding-bottom: 40%;
+  border: 2px solid #138379;
+  box-shadow: 0px 60px 140px #19a598;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  animation: squares-move 12s infinite;
+}
+@keyframes squares-move {
+  0% {
+    opacity: 0;
+    transform: translate3d(-50%, -50%, -100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(-50%, -50%, 40px);
+  }
+}
+
+/* Chill the lion (`lion`): black, as asked for this page. */
+.pen-scene--lion {
+  background: #000;
+}
+
+/*
+  Pylon Terrain (`pylons`): the pen's page and scene colour before the first
+  frame, and its "Click and drag" line, hidden where there is no WebGPU.
+*/
+.pen-scene--pylons {
+  background: #07080e;
+}
+.pylons-hint {
+  position: absolute;
+  top: 0;
+  right: 88px;
+  z-index: 10;
+  margin: 0.8em;
+  color: #eee;
+  font-size: 0.875rem;
+  pointer-events: none;
+}
+.pen-scene[data-gl='off'] ~ .pylons-hint {
+  display: none;
+}
+
+/*
+  Silly String (`sillystring`). Black ground, as asked for this page, so the
+  pen's black-on-cream panel ink is inverted to white-on-black. The can stands
+  in for the cursor over the band's empty space; over anything that can be
+  pressed, the system cursor comes back.
+*/
+.pen-scene--sillystring {
+  background: #000;
+}
+.sillystring-cursor {
+  cursor: none;
+}
+.sillystring-cursor :is(a, button, input, select, textarea, label, summary, [role='button']) {
+  cursor: pointer;
+}
+.sillystring-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  font-family: var(--font-sillystring-mono), monospace;
+  user-select: none;
+}
+.sillystring-reset {
+  position: absolute;
+  top: 18px;
+  right: 234px;
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.32);
+  font: 400 11px var(--font-sillystring-mono), monospace;
+  padding: 5px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+.sillystring-reset:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+}
+.sillystring-panel {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 200px;
+  pointer-events: auto;
+}
+.sillystring-toggle {
+  width: 100%;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.4);
+  font: 500 11px var(--font-sillystring-mono), monospace;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  letter-spacing: 0.03em;
+}
+.sillystring-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+}
+.sillystring-toggle.active {
+  border-radius: 8px 8px 0 0;
+  border-bottom-color: transparent;
+}
+.sillystring-reset:focus-visible,
+.sillystring-toggle:focus-visible,
+.sillystring-controls input[type='range']:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+.sillystring-controls {
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
+  padding: 0 16px;
+}
+.sillystring-controls.open {
+  max-height: 320px;
+  opacity: 1;
+  padding: 14px 16px 18px;
+}
+.sillystring-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+.sillystring-controls label:last-child {
+  margin-bottom: 0;
+}
+.sillystring-controls span {
+  font: 400 10px var(--font-sillystring-mono), monospace;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.sillystring-controls input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+.sillystring-controls input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #000;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.sillystring-controls input[type='range']::-webkit-slider-thumb:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 1px 6px rgba(255, 255, 255, 0.15);
+}
+.sillystring-controls input[type='range']::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #000;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 1px 4px rgba(255, 255, 255, 0.1);
+}
+.sillystring-controls input[type='range']::-moz-range-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 2px;
+  border: none;
+}
+@media (max-width: 1023px) {
+  .pylons-hint {
+    right: 16px;
+  }
+}

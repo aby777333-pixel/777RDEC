@@ -21,7 +21,7 @@ export default function BlogIndexPage() {
 
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="sketch" />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="sillystring" />
 
       <Section className="wash border-b border-line-1">
         <SectionHeader eyebrow="Topics" title="Where to start" />

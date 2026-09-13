@@ -18,22 +18,17 @@ import { LightburstBackdrop } from '@/components/backdrops/lightburst-backdrop'
 import { DancersBackdrop } from '@/components/backdrops/dancers-backdrop'
 import { LazyPyramids } from '@/components/backdrops/lazy-pyramids'
 import { TunnelBackdrop } from '@/components/backdrops/tunnel-backdrop'
-import { LatticeRouteBackdrop } from '@/components/backdrops/lattice-route-backdrop'
-import { StackBackdrop } from '@/components/backdrops/stack-backdrop'
 import { RiverBackdrop } from '@/components/backdrops/river-backdrop'
 import { RegionsBackdrop } from '@/components/backdrops/regions-backdrop'
 import { CipherBackdrop } from '@/components/backdrops/cipher-backdrop'
 import { HandshakeBackdrop } from '@/components/backdrops/handshake-backdrop'
 import { AttentionBackdrop } from '@/components/backdrops/attention-backdrop'
-import { AnswerBackdrop } from '@/components/backdrops/answer-backdrop'
-import { TensionBackdrop } from '@/components/backdrops/tension-backdrop'
 import { ConstellationBackdrop } from '@/components/backdrops/constellation-backdrop'
 import { AssembleBackdrop } from '@/components/backdrops/assemble-backdrop'
 import { BlackholeBackdrop } from '@/components/backdrops/blackhole-backdrop'
 import { SwitchboardBackdrop } from '@/components/backdrops/switchboard-backdrop'
 import { SandboxBackdrop } from '@/components/backdrops/sandbox-backdrop'
 import { LazyTube } from '@/components/backdrops/lazy-tube'
-import { SketchBackdrop } from '@/components/backdrops/sketch-backdrop'
 import { LazyAnomaly } from '@/components/backdrops/lazy-anomaly'
 import { OrbBackdrop } from '@/components/backdrops/orb-backdrop'
 import { LazyAura } from '@/components/backdrops/lazy-aura'
@@ -44,6 +39,12 @@ import { LazyExplosion } from '@/components/backdrops/lazy-explosion'
 import { TwinkleBackdrop } from '@/components/backdrops/twinkle-backdrop'
 import { DiamondBackdrop } from '@/components/backdrops/diamond-backdrop'
 import { ColorburstBackdrop } from '@/components/backdrops/colorburst-backdrop'
+import { ParticulesBackdrop } from '@/components/backdrops/particules-backdrop'
+import { LazyBoxtunnel } from '@/components/backdrops/lazy-boxtunnel'
+import { SquaresBackdrop } from '@/components/backdrops/squares-backdrop'
+import { LazyLion } from '@/components/backdrops/lazy-lion'
+import { LazyPylons } from '@/components/backdrops/lazy-pylons'
+import { SillystringBackdrop } from '@/components/backdrops/sillystring-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -83,22 +84,17 @@ export type PenBackdrop =
   | 'dancers'
   | 'pyramids'
   | 'tunnel'
-  | 'route'
-  | 'stack'
   | 'river'
   | 'regions'
   | 'cipher'
   | 'handshake'
   | 'attention'
-  | 'answer'
-  | 'tension'
   | 'constellation'
   | 'assemble'
   | 'blackhole'
   | 'switchboard'
   | 'sandbox'
   | 'tube'
-  | 'sketch'
   | 'anomaly'
   | 'orb'
   | 'aura'
@@ -109,6 +105,12 @@ export type PenBackdrop =
   | 'twinkle'
   | 'diamond'
   | 'colorburst'
+  | 'particules'
+  | 'boxtunnel'
+  | 'squares'
+  | 'lion'
+  | 'pylons'
+  | 'sillystring'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -179,22 +181,17 @@ export function PageHero({
       {backdrop === 'dancers' ? <DancersBackdrop className="-z-10" /> : null}
       {backdrop === 'pyramids' ? <LazyPyramids className="-z-10" /> : null}
       {backdrop === 'tunnel' ? <TunnelBackdrop className="-z-10" /> : null}
-      {backdrop === 'route' ? <LatticeRouteBackdrop className="-z-10" /> : null}
-      {backdrop === 'stack' ? <StackBackdrop className="-z-10" /> : null}
       {backdrop === 'river' ? <RiverBackdrop className="-z-10" /> : null}
       {backdrop === 'regions' ? <RegionsBackdrop className="-z-10" /> : null}
       {backdrop === 'cipher' ? <CipherBackdrop className="-z-10" /> : null}
       {backdrop === 'handshake' ? <HandshakeBackdrop className="-z-10" /> : null}
       {backdrop === 'attention' ? <AttentionBackdrop className="-z-10" /> : null}
-      {backdrop === 'answer' ? <AnswerBackdrop className="-z-10" /> : null}
-      {backdrop === 'tension' ? <TensionBackdrop className="-z-10" /> : null}
       {backdrop === 'constellation' ? <ConstellationBackdrop className="-z-10" /> : null}
       {backdrop === 'assemble' ? <AssembleBackdrop className="-z-10" /> : null}
       {backdrop === 'blackhole' ? <BlackholeBackdrop className="-z-10" /> : null}
       {backdrop === 'switchboard' ? <SwitchboardBackdrop className="-z-10" /> : null}
       {backdrop === 'sandbox' ? <SandboxBackdrop className="-z-10" /> : null}
       {backdrop === 'tube' ? <LazyTube className="-z-10" /> : null}
-      {backdrop === 'sketch' ? <SketchBackdrop className="-z-10" /> : null}
       {backdrop === 'anomaly' ? <LazyAnomaly className="-z-10" /> : null}
       {backdrop === 'orb' ? <OrbBackdrop className="-z-10" /> : null}
       {backdrop === 'aura' ? <LazyAura className="-z-10" /> : null}
@@ -205,6 +202,12 @@ export function PageHero({
       {backdrop === 'twinkle' ? <TwinkleBackdrop className="-z-10" /> : null}
       {backdrop === 'diamond' ? <DiamondBackdrop className="-z-10" /> : null}
       {backdrop === 'colorburst' ? <ColorburstBackdrop className="-z-10" /> : null}
+      {backdrop === 'particules' ? <ParticulesBackdrop className="-z-10" /> : null}
+      {backdrop === 'boxtunnel' ? <LazyBoxtunnel className="-z-10" /> : null}
+      {backdrop === 'squares' ? <SquaresBackdrop className="-z-10" /> : null}
+      {backdrop === 'lion' ? <LazyLion className="-z-10" /> : null}
+      {backdrop === 'pylons' ? <LazyPylons className="-z-10" /> : null}
+      {backdrop === 'sillystring' ? <SillystringBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM
