@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { ChevronDown } from 'lucide-react'
-import { NAV_GROUPS } from '@/lib/navigation'
+import { NAV_GROUPS, NAV_TOP_LINKS } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 
 export function MegaMenu() {
@@ -19,7 +19,9 @@ export function MegaMenu() {
                 // at 1280 that budget was already down to single digits. Four
                 // pixels back across seven triggers buys 28px — enough that
                 // "Developers" clears the search control again with room over.
-                'group inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-ui px-2 text-[0.9375rem] text-steel-300',
+                // Smaller type and padding below 2xl: with Gallery in the bar,
+                // 1280 no longer has room for eight triggers at full size.
+                'group inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-ui px-1.5 text-[0.875rem] text-steel-300 2xl:px-2 2xl:text-[0.9375rem]',
                 'transition-colors duration-200 hover:bg-bg-2 hover:text-steel-100 data-[state=open]:bg-bg-2 data-[state=open]:text-steel-100',
               )}
             >
@@ -68,6 +70,22 @@ export function MegaMenu() {
                 </div>
               </div>
             </NavigationMenu.Content>
+          </NavigationMenu.Item>
+        ))}
+        {NAV_TOP_LINKS.map((link) => (
+          <NavigationMenu.Item key={link.href}>
+            <NavigationMenu.Link asChild>
+              <Link
+                href={link.href}
+                title={link.description}
+                className={cn(
+                  'inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-ui px-1.5 text-[0.875rem] text-steel-300 2xl:px-2 2xl:text-[0.9375rem]',
+                  'transition-colors duration-200 hover:bg-bg-2 hover:text-steel-100',
+                )}
+              >
+                {link.label}
+              </Link>
+            </NavigationMenu.Link>
           </NavigationMenu.Item>
         ))}
       </NavigationMenu.List>

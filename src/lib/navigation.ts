@@ -96,6 +96,14 @@ export const NAV_GROUPS: readonly NavGroup[] = [
   },
 ] as const
 
+/**
+ * Top-level items that are a single page rather than a group, so they are
+ * plain links in the menu bar — no dropdown to open for one destination.
+ */
+export const NAV_TOP_LINKS: readonly NavLink[] = [
+  { label: 'Gallery', href: '/platform/emil/gallery', description: `The running ${EMIL_SHORT} apps, screen by screen.` },
+]
+
 export const FOOTER_PRODUCT_LINKS: readonly NavLink[] = [
   { label: 'Terminal', href: '/platform/terminal', description: '' },
   { label: EMIL_SHORT, href: '/platform/emil', description: '' },
