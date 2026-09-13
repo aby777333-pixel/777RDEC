@@ -12,46 +12,46 @@ outside the image, or pressing Escape, puts it back.
 
 | Filename | What to capture |
 |---|---|
-| `cockpit.png` | **Dashboard**, signed in, scrolled to the top: the mode line, the morning brief with its sourcing footer, and the capital, exposure and risk-budget meters. |
-| `markets.png` | **Global Markets**, from the exchange clocks down through the crypto venue table. |
-| `instruments.png` | **Instrument Master** with one category expanded, so the provider-spelling columns are visible. |
-| `heatmap.png` | **Heatmap & Breadth** on the 1 day / 24h view. |
-| `charts.png` | **Charts** with a symbol loaded and at least one indicator on, including the footer that states the provider and fetch time. |
-| `company.png` | **Company Intelligence** for a large listed name, including the quarterly table. |
-| `screener.png` | **Equity Screener** with results listed and the status chips visible. |
-| `news.png` | **EMIL News** on the Markets tab. |
-| `alerts.png` | **Alert Center**. |
-| `arm.png` | **ARM / DISARM**, disarmed, with a mode selected — disclosure, mode grid, limit sheet and acknowledgements. |
-| `cards.png` | **Trade Cards** showing a proposal that was *not* approved, with the agent votes. |
-| `portfolio.png` | **Portfolio & Exposure** with several accounts linked, including any that are erroring. |
-| `scenario.png` | **Scenario & Hedges** with a preset applied. |
-| `council.png` | **Agent Council** with the 29-step pipeline expanded. |
-| `apihub.png` | **Global API Hub** showing both execution routes and the market selector. |
-| `paper.png` | **Paper Trading Desk** with a venue connected, including the ticket protections. |
-| `agentdesk.png` | **Agent Paper Desk** showing the gates and the autopilot state. |
-| `backtest.png` | **Backtest Engine** after a run: the verdict banner, the metric tiles and the walk-forward panel. |
-| `options.png` | **Options Analytics** with an expiry selected and the chain visible. |
-| `calendar.png` | **Calendar & Central Banks**, from the bank monitor down into the economic calendar. |
-| `journal.png` | **Trade Journal** with at least one reviewed entry, including the review text and the process grade. |
-| `risk.png` | **Risk Management**: the sizing calculator, the nine-breaker grid and the trip history. |
-| `capital.png` | **Capital & Performance** with the 90-day equity curve and the drawdown events list. |
-| `strategycenter.png` | **Strategy Center**: champion against challenger, plus several strategy cards with health scores. |
-| `strategylab.png` | **Strategy Lab** with a candidate open and the data-mode banner visible. |
-| `teach.png` | **Teach EMIL** on the Ingest tab, including the provenance note under the analyse button. |
-| `trust.png` | **Trust & Metacognition**, including the confidence-versus-trust panel and novelty detection. |
-| `connect.png` | **Connect Your Platform** with at least one bridged account listed. |
-| `developers.png` | **Developers & API** on the reference tab, with the scope chips and quickstart visible. |
-| `integrations.png` | **Integrations Directory** including chat channels and embeddable widgets. |
-| `datafeed.png` | **Your Data Feed**, including the ingest example. |
-| `settings.png` | **Settings & Permissions**: the grants, the risk profile editor and the privacy section. |
-| `organization.png` | **Organization**. |
+| `cockpit.webp` | **Dashboard**, signed in, scrolled to the top: the mode line, the morning brief with its sourcing footer, and the capital, exposure and risk-budget meters. |
+| `markets.webp` | **Global Markets**, from the exchange clocks down through the crypto venue table. |
+| `instruments.webp` | **Instrument Master** with one category expanded, so the provider-spelling columns are visible. |
+| `heatmap.webp` | **Heatmap & Breadth** on the 1 day / 24h view. |
+| `charts.webp` | **Charts** with a symbol loaded and at least one indicator on, including the footer that states the provider and fetch time. |
+| `company.webp` | **Company Intelligence** for a large listed name, including the quarterly table. |
+| `screener.webp` | **Equity Screener** with results listed and the status chips visible. |
+| `news.webp` | **EMIL News** on the Markets tab. |
+| `alerts.webp` | **Alert Center**. |
+| `arm.webp` | **ARM / DISARM**, disarmed, with a mode selected — disclosure, mode grid, limit sheet and acknowledgements. |
+| `cards.webp` | **Trade Cards** showing a proposal that was *not* approved, with the agent votes. |
+| `portfolio.webp` | **Portfolio & Exposure** with several accounts linked, including any that are erroring. |
+| `scenario.webp` | **Scenario & Hedges** with a preset applied. |
+| `council.webp` | **Agent Council** with the 29-step pipeline expanded. |
+| `apihub.webp` | **Global API Hub** showing both execution routes and the market selector. |
+| `paper.webp` | **Paper Trading Desk** with a venue connected, including the ticket protections. |
+| `agentdesk.webp` | **Agent Paper Desk** showing the gates and the autopilot state. |
+| `backtest.webp` | **Backtest Engine** after a run: the verdict banner, the metric tiles and the walk-forward panel. |
+| `options.webp` | **Options Analytics** with an expiry selected and the chain visible. |
+| `calendar.webp` | **Calendar & Central Banks**, from the bank monitor down into the economic calendar. |
+| `journal.webp` | **Trade Journal** with at least one reviewed entry, including the review text and the process grade. |
+| `risk.webp` | **Risk Management**: the sizing calculator, the nine-breaker grid and the trip history. |
+| `capital.webp` | **Capital & Performance** with the 90-day equity curve and the drawdown events list. |
+| `strategycenter.webp` | **Strategy Center**: champion against challenger, plus several strategy cards with health scores. |
+| `strategylab.webp` | **Strategy Lab** with a candidate open and the data-mode banner visible. |
+| `teach.webp` | **Teach EMIL** on the Ingest tab, including the provenance note under the analyse button. |
+| `trust.webp` | **Trust & Metacognition**, including the confidence-versus-trust panel and novelty detection. |
+| `connect.webp` | **Connect Your Platform** with at least one bridged account listed. |
+| `developers.webp` | **Developers & API** on the reference tab, with the scope chips and quickstart visible. |
+| `integrations.webp` | **Integrations Directory** including chat channels and embeddable widgets. |
+| `datafeed.webp` | **Your Data Feed**, including the ingest example. |
+| `settings.webp` | **Settings & Permissions**: the grants, the risk profile editor and the privacy section. |
+| `organization.webp` | **Organization**. |
 
 ## The other two products
 
 | Filename | What to capture | Appears on |
 |---|---|---|
-| `terminal.png` | **EMIL Trade terminal** with a chart loaded, the watchlist open and at least one position in the order desk, so the margin bar along the bottom has something in it. | `/platform/emil`, `/platform/terminal` |
-| `desk.png` | **Broker admin** — the dealing desk or the risk view. | `/brokers/platform` |
+| `terminal.webp` | **EMIL Trade terminal** with a chart loaded, the watchlist open and at least one position in the order desk, so the margin bar along the bottom has something in it. | `/platform/emil`, `/platform/terminal` |
+| `desk.webp` | **Broker admin** — the dealing desk or the risk view. | `/brokers/platform` |
 
 ## Before you export one
 
@@ -62,7 +62,7 @@ outside the image, or pressing Escape, puts it back.
   `contain`, not `cover`, so nothing is cropped — a wide capture just leaves a
   hairline of ground above and below. Include the left nav and the status bar:
   they are part of what the surface is.
-- **2560px wide or so**, PNG. It is rendered at up to ~1100px inline and full
+- **2560px wide or so**, WebP (a PNG converted at quality ~82 is a fifth of the size). Put a 480px copy in `thumb/` for the gallery strip. It is rendered at up to ~1100px inline and full
   size on click, and Next generates the smaller sizes, so oversupplying costs
   nothing at request time.
 - **Dark theme**, to sit with the band around it.

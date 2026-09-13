@@ -12,6 +12,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { label: 'Raptor Terminal', href: '/platform/terminal', description: 'Analysis and execution in one surface.' },
       { label: 'Modules', href: '/platform/modules', description: 'The twenty modules the stack is built from.' },
       { label: EMIL_SHORT, href: '/platform/emil', description: 'The intelligence layer inside the terminal.' },
+      { label: `${EMIL_SHORT} Gallery`, href: '/platform/emil/gallery', description: 'The running apps, screen by screen.' },
       { label: 'Global Markets', href: '/platform/markets', description: 'Multi-asset coverage, session by session.' },
       { label: 'Trading Tools', href: '/platform/trading-tools', description: 'Charting, scanners, alerts, journaling.' },
       { label: 'Raptor Risk Engine', href: '/platform/risk', description: 'Exposure, limits, kill switches.' },
