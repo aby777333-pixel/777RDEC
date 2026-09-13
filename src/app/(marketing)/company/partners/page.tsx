@@ -10,5 +10,5 @@ export const metadata: Metadata = pageMetadata({
 })
 
 export default function Page() {
-  return <StandardPage copy={copy} heroBackdrop="coverage" />
+  return <StandardPage copy={copy} heroBackdrop="attraction" />
 }

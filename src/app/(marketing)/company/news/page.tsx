@@ -17,7 +17,7 @@ export default function NewsIndexPage() {
 
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="changelog" />
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="reactor" />
       <Section className="border-b border-line-1">
         <SectionHeader eyebrow="Latest" title="Company and product updates" />
         <div className="mt-10">

@@ -30,20 +30,21 @@ import { AnswerBackdrop } from '@/components/backdrops/answer-backdrop'
 import { TensionBackdrop } from '@/components/backdrops/tension-backdrop'
 import { ConstellationBackdrop } from '@/components/backdrops/constellation-backdrop'
 import { AssembleBackdrop } from '@/components/backdrops/assemble-backdrop'
-import { MachinesBackdrop } from '@/components/backdrops/machines-backdrop'
+import { BlackholeBackdrop } from '@/components/backdrops/blackhole-backdrop'
 import { SwitchboardBackdrop } from '@/components/backdrops/switchboard-backdrop'
 import { SandboxBackdrop } from '@/components/backdrops/sandbox-backdrop'
-import { UptimeBackdrop } from '@/components/backdrops/uptime-backdrop'
-import { GapsBackdrop } from '@/components/backdrops/gaps-backdrop'
-import { InstrumentsBackdrop } from '@/components/backdrops/instruments-backdrop'
-import { CoverageBackdrop } from '@/components/backdrops/coverage-backdrop'
-import { OpenBackdrop } from '@/components/backdrops/open-backdrop'
-import { ChangelogBackdrop } from '@/components/backdrops/changelog-backdrop'
-import { DependsBackdrop } from '@/components/backdrops/depends-backdrop'
-import { TallyBackdrop } from '@/components/backdrops/tally-backdrop'
-import { ReachBackdrop } from '@/components/backdrops/reach-backdrop'
-import { RedactionBackdrop } from '@/components/backdrops/redaction-backdrop'
+import { LazyTube } from '@/components/backdrops/lazy-tube'
 import { SketchBackdrop } from '@/components/backdrops/sketch-backdrop'
+import { LazyAnomaly } from '@/components/backdrops/lazy-anomaly'
+import { FollowSphere } from '@/components/backdrops/follow-sphere'
+import { OrbBackdrop } from '@/components/backdrops/orb-backdrop'
+import { LazyAura } from '@/components/backdrops/lazy-aura'
+import { TidesBackdrop } from '@/components/backdrops/tides-backdrop'
+import { LazyReactor } from '@/components/backdrops/lazy-reactor'
+import { AttractionBackdrop } from '@/components/backdrops/attraction-backdrop'
+import { LazyExplosion } from '@/components/backdrops/lazy-explosion'
+import { TwinkleBackdrop } from '@/components/backdrops/twinkle-backdrop'
+import { DiamondBackdrop } from '@/components/backdrops/diamond-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -57,7 +58,9 @@ import { cn } from '@/lib/utils'
  * its own file. From `tunnel` onward they are written for this site: the
  * technology family draws that page's own subject — the routing, the stack,
  * the round trip, the regions, the ciphertext, the handshake — which is what
- * makes them worth having rather than decoration.
+ * makes them worth having rather than decoration. The developer and company
+ * bands from `blackhole` on are ports again, credited in their files like the
+ * rest; the company hub's also carries the Follow Me Sphere (`sphere`).
  *
  * `singularity` is the one that appears twice: it closes the home page, and
  * the white-label hero asks for the same scene. It is the same component in
@@ -92,20 +95,20 @@ export type PenBackdrop =
   | 'tension'
   | 'constellation'
   | 'assemble'
-  | 'machines'
+  | 'blackhole'
   | 'switchboard'
   | 'sandbox'
-  | 'uptime'
-  | 'gaps'
-  | 'instruments'
-  | 'coverage'
-  | 'open'
-  | 'changelog'
-  | 'depends'
-  | 'tally'
-  | 'reach'
-  | 'redaction'
+  | 'tube'
   | 'sketch'
+  | 'anomaly'
+  | 'orb'
+  | 'aura'
+  | 'tides'
+  | 'reactor'
+  | 'attraction'
+  | 'explosion'
+  | 'twinkle'
+  | 'diamond'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -117,6 +120,7 @@ export function PageHero({
   actions,
   imageVariant,
   backdrop = 'image',
+  sphere = false,
   children,
 }: {
   eyebrow: string
@@ -130,6 +134,9 @@ export function PageHero({
    *  Adding one is a new value here, a component, and one opt-in on the page —
    *  nothing else in the site changes. */
   backdrop?: PenBackdrop
+  /** The Follow Me Sphere, floating over the band above its scene and below
+   *  its copy. A companion to a pen rather than a backdrop of its own. */
+  sphere?: boolean
   children?: React.ReactNode
 }) {
   const pen = backdrop !== 'image'
@@ -140,6 +147,19 @@ export function PageHero({
         // The rig needs a band deep enough to hang in and still clear its
         // control panel; the shorter headline alone does not leave one.
         backdrop === 'puppet' && 'lg:min-h-[40rem]',
+        // The Cosmic Anomaly's telemetry panel opens downward and its nav sits
+        // at the foot of the band, so on a wide band there has to be room for
+        // both; on a narrow one they stack under the copy, and the band is
+        // padded to hold them.
+        backdrop === 'anomaly' && 'pb-48 md:pb-48 lg:min-h-[40rem] lg:pb-16',
+        // The orb's preset row sits under the copy, and the orb wants a band
+        // deep enough to be more than a marble.
+        backdrop === 'orb' && 'pb-44 md:pb-44 lg:min-h-[36rem] lg:pb-36',
+        // The rest keep their pen's overlay along the foot of the band; on a
+        // narrow band that overlay stacks under the copy.
+        backdrop === 'aura' && 'pb-32 md:pb-32 lg:pb-24',
+        backdrop === 'tides' && 'pb-56 md:pb-56 lg:pb-40',
+        backdrop === 'reactor' && 'pb-52 md:pb-52 lg:pb-24',
         // Both pens assume a black ground, so the band they back stops
         // following the theme. Only that band — the image hero themes as it
         // always did.
@@ -176,20 +196,20 @@ export function PageHero({
       {backdrop === 'tension' ? <TensionBackdrop className="-z-10" /> : null}
       {backdrop === 'constellation' ? <ConstellationBackdrop className="-z-10" /> : null}
       {backdrop === 'assemble' ? <AssembleBackdrop className="-z-10" /> : null}
-      {backdrop === 'machines' ? <MachinesBackdrop className="-z-10" /> : null}
+      {backdrop === 'blackhole' ? <BlackholeBackdrop className="-z-10" /> : null}
       {backdrop === 'switchboard' ? <SwitchboardBackdrop className="-z-10" /> : null}
       {backdrop === 'sandbox' ? <SandboxBackdrop className="-z-10" /> : null}
-      {backdrop === 'uptime' ? <UptimeBackdrop className="-z-10" /> : null}
-      {backdrop === 'gaps' ? <GapsBackdrop className="-z-10" /> : null}
-      {backdrop === 'instruments' ? <InstrumentsBackdrop className="-z-10" /> : null}
-      {backdrop === 'coverage' ? <CoverageBackdrop className="-z-10" /> : null}
-      {backdrop === 'open' ? <OpenBackdrop className="-z-10" /> : null}
-      {backdrop === 'changelog' ? <ChangelogBackdrop className="-z-10" /> : null}
-      {backdrop === 'depends' ? <DependsBackdrop className="-z-10" /> : null}
-      {backdrop === 'tally' ? <TallyBackdrop className="-z-10" /> : null}
-      {backdrop === 'reach' ? <ReachBackdrop className="-z-10" /> : null}
-      {backdrop === 'redaction' ? <RedactionBackdrop className="-z-10" /> : null}
+      {backdrop === 'tube' ? <LazyTube className="-z-10" /> : null}
       {backdrop === 'sketch' ? <SketchBackdrop className="-z-10" /> : null}
+      {backdrop === 'anomaly' ? <LazyAnomaly className="-z-10" /> : null}
+      {backdrop === 'orb' ? <OrbBackdrop className="-z-10" /> : null}
+      {backdrop === 'aura' ? <LazyAura className="-z-10" /> : null}
+      {backdrop === 'tides' ? <TidesBackdrop className="-z-10" /> : null}
+      {backdrop === 'reactor' ? <LazyReactor className="-z-10" /> : null}
+      {backdrop === 'attraction' ? <AttractionBackdrop className="-z-10" /> : null}
+      {backdrop === 'explosion' ? <LazyExplosion className="-z-10" /> : null}
+      {backdrop === 'twinkle' ? <TwinkleBackdrop className="-z-10" /> : null}
+      {backdrop === 'diamond' ? <DiamondBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM
@@ -205,6 +225,9 @@ export function PageHero({
           className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-full max-w-[52rem] bg-gradient-to-r from-bg-0 to-transparent"
         />
       ) : null}
+      {/* After the scrim, so the sphere is not dimmed by it; still -z-10, so
+          the copy stays on top. */}
+      {sphere ? <FollowSphere className="-z-10" /> : null}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}
@@ -346,6 +369,7 @@ export function StandardPage({
   copy,
   modulesHeading,
   heroBackdrop,
+  heroSphere,
   children,
   className,
 }: {
@@ -353,6 +377,8 @@ export function StandardPage({
   modulesHeading?: React.ReactNode
   /** Passed through to <PageHero>; only the pages that carry a pen pass it. */
   heroBackdrop?: PenBackdrop
+  /** Passed through to <PageHero> as `sphere`. */
+  heroSphere?: boolean
   children?: React.ReactNode
   className?: string
 }) {
@@ -364,6 +390,7 @@ export function StandardPage({
         lead={copy.lead}
         actions={copy.heroActions}
         backdrop={heroBackdrop}
+        sphere={heroSphere}
       />
       <AnswerGrid answers={copy.answers} />
       {children}
