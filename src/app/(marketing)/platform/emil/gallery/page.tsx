@@ -18,6 +18,7 @@ export default function EmilGalleryPage() {
       <PageHero
         eyebrow={`Platform · ${EMIL_SHORT} · Gallery`}
         heading={`${EMIL_SHORT}, screen by screen.`}
+        backdrop="colorburst"
         lead={`${EMIL_GALLERY.length} captures of the running applications, taken ${EMIL_GALLERY_DATE}: every surface of the Control Cockpit, from the morning brief to the organisation settings, and the EMIL Trade terminal. It moves on every ten seconds; click the picture to stop and read it.`}
       />
 

@@ -43,6 +43,7 @@ import { AttractionBackdrop } from '@/components/backdrops/attraction-backdrop'
 import { LazyExplosion } from '@/components/backdrops/lazy-explosion'
 import { TwinkleBackdrop } from '@/components/backdrops/twinkle-backdrop'
 import { DiamondBackdrop } from '@/components/backdrops/diamond-backdrop'
+import { ColorburstBackdrop } from '@/components/backdrops/colorburst-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -107,6 +108,7 @@ export type PenBackdrop =
   | 'explosion'
   | 'twinkle'
   | 'diamond'
+  | 'colorburst'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -202,6 +204,7 @@ export function PageHero({
       {backdrop === 'explosion' ? <LazyExplosion className="-z-10" /> : null}
       {backdrop === 'twinkle' ? <TwinkleBackdrop className="-z-10" /> : null}
       {backdrop === 'diamond' ? <DiamondBackdrop className="-z-10" /> : null}
+      {backdrop === 'colorburst' ? <ColorburstBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM
