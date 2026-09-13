@@ -2,22 +2,23 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
-import { ANOMALY_COUNT, ANOMALY_INFO, ANOMALY_MORPH, ANOMALY_TARGET } from './anomaly-info'
+import { ANOMALY_COUNT, ANOMALY_MORPH, ANOMALY_TARGET } from './anomaly-info'
 
 /**
- * The Cosmic Anomaly band: the scene, lazily, and the pen's controls, now.
+ * The Cosmic Anomaly band: the scene, lazily, and the pen's target nav, now.
  *
  * The scene is Three.js plus a bloom pass, so it lands in a chunk of its own,
- * the same as <LazyPyramids>. The controls are the pen's own markup and are
- * rendered with the page, so they are there before the scene is.
+ * the same as <LazyPyramids>. The nav is the pen's own markup and is rendered
+ * with the page, so it is there before the scene is. The pen's telemetry panel
+ * — the object's name and a description of it — is left out on this page.
  *
- * They are siblings of the scene rather than children of it, for two reasons.
+ * It is a sibling of the scene rather than a child of it, for two reasons.
  * The scene is `aria-hidden` and `pointer-events: none`, which is right for a
- * picture and wrong for buttons. And they have to sit above the hero's copy
+ * picture and wrong for buttons. And it has to sit above the hero's copy
  * rather than behind it at `-z-10`.
  *
  * The two talk by events on the hero section: a press sends ANOMALY_MORPH, and
- * the panel changes when the scene answers with ANOMALY_TARGET — which it does
+ * the counter changes when the scene answers with ANOMALY_TARGET — which it does
  * only if it accepts, exactly as the pen ignores a press mid-morph.
  */
 const AnomalyBackdrop = dynamic(
@@ -37,7 +38,6 @@ export function LazyAnomaly({ className }: { className?: string }) {
 function AnomalyControls() {
   const rootRef = useRef<HTMLDivElement>(null)
   const [index, setIndex] = useState(0)
-  const [expanded, setExpanded] = useState(false)
 
   useEffect(() => {
     const section = rootRef.current?.parentElement
@@ -53,46 +53,8 @@ function AnomalyControls() {
     )
   }
 
-  const item = ANOMALY_INFO[index]
-
   return (
     <div ref={rootRef} className="anomaly-controls" data-pen-controls>
-      <div className={expanded ? 'anomaly-info expanded' : 'anomaly-info'}>
-        <div className="anomaly-info__header">
-          <div>
-            <div className="anomaly-info__kicker">Telemetry Link</div>
-            <div className="anomaly-info__title">{item.name}</div>
-          </div>
-          <button
-            type="button"
-            className="anomaly-info__toggle"
-            aria-label="Expand telemetry"
-            aria-expanded={expanded}
-            onClick={() => setExpanded((open) => !open)}
-          >
-            <span>{expanded ? '−' : '+'}</span>
-          </button>
-        </div>
-
-        <div className="anomaly-info__body" aria-hidden={!expanded}>
-          <p className="anomaly-info__copy">{item.copy}</p>
-          <div className="anomaly-info__grid">
-            <div className="anomaly-info__row">
-              <span>Structure</span>
-              <strong>{item.form}</strong>
-            </div>
-            <div className="anomaly-info__row">
-              <span>Emissions</span>
-              <strong>{item.palette}</strong>
-            </div>
-            <div className="anomaly-info__row">
-              <span>Dynamics</span>
-              <strong>{item.motion}</strong>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div className="anomaly-nav">
         <button
           type="button"

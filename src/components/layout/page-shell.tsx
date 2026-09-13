@@ -36,7 +36,6 @@ import { SandboxBackdrop } from '@/components/backdrops/sandbox-backdrop'
 import { LazyTube } from '@/components/backdrops/lazy-tube'
 import { SketchBackdrop } from '@/components/backdrops/sketch-backdrop'
 import { LazyAnomaly } from '@/components/backdrops/lazy-anomaly'
-import { FollowSphere } from '@/components/backdrops/follow-sphere'
 import { OrbBackdrop } from '@/components/backdrops/orb-backdrop'
 import { LazyAura } from '@/components/backdrops/lazy-aura'
 import { TidesBackdrop } from '@/components/backdrops/tides-backdrop'
@@ -60,7 +59,7 @@ import { cn } from '@/lib/utils'
  * the round trip, the regions, the ciphertext, the handshake — which is what
  * makes them worth having rather than decoration. The developer and company
  * bands from `blackhole` on are ports again, credited in their files like the
- * rest; the company hub's also carries the Follow Me Sphere (`sphere`).
+ * rest.
  *
  * `singularity` is the one that appears twice: it closes the home page, and
  * the white-label hero asks for the same scene. It is the same component in
@@ -120,7 +119,6 @@ export function PageHero({
   actions,
   imageVariant,
   backdrop = 'image',
-  sphere = false,
   children,
 }: {
   eyebrow: string
@@ -134,9 +132,6 @@ export function PageHero({
    *  Adding one is a new value here, a component, and one opt-in on the page —
    *  nothing else in the site changes. */
   backdrop?: PenBackdrop
-  /** The Follow Me Sphere, floating over the band above its scene and below
-   *  its copy. A companion to a pen rather than a backdrop of its own. */
-  sphere?: boolean
   children?: React.ReactNode
 }) {
   const pen = backdrop !== 'image'
@@ -147,19 +142,17 @@ export function PageHero({
         // The rig needs a band deep enough to hang in and still clear its
         // control panel; the shorter headline alone does not leave one.
         backdrop === 'puppet' && 'lg:min-h-[40rem]',
-        // The Cosmic Anomaly's telemetry panel opens downward and its nav sits
-        // at the foot of the band, so on a wide band there has to be room for
-        // both; on a narrow one they stack under the copy, and the band is
-        // padded to hold them.
-        backdrop === 'anomaly' && 'pb-48 md:pb-48 lg:min-h-[40rem] lg:pb-16',
+        // The Cosmic Anomaly's target nav sits at the foot of the band — under
+        // the copy on a narrow one, which is padded to hold it — and the scene
+        // wants a deep band to turn in.
+        backdrop === 'anomaly' && 'pb-32 md:pb-32 lg:min-h-[40rem] lg:pb-16',
         // The orb's preset row sits under the copy, and the orb wants a band
         // deep enough to be more than a marble.
         backdrop === 'orb' && 'pb-44 md:pb-44 lg:min-h-[36rem] lg:pb-36',
-        // The rest keep their pen's overlay along the foot of the band; on a
-        // narrow band that overlay stacks under the copy.
-        backdrop === 'aura' && 'pb-32 md:pb-32 lg:pb-24',
-        backdrop === 'tides' && 'pb-56 md:pb-56 lg:pb-40',
-        backdrop === 'reactor' && 'pb-52 md:pb-52 lg:pb-24',
+        // These keep a control or a hint along the foot of the band, clear of
+        // the copy.
+        backdrop === 'tides' && 'pb-28 md:pb-28 lg:pb-28',
+        backdrop === 'reactor' && 'pb-24 md:pb-24 lg:pb-24',
         // Both pens assume a black ground, so the band they back stops
         // following the theme. Only that band — the image hero themes as it
         // always did.
@@ -225,9 +218,6 @@ export function PageHero({
           className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-full max-w-[52rem] bg-gradient-to-r from-bg-0 to-transparent"
         />
       ) : null}
-      {/* After the scrim, so the sphere is not dimmed by it; still -z-10, so
-          the copy stays on top. */}
-      {sphere ? <FollowSphere className="-z-10" /> : null}
       <WingMark
         className="pointer-events-none absolute -right-24 top-0 h-[22rem] w-[38rem] text-steel-700 opacity-40"
         strokeWidth={1}
@@ -369,7 +359,6 @@ export function StandardPage({
   copy,
   modulesHeading,
   heroBackdrop,
-  heroSphere,
   children,
   className,
 }: {
@@ -377,8 +366,6 @@ export function StandardPage({
   modulesHeading?: React.ReactNode
   /** Passed through to <PageHero>; only the pages that carry a pen pass it. */
   heroBackdrop?: PenBackdrop
-  /** Passed through to <PageHero> as `sphere`. */
-  heroSphere?: boolean
   children?: React.ReactNode
   className?: string
 }) {
@@ -390,7 +377,6 @@ export function StandardPage({
         lead={copy.lead}
         actions={copy.heroActions}
         backdrop={heroBackdrop}
-        sphere={heroSphere}
       />
       <AnswerGrid answers={copy.answers} />
       {children}

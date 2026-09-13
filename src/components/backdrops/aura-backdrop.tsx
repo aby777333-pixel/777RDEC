@@ -46,8 +46,9 @@ import { motionIsReduced } from './motion'
  * The camera circles on its own and turns under a drag.
  *
  * Every geometry, material, light, colour, count and speed is the pen's, as is
- * the bloom, the Reinhard tone mapping, the fog, the loading notice that fades
- * after half a second, and the caption along the foot of the view.
+ * the bloom, the Reinhard tone mapping, the fog, and the loading notice that
+ * fades after half a second. The pen's caption along the foot of the view is
+ * left out on this page.
  *
  * What changed:
  *
@@ -334,10 +335,6 @@ export function AuraBackdrop({ className }: { className?: string }) {
     <>
       <div ref={hostRef} className={cn('pen-scene pen-scene--aura', className)} aria-hidden />
       <div className="aura-ui" aria-hidden>
-        <div className="aura-info">
-          ✦ 3D Geometric Aura ✦ | <span className="aura-info__hint">Drag to rotate view</span> | Inspired
-          Iteration · Refreshed Presentation
-        </div>
         <div ref={loadingRef} className="aura-loading">
           Loading visual engine...
         </div>

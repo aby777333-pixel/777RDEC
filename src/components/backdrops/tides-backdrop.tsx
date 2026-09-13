@@ -1,6 +1,6 @@
 'use client'
 
-import { DM_Mono, Instrument_Serif } from 'next/font/google'
+import { DM_Mono } from 'next/font/google'
 import { cn } from '@/lib/utils'
 import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
 import { motionIsReduced } from './motion'
@@ -14,20 +14,18 @@ import { motionIsReduced } from './motion'
  * horizon; below it twenty-six swells, back to front, each wider, taller and
  * faster than the one behind, with a crest line and — on the nearest — foam;
  * then a glitter path under the sun and a vignette over all of it. The time
- * slider runs from dawn to moonlight through six keyframed palettes, naming
- * the mood and the hour as it goes, and the sun follows the pointer across
- * the sky.
+ * slider runs from dawn to moonlight through six keyframed palettes, and the
+ * sun follows the pointer across the sky.
  *
- * The palettes, the geometry of every layer, the counts, the speeds, the
- * overlay and its type (Instrument Serif and DM Mono) and the slider are the
- * pen's, values included. The slider is a control, and is kept working.
+ * The palettes, the geometry of every layer, the counts, the speeds and the
+ * slider, in its DM Mono, are the pen's, values included. The slider is a
+ * control, and is kept working. The pen's label, mood and hour readout and its
+ * caption are left out on this page.
  *
  * What changed:
  *
- * - **The overlay is laid out around the headline.** The pen's label and mood
- *   sit in the top corners and its caption and slider along the foot; here the
- *   label and mood sit together top right and the caption and slider bottom
- *   right, where the copy is not. On a narrow band they stack at the foot.
+ * - **The slider sits bottom right**, where the copy is not, rather than at
+ *   the pen's bottom centre. On a narrow band it runs along the foot.
  * - **The pointer is the hero's, not the window's**, so the sun follows it
  *   across this band.
  * - **Its clock.** The pen moves its time, clouds and birds a fixed step per
@@ -37,13 +35,6 @@ import { motionIsReduced } from './motion'
  *   holds still — but the slider and the sun still answer, a frame at a time.
  */
 
-const serif = Instrument_Serif({
-  subsets: ['latin'],
-  weight: '400',
-  style: ['normal', 'italic'],
-  display: 'swap',
-  variable: '--font-tides-serif',
-})
 const mono = DM_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
@@ -120,8 +111,6 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
   const section = host.parentElement ?? host
   const slider = section.querySelector<HTMLInputElement>('[data-tides-slider]')
-  const moodName = section.querySelector<HTMLElement>('[data-tides-mood-name]')
-  const moodTime = section.querySelector<HTMLElement>('[data-tides-mood-time]')
 
   let W = Math.max(1, host.clientWidth)
   let H = Math.max(1, host.clientHeight)
@@ -326,15 +315,6 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
     vig.addColorStop(1, 'rgba(0,0,8,0.34)')
     ctx.fillStyle = vig
     ctx.fillRect(0, 0, W, H)
-
-    // ── UI TEXT ──
-    if (moodName) moodName.textContent = P.name
-    if (moodTime) {
-      const hours = 5 + timeOfDay * 18 // 05:00 → 23:00
-      const hh = Math.floor(hours) % 24
-      const mm = Math.floor((hours % 1) * 60)
-      moodTime.textContent = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`
-    }
   }
 
   // A paused band still answers the slider and the pointer, a frame at a time.
@@ -387,21 +367,8 @@ export function TidesBackdrop({ className }: { className?: string }) {
   return (
     <>
       <div ref={hostRef} className={cn('pen-scene pen-scene--tides', className)} aria-hidden />
-      <div className={cn('tides-ui', serif.variable, mono.variable)} data-pen-controls>
-        <div className="tides-ui__top" aria-hidden>
-          <div className="tides-label">◑ &nbsp;T I D E S</div>
-          <div className="tides-mood">
-            <span data-tides-mood-name>GOLDEN HOUR</span>
-            <span className="tides-mood__time" data-tides-mood-time>
-              15:48
-            </span>
-          </div>
-        </div>
-
+      <div className={cn('tides-ui', mono.variable)} data-pen-controls>
         <div className="tides-ui__bottom">
-          <p className="tides-caption" aria-hidden>
-            Same sea — <em>every hour a different blue.</em>
-          </p>
           <div className="tides-slider">
             <span className="tides-slider__end" aria-hidden>
               DAWN

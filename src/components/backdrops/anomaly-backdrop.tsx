@@ -36,9 +36,9 @@ import { ANOMALY_COUNT, ANOMALY_MORPH, ANOMALY_TARGET } from './anomaly-info'
  * seconds, through an unreal bloom.
  *
  * The shaders, the particle count, the camera fit, the bloom, the fog, the
- * tone mapping and the morph timing are the pen's, values included. So are
- * its controls: the telemetry panel and the previous/next targets are in
- * <AnomalyControls>, wired to this scene by events on the hero.
+ * tone mapping and the morph timing are the pen's, values included. So is its
+ * previous/next target nav, in <AnomalyControls>, wired to this scene by
+ * events on the hero. Its telemetry panel is left out on this page.
  *
  * (The older version of this pen — the one with an event horizon mesh and
  * instanced streaks — is still the site's `singularity`. That is a port of

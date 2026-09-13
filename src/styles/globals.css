@@ -1299,16 +1299,13 @@ html[data-reduce-motion='true'] *::after {
 }
 
 /*
-  The Cosmic Anomaly pen's controls, in the pen's own styling. The layer is
-  the band's size and lets the pointer through; only the panel and the nav
-  take it. They sit on the right, clear of the headline and of the page's
-  scroll buttons; on a narrow band they stack at the bottom, which the hero
-  pads for.
+  The Cosmic Anomaly pen's target nav, in the pen's own styling. The layer is
+  the band's size and lets the pointer through; only the nav takes it. It sits
+  bottom right, clear of the headline and of the page's scroll buttons; on a
+  narrow band it sits at the bottom left, which the hero pads for.
 */
 .anomaly-controls {
   --anomaly-neon-cyan: #00f0ff;
-  --anomaly-neon-blue: #0066ff;
-  --anomaly-text-main: #e0f2fe;
   --anomaly-text-dim: #7dd3fc;
   --anomaly-panel-bg: rgba(4, 9, 16, 0.65);
   --anomaly-panel-border: rgba(0, 240, 255, 0.15);
@@ -1322,137 +1319,6 @@ html[data-reduce-motion='true'] *::after {
 .pen-scene[data-gl='off'] ~ .anomaly-controls,
 .pen-scene[data-gl='off'] ~ .orb-presets {
   display: none;
-}
-
-.anomaly-info {
-  position: absolute;
-  top: 32px;
-  right: 88px;
-  width: 360px;
-  pointer-events: auto;
-  color: var(--anomaly-text-main);
-  border-radius: 6px;
-  background: var(--anomaly-panel-bg);
-  border: 1px solid var(--anomaly-panel-border);
-  box-shadow:
-    0 24px 64px rgba(0, 0, 0, 0.9),
-    inset 0 0 32px rgba(0, 100, 255, 0.05);
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
-  overflow: hidden;
-  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
-}
-.anomaly-info.expanded {
-  width: 440px;
-  border-color: rgba(0, 240, 255, 0.4);
-  box-shadow:
-    0 32px 80px rgba(0, 0, 0, 0.95),
-    0 0 40px rgba(0, 150, 255, 0.1),
-    inset 0 0 20px rgba(0, 240, 255, 0.1);
-}
-.anomaly-info__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  position: relative;
-}
-.anomaly-info__header::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 20px;
-  right: 20px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--anomaly-neon-blue), transparent);
-  opacity: 0.5;
-}
-.anomaly-info__kicker {
-  font-size: 10px;
-  line-height: 1;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: var(--anomaly-neon-cyan);
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-.anomaly-info__title {
-  font-size: 16px;
-  line-height: 1.6;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: #ffffff;
-  text-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
-}
-.anomaly-info__toggle {
-  width: 34px;
-  height: 34px;
-  flex: none;
-  border: 1px solid var(--anomaly-panel-border);
-  border-radius: 4px;
-  background: rgba(0, 240, 255, 0.05);
-  color: var(--anomaly-neon-cyan);
-  cursor: pointer;
-  display: grid;
-  place-items: center;
-  font-size: 18px;
-  font-weight: 300;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.anomaly-info__toggle:hover {
-  background: rgba(0, 240, 255, 0.15);
-  border-color: var(--anomaly-neon-cyan);
-  box-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
-}
-.anomaly-info__body {
-  max-height: 0;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, transform 0.5s ease;
-}
-.anomaly-info.expanded .anomaly-info__body {
-  max-height: 400px;
-  opacity: 1;
-  transform: translateY(0);
-}
-.anomaly-info__copy {
-  margin: 0;
-  padding: 20px;
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--anomaly-text-dim);
-  font-weight: 300;
-  letter-spacing: 0.02em;
-}
-.anomaly-info__grid {
-  display: grid;
-  gap: 12px;
-  padding: 0 20px 24px 20px;
-}
-.anomaly-info__row {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: 12px;
-  align-items: baseline;
-  padding: 8px 10px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 4px;
-  border-left: 2px solid var(--anomaly-neon-blue);
-}
-.anomaly-info__row span {
-  color: var(--anomaly-neon-cyan);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  font-size: 9px;
-  font-weight: 600;
-  opacity: 0.8;
-}
-.anomaly-info__row strong {
-  color: var(--anomaly-text-main);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 1.4;
 }
 
 .anomaly-nav {
@@ -1484,8 +1350,7 @@ html[data-reduce-motion='true'] *::after {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.anomaly-nav__btn:focus-visible,
-.anomaly-info__toggle:focus-visible {
+.anomaly-nav__btn:focus-visible {
   outline: 2px solid var(--anomaly-neon-cyan);
   outline-offset: 2px;
 }
@@ -1524,59 +1389,11 @@ html[data-reduce-motion='true'] *::after {
 }
 
 @media (max-width: 1023px) {
-  .anomaly-info,
-  .anomaly-info.expanded {
-    top: auto;
-    right: 16px;
-    bottom: 100px;
-    left: 16px;
-    width: auto;
-    max-width: 440px;
-  }
   .anomaly-nav {
     right: auto;
     bottom: 24px;
     left: 16px;
   }
-}
-
-/*
-  Follow Me Sphere, in the pen's own styling. Class names are prefixed: the
-  pen's `.container` and `.shadow` are both Tailwind utilities here.
-*/
-.follow-sphere {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-.follow-sphere__container {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-}
-.follow-sphere__shadow {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.3);
-  border-radius: 50%;
-  width: 92px;
-  height: 32px;
-  top: 80px;
-  left: -48px;
-}
-.follow-sphere__sprite {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transform: translate(-50%, -50%);
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  transition: filter 0.5s ease-in-out;
-  filter: brightness(1.1) contrast(1.2);
-}
-.follow-sphere__sprite.is-hovered {
-  filter: drop-shadow(0 2px 15px rgba(255, 100, 150, 0.65)) brightness(1.1) contrast(1.2);
 }
 
 /*
@@ -1685,8 +1502,8 @@ html[data-reduce-motion='true'] *::after {
 
 /*
   Geometric Aura (`aura`). The scene paints its own navy; this is that colour
-  before the first frame. The caption and the loading notice are the pen's,
-  centred on the scene — which on a wide band sits right of the copy.
+  before the first frame. The loading notice is the pen's, centred on the
+  scene — which on a wide band sits right of the copy.
 */
 .pen-scene--aura {
   background: #050b1a;
@@ -1702,37 +1519,6 @@ html[data-reduce-motion='true'] *::after {
   .aura-ui {
     --aura-centre: 68%;
   }
-  /* The caption is wider than the space right of the centre on a laptop
-     band, so on a wide band it is set against the right-hand margin. */
-  .aura-info {
-    left: auto;
-    right: 88px;
-    transform: none;
-  }
-}
-.aura-info {
-  position: absolute;
-  bottom: 24px;
-  left: var(--aura-centre);
-  transform: translateX(-50%);
-  width: max-content;
-  max-width: calc(100% - 32px);
-  text-align: center;
-  color: hsla(0, 0%, 100%, 0.7);
-  font-size: 14px;
-  line-height: 1.5;
-  letter-spacing: 1px;
-  font-weight: 400;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background: rgba(0, 0, 0, 0.3);
-  padding: 8px 20px;
-  border-radius: 40px;
-  font-family: monospace;
-  border: 1px solid hsla(0, 0%, 100%, 0.15);
-}
-.aura-info__hint {
-  color: #88ccff;
 }
 .aura-loading {
   position: absolute;
@@ -1750,17 +1536,10 @@ html[data-reduce-motion='true'] *::after {
   transition: opacity 1s;
   white-space: nowrap;
 }
-@media (max-width: 600px) {
-  .aura-info {
-    font-size: 10px;
-    bottom: 16px;
-    padding: 6px 16px;
-  }
-}
 
 /*
   TIDES (`tides`). The canvas paints every pixel; the ground is the pen's page
-  colour until it does. The overlay is the pen's, in its own two faces.
+  colour until it does. The slider is the pen's, in its own face.
 */
 .pen-scene--tides {
   background: #06080f;
@@ -1773,43 +1552,6 @@ html[data-reduce-motion='true'] *::after {
   color: #fff;
   font-family: var(--font-tides-mono), monospace;
 }
-.tides-ui__top {
-  position: absolute;
-  top: 32px;
-  right: 88px;
-  display: flex;
-  gap: 40px;
-  align-items: flex-start;
-}
-.tides-label {
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.45em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
-}
-.tides-mood {
-  text-align: right;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.4);
-}
-.tides-mood span {
-  display: block;
-}
-.tides-mood span:first-child {
-  font-size: 12px;
-  line-height: 1.6;
-  letter-spacing: 0.3em;
-  color: rgba(255, 255, 255, 0.9);
-}
-.tides-mood__time {
-  font-family: var(--font-tides-serif), serif;
-  font-size: 26px;
-  line-height: 1.2;
-  font-variant-numeric: tabular-nums;
-  margin-top: 2px;
-  color: #fff;
-}
 .tides-ui__bottom {
   position: absolute;
   right: 88px;
@@ -1818,18 +1560,6 @@ html[data-reduce-motion='true'] *::after {
   flex-direction: column;
   align-items: center;
   gap: 22px;
-}
-.tides-caption {
-  font-family: var(--font-tides-serif), serif;
-  font-size: clamp(1.1rem, 3vw, 1.9rem);
-  line-height: 1.2;
-  letter-spacing: 0.01em;
-  color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
-  text-align: center;
-}
-.tides-caption em {
-  font-style: italic;
 }
 .tides-slider {
   pointer-events: auto;
@@ -1888,20 +1618,10 @@ html[data-reduce-motion='true'] *::after {
   cursor: grab;
 }
 @media (max-width: 1023px) {
-  .tides-ui__top {
-    top: auto;
-    right: 22px;
-    bottom: 150px;
-    left: 22px;
-    justify-content: space-between;
-  }
   .tides-ui__bottom {
     right: 22px;
     bottom: 22px;
     left: 22px;
-  }
-  .tides-label {
-    font-size: 10px;
   }
 }
 
@@ -1972,52 +1692,6 @@ html[data-reduce-motion='true'] *::after {
   right: -1px;
   border-width: 0 2px 2px 0;
 }
-.reactor-header {
-  position: absolute;
-  top: 30px;
-  right: 88px;
-  display: flex;
-  gap: 28px;
-  align-items: flex-start;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-}
-.reactor-title__name {
-  margin: 0;
-  font-size: 1.2rem;
-  line-height: 1.3;
-  font-weight: 700;
-  color: #00f0ff;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.5), 0 0 30px rgba(0, 240, 255, 0.22);
-}
-.reactor-title p {
-  margin: 5px 0 0 0;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  color: #ffbc40;
-  font-family: var(--font-reactor-mono), monospace;
-  text-shadow: 0 0 12px rgba(255, 188, 64, 0.35);
-}
-.reactor-status {
-  font-family: var(--font-reactor-mono), monospace;
-  font-size: 0.7rem;
-  line-height: 1.5;
-  color: rgba(255, 255, 255, 0.55);
-  text-align: right;
-  padding: 12px 14px;
-  border: 1px solid rgba(0, 240, 255, 0.14);
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.18);
-  box-shadow: inset 0 0 24px rgba(0, 240, 255, 0.045), 0 0 30px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-.reactor-status__gold {
-  color: #ffbc40;
-}
-.reactor-status__cyan {
-  color: #00f0ff;
-}
 .reactor-footer {
   position: absolute;
   right: 30px;
@@ -2050,27 +1724,6 @@ html[data-reduce-motion='true'] *::after {
   opacity: 0.65;
   filter: drop-shadow(0 0 8px rgba(255, 188, 64, 0.32));
 }
-/*
-  Particle Explosion (`explosion`) and the two canvas pens that open on black.
-  The explosion's tag is the pen's, in the pen's corner.
-*/
-.explosion-dir {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  z-index: 10;
-  pointer-events: none;
-  background-color: #ffffff;
-  color: #000000;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 12px;
-  line-height: normal;
-  font-weight: bold;
-  min-width: 300px;
-  text-align: center;
-  opacity: 0.5;
-}
-
 /*
   CSS Pyramid Diamond (`diamond`), compiled from the pen's SCSS. The pen's
   `vmin` is `cqmin` here, against the band as a size container, and every name
@@ -2570,12 +2223,3 @@ html[data-reduce-motion='true'] *::after {
   transform: rotateX(-90deg) translateZ(calc(var(--diamond-size) / 2));
 }
 
-@media (max-width: 1023px) {
-  .reactor-header {
-    top: auto;
-    right: 30px;
-    bottom: 84px;
-    left: 30px;
-    justify-content: space-between;
-  }
-}

@@ -22,9 +22,9 @@ import { type BackdropScene, isInteractiveTarget, useBackdropCanvas } from './us
  * square around the middle of the view — often off the edge of it — so the
  * band fills with drifting clouds of colour the more it is pressed.
  *
- * The settings (speed, count, size, spread, palette), the camera and the
- * "Click Anywhere For More" tag are the pen's, and so are two of its quirks,
- * because they are what it looks like:
+ * The settings (speed, count, size, spread, palette) and the camera are the
+ * pen's, and so are two of its quirks, because they are what it looks like.
+ * (Its "Click Anywhere For More" tag is left out on this page.)
  *
  * - Every burst takes its thousand directions from the same first thousand the
  *   pen ever generated, so every burst is the same shape.
@@ -162,12 +162,5 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
 export function ExplosionBackdrop({ className }: { className?: string }) {
   const { hostRef } = useBackdropCanvas(setup, { maxDpr: 2 })
-  return (
-    <>
-      <div ref={hostRef} className={cn('pen-scene pen-scene--explosion', className)} aria-hidden />
-      <div className="explosion-dir" aria-hidden>
-        Click Anywhere For More
-      </div>
-    </>
-  )
+  return <div ref={hostRef} className={cn('pen-scene pen-scene--explosion', className)} aria-hidden />
 }

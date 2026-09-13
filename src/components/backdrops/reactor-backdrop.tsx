@@ -58,17 +58,14 @@ import { motionIsReduced } from './motion'
  *
  * Every shader, geometry, colour, light, count, speed and timing is the pen's,
  * as is the bloom and output pass, the tone mapping, the fog, the gradient
- * ground, the scanlines and vignette over it, and the HUD — the frame, the
- * construct's name, the status readout with its live frequency, and the hint.
+ * ground, the scanlines and vignette over it, and the HUD's frame and hint.
+ * The pen's construct name and status readout are left out on this page.
  *
  * What changed:
  *
  * - **OrbitControls is <OrbitRig>**, at the pen's damping, rotate speed and
  *   distance limits: drag to turn, Ctrl+wheel or pinch to zoom, so the page
  *   still scrolls.
- * - **The HUD is laid out around the headline.** The pen's title sits top
- *   left, where the copy is here; the title and the status sit together top
- *   right, and on a narrow band at the foot.
  * - **The view is centred right of the copy on a wide band**, by offsetting
  *   the camera's frustum, so the perspective is the pen's.
  * - **The rings' per-frame turns step at the pen's 60 a second.**
@@ -117,9 +114,6 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   renderer.outputColorSpace = SRGBColorSpace
   renderer.toneMapping = ACESFilmicToneMapping
   renderer.toneMappingExposure = 0.95
-
-  const section = host.parentElement ?? host
-  const freqUi = section.querySelector<HTMLElement>('[data-reactor-freq]')
 
   const scene = new Scene()
   scene.fog = new FogExp2(0x020204, 0.022)
@@ -716,9 +710,6 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       const randomSurge = smoothstep(0.85, 1.0, Math.sin(time * 7.3) * 0.5 + 0.5)
       sharedUniforms.uFlicker.value = globalPulse + randomSurge * 1.5
 
-      if (freqUi && Math.floor(time * 10) % 5 === 0) {
-        freqUi.textContent = (144.0 + (Math.random() * 2 - 1) + randomSurge * 15).toFixed(1)
-      }
 
       masterGroup.position.y = Math.sin(time * 0.5) * 0.1
 
@@ -808,21 +799,6 @@ export function ReactorBackdrop({ className }: { className?: string }) {
       <div ref={hostRef} className={cn('pen-scene pen-scene--reactor', className)} aria-hidden />
       <div className={cn('reactor-ui', rajdhani.variable, spaceMono.variable)} aria-hidden>
         <div className="reactor-frame" />
-        <div className="reactor-header">
-          <div className="reactor-title">
-            <div className="reactor-title__name">Construct_04</div>
-            <p>Intermittent Energy Matrix</p>
-          </div>
-          <div className="reactor-status">
-            SYS.ONLINE
-            <br />
-            FREQ: <span data-reactor-freq>144.0</span>HZ
-            <br />
-            CORE: <span className="reactor-status__gold">VISIBLE</span>
-            <br />
-            STB: <span className="reactor-status__cyan">99.9%</span>
-          </div>
-        </div>
         <div className="reactor-footer">
           <div className="reactor-hint">Initialize Interaction [Drag/Zoom]</div>
           <svg width="40" height="40" viewBox="0 0 40 40" className="reactor-glyph">
