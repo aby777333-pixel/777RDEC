@@ -20,12 +20,14 @@ export default function EmilTradeGalleryPage() {
         eyebrow={`Gallery · ${EMIL_TRADE}`}
         heading={`${EMIL_TRADE}, screen by screen.`}
         lead={`${EMIL_TRADE_GALLERY.length} captures of the running trading platform, taken ${EMIL_TRADE_GALLERY_DATE}: the terminal and its menus, the one-click ticket and alerts, NEXUS, live TV and video chat, the scanner, the hedging engine, Shield and ABIN.`}
-        imageVariant="emil"
+        backdrop="zeropoint"
+        headingSize="compact"
       />
 
       <Section className="border-b border-line-1">
         <SectionHeader
           eyebrow="The trading platform, running"
+          size="compact"
           title="Every market, one window — shown, not described."
           lead={`${EMIL_TRADE} is the multi-asset platform your traders actually sit in front of. Each capture below carries a heading and a short explanation of what it shows and why it is built that way. The player moves on every ten seconds; click the picture to stop and read it.`}
         />

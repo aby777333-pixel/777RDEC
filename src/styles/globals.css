@@ -1259,6 +1259,23 @@ html[data-reduce-motion='true'] *::after {
 .pen-scene--bursts {
   background: #1e1e1e;
 }
+/*
+  ZERO-POINT (`zeropoint`): the pen's black page, and the two parts of its HUD
+  that are not text — the vignette its UI layer paints and the scanlines laid
+  over everything at 15%. Drawn above the canvas and never catching the pointer.
+*/
+.pen-scene--zeropoint {
+  background: #000;
+}
+.pen-scene--zeropoint::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.03) 50%) 0 0 / 100% 4px,
+    radial-gradient(circle at center, transparent 40%, #000510 140%);
+}
 .pen-scene--intercosmic {
   /* hsla(217, 35%, 5%), the InterCosmic pen's ground. */
   background: #080c11;

@@ -46,6 +46,7 @@ import { SillystringBackdrop } from '@/components/backdrops/sillystring-backdrop
 import { IntercosmicBackdrop } from '@/components/backdrops/intercosmic-backdrop'
 import { NoisycirclesBackdrop } from '@/components/backdrops/noisycircles-backdrop'
 import { LazyRacinglines } from '@/components/backdrops/lazy-racinglines'
+import { LazyZeropoint } from '@/components/backdrops/lazy-zeropoint'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -113,6 +114,7 @@ export type PenBackdrop =
   | 'intercosmic'
   | 'noisycircles'
   | 'racinglines'
+  | 'zeropoint'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -124,6 +126,7 @@ export function PageHero({
   actions,
   imageVariant,
   backdrop = 'image',
+  headingSize = 'default',
   children,
 }: {
   eyebrow: string
@@ -137,6 +140,9 @@ export function PageHero({
    *  Adding one is a new value here, a component, and one opt-in on the page —
    *  nothing else in the site changes. */
   backdrop?: PenBackdrop
+  /** `compact` for a hero that introduces something else — a gallery, say —
+   *  rather than being the page's statement. Every other hero keeps `default`. */
+  headingSize?: 'default' | 'compact'
   children?: React.ReactNode
 }) {
   const pen = backdrop !== 'image'
@@ -163,6 +169,9 @@ export function PageHero({
         backdrop === 'intercosmic' && 'md:min-h-[29rem]',
         // The client portal's morphing figure wants more height than its copy gives it.
         backdrop === 'morph' && 'md:min-h-[34rem]',
+        // ZERO-POINT's core sits in the middle of a wide field of snow; the
+        // compact gallery heading alone would leave it a speck.
+        backdrop === 'zeropoint' && 'min-h-[28rem] md:min-h-[32rem]',
         // The noisy rings reach to half the band's shorter side, so a taller
         // band is a bigger figure behind the search box.
         backdrop === 'noisycircles' && 'min-h-[30rem] md:min-h-[36rem]',
@@ -223,6 +232,7 @@ export function PageHero({
       {backdrop === 'intercosmic' ? <IntercosmicBackdrop className="-z-10" /> : null}
       {backdrop === 'noisycircles' ? <NoisycirclesBackdrop className="-z-10" /> : null}
       {backdrop === 'racinglines' ? <LazyRacinglines className="-z-10" /> : null}
+      {backdrop === 'zeropoint' ? <LazyZeropoint className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM
@@ -252,8 +262,24 @@ export function PageHero({
           )}
         >
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1 className="text-hero uppercase text-chrome">{heading}</h1>
-          <p className="max-w-2xl text-body text-steel-300">{lead}</p>
+          <h1
+            className={cn(
+              'uppercase text-chrome',
+              headingSize === 'compact'
+                ? 'text-[clamp(2rem,3.6vw,3.5rem)] leading-[0.95] tracking-[-0.02em]'
+                : 'text-hero',
+            )}
+          >
+            {heading}
+          </h1>
+          <p
+            className={cn(
+              'max-w-2xl text-steel-300',
+              headingSize === 'compact' ? 'text-[1rem] leading-relaxed' : 'text-body',
+            )}
+          >
+            {lead}
+          </p>
           {actions && actions.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {actions.map((action) => (
