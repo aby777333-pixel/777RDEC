@@ -5,7 +5,7 @@ import Link from 'next/link'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDown, Menu, X } from 'lucide-react'
-import { NAV_GROUPS, NAV_TOP_LINKS } from '@/lib/navigation'
+import { NAV_GROUPS, NAV_MENUS } from '@/lib/navigation'
 import { ButtonLink } from '@/components/ui/button'
 import { RaptorLogo } from '@/components/ui/raptor-logo'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
@@ -78,19 +78,39 @@ export function MobileDrawer() {
                   </Accordion.Content>
                 </Accordion.Item>
               ))}
+              {NAV_MENUS.map((menu) => (
+                <Accordion.Item key={menu.label} value={menu.label} className="border-b border-line-1">
+                  <Accordion.Header>
+                    <Accordion.Trigger className="group flex w-full items-center justify-between py-4 text-left">
+                      <span className="font-display text-[1.125rem] uppercase tracking-tight text-steel-100">
+                        {menu.label}
+                      </span>
+                      <ChevronDown
+                        size={16}
+                        strokeWidth={1.5}
+                        aria-hidden
+                        className="text-steel-500 transition-transform duration-200 group-data-[state=open]:rotate-180"
+                      />
+                    </Accordion.Trigger>
+                  </Accordion.Header>
+                  <Accordion.Content className="overflow-hidden pb-3">
+                    <ul className="flex flex-col gap-0.5">
+                      {menu.links.map((link) => (
+                        <li key={link.href}>
+                          <Link
+                            href={link.href}
+                            onClick={() => setOpen(false)}
+                            className="block rounded-ui px-3 py-2.5 text-[0.9375rem] text-steel-300"
+                          >
+                            {link.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </Accordion.Content>
+                </Accordion.Item>
+              ))}
             </Accordion.Root>
-            {NAV_TOP_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="flex w-full items-center justify-between border-b border-line-1 py-4 text-left"
-              >
-                <span className="font-display text-[1.125rem] uppercase tracking-tight text-steel-100">
-                  {link.label}
-                </span>
-              </Link>
-            ))}
           </div>
 
           <div className="flex flex-col gap-3 border-t border-line-1 px-5 py-5">

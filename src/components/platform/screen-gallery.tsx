@@ -3,11 +3,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, Maximize2, Minimize2, Pause, Play, ScanSearch, SkipBack, SkipForward } from 'lucide-react'
-import { EMIL_GALLERY, galleryFull, galleryThumb } from '@/lib/emil-gallery'
+import { galleryFull, galleryThumb, type GalleryShot } from '@/lib/emil-gallery'
 import { cn } from '@/lib/utils'
 
 /**
- * The EMIL gallery viewer.
+ * The screenshot player behind both galleries — EMIL and EMIL Trade. Each
+ * capture is shown with its heading and explanation underneath, so the player
+ * reads as a guided tour rather than a slideshow.
  *
  * It advances on its own — one capture every ten seconds by default, with a
  * bar showing how long the current one has left — and stops the moment someone
@@ -25,8 +27,14 @@ import { cn } from '@/lib/utils'
 const SPEEDS = [5, 10, 15, 30] as const
 const TICK_MS = 100
 
-export function EmilGallery() {
-  const shots = EMIL_GALLERY
+export function ScreenGallery({
+  shots,
+  label,
+}: {
+  shots: readonly GalleryShot[]
+  /** Names the region for assistive technology, e.g. "EMIL screenshots". */
+  label: string
+}) {
   const [index, setIndex] = useState(0)
   const [playing, setPlaying] = useState(true)
   const [seconds, setSeconds] = useState<(typeof SPEEDS)[number]>(10)
@@ -181,7 +189,7 @@ export function EmilGallery() {
       onKeyDown={onKeyDown}
       role="region"
       aria-roledescription="gallery"
-      aria-label="EMIL screenshots"
+      aria-label={label}
       className={cn(
         'flex flex-col gap-4 rounded-panel border border-line-2 bg-bg-1 p-3 shadow-panel outline-none focus-visible:ring-2 focus-visible:ring-signal md:p-4',
         fullscreen && 'h-screen rounded-none border-0 bg-bg-0',
@@ -313,13 +321,22 @@ export function EmilGallery() {
         </div>
       </div>
 
-      {/* ---- caption ---- */}
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-1">
-        <p className="font-display text-[1.0625rem] uppercase tracking-tight text-steel-100">{shot.title}</p>
-        <p className="text-[0.8125rem] text-steel-500">
-          Captured {shot.time}
-          {shot.redacted ? ' · private details blacked out' : ''}
-        </p>
+      {/* ---- caption: which screen, what it shows, and why ---- */}
+      <div className="flex flex-col gap-2 px-1">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+          <p className="text-eyebrow uppercase text-signal">
+            {String(index + 1).padStart(2, '0')} · {shot.title}
+          </p>
+          <p className="text-[0.8125rem] text-steel-500">
+            Captured {shot.date ? `${shot.date}, ` : ''}
+            {shot.time}
+            {shot.redacted ? ' · private details blacked out' : ''}
+          </p>
+        </div>
+        <h3 className="font-display text-[1.375rem] leading-snug text-steel-100 md:text-[1.625rem]">
+          {shot.heading}
+        </h3>
+        <p className="max-w-4xl text-[0.9375rem] leading-relaxed text-steel-300">{shot.body}</p>
       </div>
 
       {/* ---- strip ---- */}

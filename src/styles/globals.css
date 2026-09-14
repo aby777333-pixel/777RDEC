@@ -2302,27 +2302,6 @@ html[data-reduce-motion='true'] *::after {
 }
 
 /*
-  Pylon Terrain (`pylons`): the pen's page and scene colour before the first
-  frame, and its "Click and drag" line, hidden where there is no WebGPU.
-*/
-.pen-scene--pylons {
-  background: #07080e;
-}
-.pylons-hint {
-  position: absolute;
-  top: 0;
-  right: 88px;
-  z-index: 10;
-  margin: 0.8em;
-  color: #eee;
-  font-size: 0.875rem;
-  pointer-events: none;
-}
-.pen-scene[data-gl='off'] ~ .pylons-hint {
-  display: none;
-}
-
-/*
   Silly String (`sillystring`). Black ground, as asked for this page, so the
   pen's black-on-cream panel ink is inverted to white-on-black. The can stands
   in for the cursor over the band's empty space; over anything that can be
@@ -2469,9 +2448,4 @@ html[data-reduce-motion='true'] *::after {
   background: rgba(255, 255, 255, 0.07);
   border-radius: 2px;
   border: none;
-}
-@media (max-width: 1023px) {
-  .pylons-hint {
-    right: 16px;
-  }
 }

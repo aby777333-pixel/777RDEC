@@ -1,14 +1,14 @@
 import type { Metadata } from 'next'
 import { CtaBand, PageHero } from '@/components/layout/page-shell'
-import { EmilGallery } from '@/components/platform/emil-gallery'
-import { Section } from '@/components/ui/section'
-import { EMIL_SHORT } from '@/lib/brand'
+import { ScreenGallery } from '@/components/platform/screen-gallery'
+import { Section, SectionHeader } from '@/components/ui/section'
+import { EMIL_SHORT, EMIL_TRADE } from '@/lib/brand'
 import { EMIL_GALLERY, EMIL_GALLERY_DATE } from '@/lib/emil-gallery'
 import { pageMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = pageMetadata({
   title: `${EMIL_SHORT} Gallery`,
-  description: `The running ${EMIL_SHORT} applications, screen by screen: the Control Cockpit and the EMIL Trade terminal, captured ${EMIL_GALLERY_DATE}.`,
+  description: `The running ${EMIL_SHORT} Control Cockpit, screen by screen — every surface with a heading and an explanation of what it shows — captured ${EMIL_GALLERY_DATE}.`,
   path: '/platform/emil/gallery',
 })
 
@@ -16,22 +16,29 @@ export default function EmilGalleryPage() {
   return (
     <>
       <PageHero
-        eyebrow={`Platform · ${EMIL_SHORT} · Gallery`}
+        eyebrow={`Gallery · ${EMIL_SHORT}`}
         heading={`${EMIL_SHORT}, screen by screen.`}
         backdrop="colorburst"
-        lead={`${EMIL_GALLERY.length} captures of the running applications, taken ${EMIL_GALLERY_DATE}: every surface of the Control Cockpit, from the morning brief to the organisation settings, and the EMIL Trade terminal. It moves on every ten seconds; click the picture to stop and read it.`}
+        lead={`${EMIL_GALLERY.length} captures of the running ${EMIL_SHORT} Control Cockpit, taken ${EMIL_GALLERY_DATE}: from the morning brief and the markets it reads, through arming, the decision pipeline and the strategy lab, to the settings a team runs it by.`}
       />
 
       <Section className="border-b border-line-1">
-        <EmilGallery />
+        <SectionHeader
+          eyebrow="The Control Cockpit, running"
+          title="Where the intelligence layer is operated."
+          lead={`${EMIL_SHORT} is the intelligence inside the terminal, and the Control Cockpit is where you watch it think, set its limits and decide whether it may act. Each capture below carries a heading and a short explanation of what to look at. The player moves on every ten seconds; click the picture to stop and read it.`}
+        />
+        <div className="mt-12">
+          <ScreenGallery shots={EMIL_GALLERY} label={`${EMIL_SHORT} screenshots`} />
+        </div>
       </Section>
 
       <CtaBand
         heading={`What ${EMIL_SHORT} is, not just what it looks like.`}
-        body="The platform page explains each of these surfaces — what it reads, what it is forbidden from doing, and where the controls sit."
+        body={`The platform page explains each of these surfaces — what it reads, what it is forbidden from doing, and where the controls sit. The ${EMIL_TRADE} gallery shows the trading platform it lives inside.`}
         actions={[
           { label: `Read about ${EMIL_SHORT}`, href: '/platform/emil', variant: 'primary' },
-          { label: 'Request a demo', href: '/request-demo', variant: 'ghost' },
+          { label: `${EMIL_TRADE} gallery`, href: '/platform/emil-trade/gallery', variant: 'ghost' },
         ]}
       />
     </>

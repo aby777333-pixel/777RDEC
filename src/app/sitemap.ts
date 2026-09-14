@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/brand'
-import { NAV_GROUPS } from '@/lib/navigation'
+import { NAV_GROUPS, NAV_MENUS } from '@/lib/navigation'
 import { LEGAL_DOCUMENTS } from '@/lib/copy/legal'
 import { BLOG_CATEGORIES, listContent } from '@/lib/content'
 
@@ -22,7 +22,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const navPaths = NAV_GROUPS.flatMap((group) => [
     group.href,
     ...group.links.map((link) => link.href),
-  ]).filter((href) => href !== '/intelligence/emil')
+  ])
+    .concat(NAV_MENUS.flatMap((menu) => menu.links.map((link) => link.href)))
+    .filter((href) => href !== '/intelligence/emil')
 
   const legalPaths = LEGAL_DOCUMENTS.map((doc) => `/legal/${doc.slug}`)
   const researchPaths = listContent('research').map((e) => `/intelligence/research/${e.slug}`)

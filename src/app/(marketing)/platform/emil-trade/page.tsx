@@ -40,7 +40,7 @@ export default function EmilTradePage() {
         heading={copy.heading}
         lead={copy.lead}
         actions={copy.heroActions}
-        imageVariant="emil"
+        backdrop="racinglines"
       >
         <div className="flex flex-col gap-4">
           <EmilTradeFigures />

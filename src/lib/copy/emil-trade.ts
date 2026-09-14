@@ -43,7 +43,7 @@ export const emilTrade: PageCopy = {
   lead: `${EMIL_TRADE} is the multi-asset trading platform built on Raptor. Forex, metals, energies, indices and crypto in one terminal, with an AI advisor that reads the market beside you, spots the trend and warns you early — and trades on its own only once you have armed it, inside limits you set.`,
   heroActions: [
     { label: 'Request a demo', href: '/request-demo', variant: 'primary' },
-    { label: 'See it running', href: '/platform/emil/gallery', variant: 'ghost' },
+    { label: 'See it running', href: '/platform/emil-trade/gallery', variant: 'ghost' },
   ],
   answers: {
     what: `A complete trading platform: charting, execution, the NEXUS AI trade assistant and an AI advisor, scanners and hedging engines, strategy and EA building, copy trading and prop challenges, research, and a live media and community layer — TV, radio, chat, video and training — in one window instead of five tabs.`,
@@ -260,8 +260,8 @@ export const EMIL_TRADE_FLOOR: readonly SpecGroup[] = [
   {
     label: 'See each other',
     items: [
-      'Live video rooms and one-to-one video chat with peers or your account team',
-      'Screen sharing, so a chart, a setup or a problem can be looked at together',
+      'Video calls with your broker from inside the terminal, for live support, with microphone and camera',
+      'Screen sharing on the call, so a chart, a setup or a problem can be looked at together',
       'Live rooms, a social feed, leaderboards and trading competitions',
     ],
   },

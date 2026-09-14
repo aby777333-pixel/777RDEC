@@ -42,9 +42,10 @@ import { ParticulesBackdrop } from '@/components/backdrops/particules-backdrop'
 import { LazyBoxtunnel } from '@/components/backdrops/lazy-boxtunnel'
 import { SquaresBackdrop } from '@/components/backdrops/squares-backdrop'
 import { LazyLion } from '@/components/backdrops/lazy-lion'
-import { LazyPylons } from '@/components/backdrops/lazy-pylons'
 import { SillystringBackdrop } from '@/components/backdrops/sillystring-backdrop'
 import { IntercosmicBackdrop } from '@/components/backdrops/intercosmic-backdrop'
+import { NoisycirclesBackdrop } from '@/components/backdrops/noisycircles-backdrop'
+import { LazyRacinglines } from '@/components/backdrops/lazy-racinglines'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -108,9 +109,10 @@ export type PenBackdrop =
   | 'boxtunnel'
   | 'squares'
   | 'lion'
-  | 'pylons'
   | 'sillystring'
   | 'intercosmic'
+  | 'noisycircles'
+  | 'racinglines'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -159,6 +161,15 @@ export function PageHero({
         // The InterCosmic sphere is as wide as the band is tall, so a band
         // sized to the copy alone leaves it too little room to turn in.
         backdrop === 'intercosmic' && 'md:min-h-[29rem]',
+        // The client portal's morphing figure wants more height than its copy gives it.
+        backdrop === 'morph' && 'md:min-h-[34rem]',
+        // The noisy rings reach to half the band's shorter side, so a taller
+        // band is a bigger figure behind the search box.
+        backdrop === 'noisycircles' && 'min-h-[30rem] md:min-h-[36rem]',
+        // Racing Lines is a view down two floors of lanes; a deeper band shows
+        // more road between them. Extra top padding rather than only a minimum,
+        // because the EMIL Trade hero's own content already outgrows one.
+        backdrop === 'racinglines' && 'md:min-h-[44rem] md:pt-28 lg:pt-32',
         // Both pens assume a black ground, so the band they back stops
         // following the theme. Only that band — the image hero themes as it
         // always did.
@@ -208,9 +219,10 @@ export function PageHero({
       {backdrop === 'boxtunnel' ? <LazyBoxtunnel className="-z-10" /> : null}
       {backdrop === 'squares' ? <SquaresBackdrop className="-z-10" /> : null}
       {backdrop === 'lion' ? <LazyLion className="-z-10" /> : null}
-      {backdrop === 'pylons' ? <LazyPylons className="-z-10" /> : null}
       {backdrop === 'sillystring' ? <SillystringBackdrop className="-z-10" /> : null}
       {backdrop === 'intercosmic' ? <IntercosmicBackdrop className="-z-10" /> : null}
+      {backdrop === 'noisycircles' ? <NoisycirclesBackdrop className="-z-10" /> : null}
+      {backdrop === 'racinglines' ? <LazyRacinglines className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM

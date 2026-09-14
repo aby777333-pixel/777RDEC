@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import * as NavigationMenu from '@radix-ui/react-navigation-menu'
 import { ChevronDown } from 'lucide-react'
-import { NAV_GROUPS, NAV_TOP_LINKS } from '@/lib/navigation'
+import { NAV_GROUPS, NAV_MENUS } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 
 export function MegaMenu() {
@@ -72,20 +72,48 @@ export function MegaMenu() {
             </NavigationMenu.Content>
           </NavigationMenu.Item>
         ))}
-        {NAV_TOP_LINKS.map((link) => (
-          <NavigationMenu.Item key={link.href}>
-            <NavigationMenu.Link asChild>
-              <Link
-                href={link.href}
-                title={link.description}
-                className={cn(
-                  'inline-flex h-9 shrink-0 items-center whitespace-nowrap rounded-ui px-1.5 text-[0.875rem] text-steel-300 2xl:px-2 2xl:text-[0.9375rem]',
-                  'transition-colors duration-200 hover:bg-bg-2 hover:text-steel-100',
-                )}
-              >
-                {link.label}
-              </Link>
-            </NavigationMenu.Link>
+        {NAV_MENUS.map((menu) => (
+          // Relative, so the compact panel hangs under its own trigger rather
+          // than from the left edge of the bar like the mega panels do.
+          <NavigationMenu.Item key={menu.label} className="relative">
+            <NavigationMenu.Trigger
+              className={cn(
+                'group inline-flex h-9 shrink-0 items-center gap-1 whitespace-nowrap rounded-ui px-1.5 text-[0.875rem] text-steel-300 2xl:px-2 2xl:text-[0.9375rem]',
+                'transition-colors duration-200 hover:bg-bg-2 hover:text-steel-100 data-[state=open]:bg-bg-2 data-[state=open]:text-steel-100',
+              )}
+            >
+              {menu.label}
+              <ChevronDown
+                size={14}
+                strokeWidth={1.5}
+                aria-hidden
+                className="text-steel-500 transition-transform duration-200 group-data-[state=open]:rotate-180"
+              />
+            </NavigationMenu.Trigger>
+            <NavigationMenu.Content
+              className={cn(
+                'absolute left-0 top-full pt-3',
+                'data-[motion=from-start]:animate-ticker-in data-[motion=from-end]:animate-ticker-in',
+              )}
+            >
+              <ul className="surface-sheen flex w-72 flex-col gap-1 overflow-hidden rounded-panel border border-line-2 bg-bg-1 p-3 shadow-panel">
+                {menu.links.map((link) => (
+                  <li key={link.href}>
+                    <NavigationMenu.Link asChild>
+                      <Link
+                        href={link.href}
+                        className="block rounded-ui px-3 py-2.5 transition-colors duration-200 hover:bg-bg-2 hover:shadow-soft"
+                      >
+                        <span className="block text-[0.9375rem] text-steel-100">{link.label}</span>
+                        <span className="mt-0.5 block text-[0.8125rem] leading-snug text-steel-500">
+                          {link.description}
+                        </span>
+                      </Link>
+                    </NavigationMenu.Link>
+                  </li>
+                ))}
+              </ul>
+            </NavigationMenu.Content>
           </NavigationMenu.Item>
         ))}
       </NavigationMenu.List>
