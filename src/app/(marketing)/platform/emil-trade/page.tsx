@@ -13,6 +13,7 @@ import {
   EMIL_TRADE_BUSINESS,
   EMIL_TRADE_FLOOR,
   EMIL_TRADE_MARKETS,
+  EMIL_TRADE_NEXUS,
   EMIL_TRADE_PROTECTION,
   EMIL_TRADE_TERMINAL,
   emilTrade as copy,
@@ -56,6 +57,15 @@ export default function EmilTradePage() {
           lead={`${EMIL_SHORT} sits inside every chart, every ticket and every risk decision. It explains before it suggests, detects the trend and the regime before you have to ask, and warns you — about the market, your margin and your own habits — while there is still time to act on it.`}
         />
         <SpecGroups groups={EMIL_TRADE_AI} className="mt-12" />
+      </Section>
+
+      <Section className="border-b border-line-1">
+        <SectionHeader
+          eyebrow="NEXUS · AI trade assistant"
+          title="A trading companion in the side panel."
+          lead="NEXUS is the assistant you talk to. Ask it about a setup, a position or your own habits and it answers in plain language — then marks the zone on your chart or helps you manage the trade, in one tap."
+        />
+        <SpecGroups groups={EMIL_TRADE_NEXUS} className="mt-12" />
       </Section>
 
       <Section className="wash border-b border-line-1">

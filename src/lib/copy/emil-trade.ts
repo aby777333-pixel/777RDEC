@@ -16,7 +16,9 @@ import { DEFAULT_CTA_ACTIONS, type PageCopy } from './types'
  *    that inventory had parked as unverified: copy trading, PAMM / MAM, prop
  *    challenges, the IB network, KYC / AML, payments, native mobile apps and
  *    the MQL5 converter.
- * 3. The product owner, directly: radio, live video rooms, screen sharing,
+ * 3. The product owner, directly: the NEXUS panel as captured in the
+ *    terminal (its greeting, Active switch, alerts and one-tap actions),
+ *    radio, live video rooms, screen sharing,
  *    live training modules, the AI EA and indicator builder, strategies
  *    attaching to the chart, and trading straight from a strategy.
  *
@@ -35,7 +37,7 @@ import { DEFAULT_CTA_ACTIONS, type PageCopy } from './types'
 
 export const emilTrade: PageCopy = {
   title: EMIL_TRADE,
-  description: `${EMIL_TRADE}: a multi-asset trading platform with an AI advisor, trend detection and early warnings, automation you arm deliberately, strategy and EA building, live TV, radio, chat, video and training inside the terminal.`,
+  description: `${EMIL_TRADE}: a multi-asset trading platform with the NEXUS AI trade assistant, an AI advisor, trend detection and early warnings, automation you arm deliberately, strategy and EA building, live TV, radio, chat, video and training inside the terminal.`,
   eyebrow: `Platform · ${EMIL_TRADE}`,
   heading: 'Every market. One terminal. AI on your terms.',
   lead: `${EMIL_TRADE} is the multi-asset trading platform built on Raptor. Forex, metals, energies, indices and crypto in one terminal, with an AI advisor that reads the market beside you, spots the trend and warns you early — and trades on its own only once you have armed it, inside limits you set.`,
@@ -44,7 +46,7 @@ export const emilTrade: PageCopy = {
     { label: 'See it running', href: '/platform/emil/gallery', variant: 'ghost' },
   ],
   answers: {
-    what: `A complete trading platform: charting, execution, an AI advisor, scanners and hedging engines, strategy and EA building, copy trading and prop challenges, research, and a live media and community layer — TV, radio, chat, video and training — in one window instead of five tabs.`,
+    what: `A complete trading platform: charting, execution, the NEXUS AI trade assistant and an AI advisor, scanners and hedging engines, strategy and EA building, copy trading and prop challenges, research, and a live media and community layer — TV, radio, chat, video and training — in one window instead of five tabs.`,
     who: 'Active traders who want an AI that explains rather than decides for them; strategy builders bringing EAs and indicators from MT5; and brokers, prop firms and fund managers who want to hand all of it to their clients under their own brand.',
     why: 'Most platforms bolt AI on beside the chart and leave risk to the trader’s mood on the day. Here the AI, the automation and the risk rules share one state, and the automation cannot act until you arm it — nor route around the limits you set yourself.',
     connects: `${EMIL_SHORT} is the intelligence inside it. Every order, manual or automated, passes Shield, an independent Guardian and an account-level Risk Governor. For brokers, the same terminal sits on Raptor’s CRM, risk engine, dealing desk and API hub.`,
@@ -53,7 +55,8 @@ export const emilTrade: PageCopy = {
   // Rendered from the constants below, not from here. Kept because the site
   // search indexes `modules`, and these are the names people search for.
   modules: [
-    { title: 'AI advisor', body: 'Pre-trade analysis, morning brief, plain-language questions, voice' },
+    { title: 'NEXUS AI trade assistant', body: 'Ask anything, entry zones, mark zones on the chart, manage trades, psychology coaching, voice' },
+    { title: 'AI advisor', body: 'Pre-trade analysis, morning brief, plain-language questions, agent council' },
     { title: 'AI trend detector', body: 'Trend and regime classification, pattern detection, sentiment' },
     { title: 'AI warnings', body: 'Overtrading, revenge trading, FOMO, margin and news warnings' },
     { title: 'Autonomous trading', body: 'Off, Signal Only, Manual Confirmation, Full Auto — armed by you' },
@@ -146,6 +149,30 @@ export const EMIL_TRADE_BUILD_STEPS: readonly { title: string; body: string }[] 
   },
 ]
 
+/** NEXUS, as its own panel in the terminal presents itself. */
+export const EMIL_TRADE_NEXUS: readonly SpecGroup[] = [
+  {
+    label: 'Talk to it',
+    items: [
+      'Ask NEXUS anything, in plain words, from its panel beside the chart — or open it from the NEXUS button on any screen',
+      'Analyse a setup before you take it: the entry zone, where the idea fails, and the risk you would be carrying',
+      'Review the positions you already hold, and what has changed since you opened them',
+      'Coaching on the psychology of your trading in conversation, and weekly reports on how you actually traded',
+      'Voice mode, for asking without typing (beta)',
+    ],
+  },
+  {
+    label: 'Act on the chart',
+    items: [
+      'One-tap actions under the conversation: Entry Zone, Mark Zone on Chart and Manage Trades',
+      'The zone it finds is marked on your chart, not left in a paragraph for you to redraw',
+      'Its own alerts, switched and managed from the top of the panel',
+      'An Active switch shown at the top of the panel at all times, so you know whether NEXUS is engaged',
+      'Every conversation carries its own line: AI analysis, not financial advice',
+    ],
+  },
+]
+
 export const EMIL_TRADE_AI: readonly SpecGroup[] = [
   {
     label: 'The AI advisor',
@@ -153,9 +180,8 @@ export const EMIL_TRADE_AI: readonly SpecGroup[] = [
       'Pre-trade analysis on every order ticket: stop and target suggestions, and a risk read before you commit',
       'A daily morning brief — market pulse, your watchlist, the calendar, the risks, and the questions worth investigating today',
       'Ask in plain words, in English or your own language: “compare EURUSD and GBPUSD”, “find a hedge for gold”, “show my exposure”',
-      'Voice mode: speak your question or your order instead of typing it (beta)',
       'An agent council — several AI agents reason about the same market and show where they agree and where they conflict',
-      'Structured trade cards with entry, risk and targets defined, and weekly reports on how you actually traded',
+      'Structured trade cards with entry, risk and targets defined',
     ],
   },
   {
