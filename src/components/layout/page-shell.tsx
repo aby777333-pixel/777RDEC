@@ -174,7 +174,7 @@ export function PageHero({
         backdrop === 'colorburst' && 'md:min-h-[30rem]',
         // The warp reveals the logo in the space beside the copy, and needs the
         // height to show it whole.
-        backdrop === 'warp' && 'md:min-h-[36rem]',
+        backdrop === 'warp' && 'md:min-h-[42rem]',
         // The noisy rings reach to half the band's shorter side, so a taller
         // band is a bigger figure behind the search box.
         backdrop === 'noisycircles' && 'min-h-[30rem] md:min-h-[36rem]',
