@@ -24,7 +24,6 @@ import { CipherBackdrop } from '@/components/backdrops/cipher-backdrop'
 import { HandshakeBackdrop } from '@/components/backdrops/handshake-backdrop'
 import { AttentionBackdrop } from '@/components/backdrops/attention-backdrop'
 import { ConstellationBackdrop } from '@/components/backdrops/constellation-backdrop'
-import { AssembleBackdrop } from '@/components/backdrops/assemble-backdrop'
 import { BlackholeBackdrop } from '@/components/backdrops/blackhole-backdrop'
 import { SwitchboardBackdrop } from '@/components/backdrops/switchboard-backdrop'
 import { SandboxBackdrop } from '@/components/backdrops/sandbox-backdrop'
@@ -45,6 +44,7 @@ import { SquaresBackdrop } from '@/components/backdrops/squares-backdrop'
 import { LazyLion } from '@/components/backdrops/lazy-lion'
 import { LazyPylons } from '@/components/backdrops/lazy-pylons'
 import { SillystringBackdrop } from '@/components/backdrops/sillystring-backdrop'
+import { IntercosmicBackdrop } from '@/components/backdrops/intercosmic-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -90,7 +90,6 @@ export type PenBackdrop =
   | 'handshake'
   | 'attention'
   | 'constellation'
-  | 'assemble'
   | 'blackhole'
   | 'switchboard'
   | 'sandbox'
@@ -111,6 +110,7 @@ export type PenBackdrop =
   | 'lion'
   | 'pylons'
   | 'sillystring'
+  | 'intercosmic'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -156,6 +156,9 @@ export function PageHero({
         // the copy.
         backdrop === 'tides' && 'pb-28 md:pb-28 lg:pb-28',
         backdrop === 'reactor' && 'pb-24 md:pb-24 lg:pb-24',
+        // The InterCosmic sphere is as wide as the band is tall, so a band
+        // sized to the copy alone leaves it too little room to turn in.
+        backdrop === 'intercosmic' && 'md:min-h-[29rem]',
         // Both pens assume a black ground, so the band they back stops
         // following the theme. Only that band — the image hero themes as it
         // always did.
@@ -187,7 +190,6 @@ export function PageHero({
       {backdrop === 'handshake' ? <HandshakeBackdrop className="-z-10" /> : null}
       {backdrop === 'attention' ? <AttentionBackdrop className="-z-10" /> : null}
       {backdrop === 'constellation' ? <ConstellationBackdrop className="-z-10" /> : null}
-      {backdrop === 'assemble' ? <AssembleBackdrop className="-z-10" /> : null}
       {backdrop === 'blackhole' ? <BlackholeBackdrop className="-z-10" /> : null}
       {backdrop === 'switchboard' ? <SwitchboardBackdrop className="-z-10" /> : null}
       {backdrop === 'sandbox' ? <SandboxBackdrop className="-z-10" /> : null}
@@ -208,6 +210,7 @@ export function PageHero({
       {backdrop === 'lion' ? <LazyLion className="-z-10" /> : null}
       {backdrop === 'pylons' ? <LazyPylons className="-z-10" /> : null}
       {backdrop === 'sillystring' ? <SillystringBackdrop className="-z-10" /> : null}
+      {backdrop === 'intercosmic' ? <IntercosmicBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM

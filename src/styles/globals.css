@@ -1259,6 +1259,10 @@ html[data-reduce-motion='true'] *::after {
 .pen-scene--bursts {
   background: #1e1e1e;
 }
+.pen-scene--intercosmic {
+  /* hsla(217, 35%, 5%), the InterCosmic pen's ground. */
+  background: #080c11;
+}
 
 .pen-scene--drift {
   background: #0a121b;
