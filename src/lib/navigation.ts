@@ -1,4 +1,4 @@
-import { EMIL_SHORT } from './brand'
+import { EMIL_SHORT, EMIL_TRADE } from './brand'
 
 export type NavLink = { label: string; href: string; description: string }
 export type NavGroup = { label: string; href: string; blurb: string; links: readonly NavLink[] }
@@ -10,6 +10,7 @@ export const NAV_GROUPS: readonly NavGroup[] = [
     blurb: 'The trading surface and everything that makes it decisive.',
     links: [
       { label: 'Raptor Terminal', href: '/platform/terminal', description: 'Analysis and execution in one surface.' },
+      { label: EMIL_TRADE, href: '/platform/emil-trade', description: 'Multi-asset trading, with an AI advisor.' },
       { label: 'Modules', href: '/platform/modules', description: 'The twenty modules the stack is built from.' },
       { label: EMIL_SHORT, href: '/platform/emil', description: 'The intelligence layer inside the terminal.' },
       { label: `${EMIL_SHORT} Gallery`, href: '/platform/emil/gallery', description: 'The running apps, screen by screen.' },
@@ -106,6 +107,7 @@ export const NAV_TOP_LINKS: readonly NavLink[] = [
 
 export const FOOTER_PRODUCT_LINKS: readonly NavLink[] = [
   { label: 'Terminal', href: '/platform/terminal', description: '' },
+  { label: EMIL_TRADE, href: '/platform/emil-trade', description: '' },
   { label: EMIL_SHORT, href: '/platform/emil', description: '' },
   { label: 'CRM', href: '/brokers/crm', description: '' },
   { label: 'Client Portal', href: '/brokers/client-portal', description: '' },

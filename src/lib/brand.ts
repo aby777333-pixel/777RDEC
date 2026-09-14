@@ -16,6 +16,9 @@ export const LOGO_TAGLINE = 'PRECISION. POWER. PERFORMANCE.'
 export const EMIL_EXPANSION = 'Evolving Market Intelligence Layer'
 export const EMIL_SHORT = 'EMIL'
 
+/** The trading platform EMIL ships inside. One spelling, everywhere. */
+export const EMIL_TRADE = 'EMIL Trade'
+
 /** Legal entity block. Rendered by <LegalEntityBlock> in the footer. */
 export const LEGAL_ENTITY_NAME = '777 Capital Markets Limited'
 export const LEGAL_ENTITY_JURISDICTION = 'United Kingdom'
