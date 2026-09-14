@@ -46,5 +46,14 @@ If the new artwork is dark enough to work on white, delete
 
 ## Favicon
 
-`public/favicon.svg` is the abstracted wing on black. Replace it with a crop
-of the falcon head when convenient — keep it as an SVG and keep the filename.
+The falcon mark alone, on a black square, cut from `Raptor transparent logo.png`
+(columns 69–250, trimmed to its alpha bounds):
+
+| File | Size | Mark fills |
+|---|---|---|
+| `public/favicon.ico` | 16, 32, 48px | 92%, lightly sharpened for the tab |
+| `public/favicon.png` | 512px | 84% |
+| `public/apple-touch-icon.png` | 180px | 80%, so iOS rounding does not clip the wing |
+
+There is deliberately no SVG favicon. Browsers pick a vector icon over a PNG
+when both are listed, so any SVG added back will replace the falcon in the tab.

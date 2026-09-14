@@ -38,12 +38,14 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   formatDetection: { telephone: false, address: false, email: false },
   icons: {
-    // Generated from the falcon mark in public/brand/raptor-logo.png, on a
-    // dark plate so it stays legible in any browser tab. The SVG wing is kept
-    // as a fallback for clients that prefer vector.
+    // The falcon mark alone, cut from the master logo and filling a black
+    // square. No SVG: browsers prefer a vector icon when one is listed, and the
+    // old wing-lines SVG was winning the tab over the falcon. The .ico carries
+    // 16, 32 and 48px renders sharpened for the tab; it also answers the
+    // /favicon.ico request browsers make on their own.
     icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
       { url: '/favicon.png', type: 'image/png', sizes: '512x512' },
-      { url: '/favicon.svg', type: 'image/svg+xml' },
     ],
     apple: '/apple-touch-icon.png',
   },
