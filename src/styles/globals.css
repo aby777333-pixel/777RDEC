@@ -1260,6 +1260,62 @@ html[data-reduce-motion='true'] *::after {
   background: #1e1e1e;
 }
 /*
+  Raptor deep space (`cosmic`, the white-label hero): the pen's black ground,
+  its logo reveal and its phase line, above the canvas. Both are centred on the
+  vanishing point, published by the scene as --cosmic-x; the logo is capped to
+  the space beside the copy. Below lg the copy spans the band and the overlay
+  is not shown.
+*/
+.pen-scene--cosmic {
+  background: #000;
+}
+.cosmic-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+}
+@media (min-width: 1024px) {
+  .cosmic-overlay {
+    display: block;
+  }
+}
+.cosmic-reveal {
+  position: absolute;
+  left: var(--cosmic-x, 50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.cosmic-logo {
+  display: block;
+  width: min(520px, 34vw);
+  height: auto;
+  opacity: 0;
+  transform: scale(0.82);
+  filter: blur(18px) brightness(1.8);
+  transition:
+    opacity 1.6s ease,
+    transform 2s cubic-bezier(0.16, 0.84, 0.2, 1),
+    filter 2s ease;
+}
+.cosmic-logo.show {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0) brightness(1.05) drop-shadow(0 0 28px rgba(255, 255, 255, 0.22));
+}
+.cosmic-hud {
+  position: absolute;
+  bottom: 26px;
+  left: var(--cosmic-x, 50%);
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.38);
+  letter-spacing: 0.45em;
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+/*
   Raptor warp (`warp`, the request-demo hero): the pen's ground, and its brand
   overlay — eyebrow, logo, tagline and the status line — above the canvas. The
   brand is centred on the vanishing point, which the scene publishes as
