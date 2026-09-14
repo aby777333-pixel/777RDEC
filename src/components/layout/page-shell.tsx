@@ -126,7 +126,6 @@ export function PageHero({
   actions,
   imageVariant,
   backdrop = 'image',
-  headingSize = 'default',
   children,
 }: {
   eyebrow: string
@@ -140,9 +139,6 @@ export function PageHero({
    *  Adding one is a new value here, a component, and one opt-in on the page —
    *  nothing else in the site changes. */
   backdrop?: PenBackdrop
-  /** `compact` for a hero that introduces something else — a gallery, say —
-   *  rather than being the page's statement. Every other hero keeps `default`. */
-  headingSize?: 'default' | 'compact'
   children?: React.ReactNode
 }) {
   const pen = backdrop !== 'image'
@@ -169,9 +165,11 @@ export function PageHero({
         backdrop === 'intercosmic' && 'md:min-h-[29rem]',
         // The client portal's morphing figure wants more height than its copy gives it.
         backdrop === 'morph' && 'md:min-h-[34rem]',
-        // ZERO-POINT's core sits in the middle of a wide field of snow; the
-        // compact gallery heading alone would leave it a speck.
-        backdrop === 'zeropoint' && 'min-h-[28rem] md:min-h-[32rem]',
+        // ZERO-POINT's core sits in the middle of a wide field of snow, and a
+        // band sized to the gallery's short copy would leave it a speck.
+        backdrop === 'zeropoint' && 'min-h-[30rem] md:min-h-[38rem]',
+        // The EMIL gallery's colour burst wants a little more room than its copy gives it.
+        backdrop === 'colorburst' && 'md:min-h-[30rem]',
         // The noisy rings reach to half the band's shorter side, so a taller
         // band is a bigger figure behind the search box.
         backdrop === 'noisycircles' && 'min-h-[30rem] md:min-h-[36rem]',
@@ -262,24 +260,8 @@ export function PageHero({
           )}
         >
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h1
-            className={cn(
-              'uppercase text-chrome',
-              headingSize === 'compact'
-                ? 'text-[clamp(2rem,3.6vw,3.5rem)] leading-[0.95] tracking-[-0.02em]'
-                : 'text-hero',
-            )}
-          >
-            {heading}
-          </h1>
-          <p
-            className={cn(
-              'max-w-2xl text-steel-300',
-              headingSize === 'compact' ? 'text-[1rem] leading-relaxed' : 'text-body',
-            )}
-          >
-            {lead}
-          </p>
+          <h1 className="text-hero uppercase text-chrome">{heading}</h1>
+          <p className="max-w-2xl text-body text-steel-300">{lead}</p>
           {actions && actions.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {actions.map((action) => (
@@ -372,10 +354,14 @@ export function CtaBand({
 }) {
   return (
     <Section grid className="wash">
-      <Panel tone="raised" size="panel" className="flex flex-col gap-6 p-8 md:p-12">
-        <h2 className="max-w-3xl text-h2 uppercase text-steel-100">{heading}</h2>
-        <p className="max-w-2xl text-body text-steel-300">{body}</p>
-        <div className="flex flex-wrap gap-3">
+      <Panel
+        tone="raised"
+        size="panel"
+        className="flex flex-col items-center gap-6 p-8 text-center md:p-12"
+      >
+        <h2 className="mx-auto max-w-5xl text-h2 uppercase text-steel-100">{heading}</h2>
+        <p className="mx-auto max-w-4xl text-body text-steel-300">{body}</p>
+        <div className="flex flex-wrap justify-center gap-3">
           {actions.map((action) => (
             <ButtonLink
               key={action.href}

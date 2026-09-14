@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { CtaBand, PageHero } from '@/components/layout/page-shell'
 import { RiskLine } from '@/components/layout/risk-line'
 import { ScreenGallery } from '@/components/platform/screen-gallery'
-import { Section, SectionHeader } from '@/components/ui/section'
+import { Section } from '@/components/ui/section'
 import { EMIL_TRADE } from '@/lib/brand'
 import { EMIL_TRADE_GALLERY, EMIL_TRADE_GALLERY_DATE } from '@/lib/emil-gallery'
 import { pageMetadata } from '@/lib/seo'
@@ -21,19 +21,10 @@ export default function EmilTradeGalleryPage() {
         heading={`${EMIL_TRADE}, screen by screen.`}
         lead={`${EMIL_TRADE_GALLERY.length} captures of the running trading platform, taken ${EMIL_TRADE_GALLERY_DATE}: the terminal and its menus, the one-click ticket and alerts, NEXUS, live TV and video chat, the scanner, the hedging engine, Shield and ABIN.`}
         backdrop="zeropoint"
-        headingSize="compact"
       />
 
       <Section className="border-b border-line-1">
-        <SectionHeader
-          eyebrow="The trading platform, running"
-          size="compact"
-          title="Every market, one window — shown, not described."
-          lead={`${EMIL_TRADE} is the multi-asset platform your traders actually sit in front of. Each capture below carries a heading and a short explanation of what it shows and why it is built that way. The player moves on every ten seconds; click the picture to stop and read it.`}
-        />
-        <div className="mt-12">
-          <ScreenGallery shots={EMIL_TRADE_GALLERY} label={`${EMIL_TRADE} screenshots`} />
-        </div>
+        <ScreenGallery shots={EMIL_TRADE_GALLERY} label={`${EMIL_TRADE} screenshots`} />
         <div className="mt-10 flex max-w-3xl flex-col gap-3">
           <RiskLine />
           <p className="text-data text-steel-500">

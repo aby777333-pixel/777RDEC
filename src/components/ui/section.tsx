@@ -26,15 +26,12 @@ export function SectionHeader({
   lead,
   className,
   align = 'left',
-  size = 'default',
 }: {
   eyebrow?: string
   title: React.ReactNode
   lead?: string
   className?: string
   align?: 'left' | 'center'
-  /** `compact` for a heading that introduces a component rather than a section of argument. */
-  size?: 'default' | 'compact'
 }) {
   return (
     <div
@@ -45,22 +42,9 @@ export function SectionHeader({
       )}
     >
       {eyebrow ? <Eyebrow>{eyebrow}</Eyebrow> : null}
-      <h2
-        className={cn(
-          'w-full uppercase text-steel-100',
-          size === 'compact' ? 'text-[clamp(1.75rem,3vw,2.75rem)] leading-[1.02] tracking-[-0.02em]' : 'text-h2',
-        )}
-      >
-        {title}
-      </h2>
+      <h2 className="w-full text-h2 uppercase text-steel-100">{title}</h2>
       {lead ? (
-        <p
-          className={cn(
-            'w-full max-w-2xl text-steel-300',
-            size === 'compact' ? 'text-[1rem] leading-relaxed' : 'text-body',
-            align === 'center' && 'mx-auto',
-          )}
-        >
+        <p className={cn('w-full max-w-2xl text-body text-steel-300', align === 'center' && 'mx-auto')}>
           {lead}
         </p>
       ) : null}

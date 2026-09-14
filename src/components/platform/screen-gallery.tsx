@@ -333,9 +333,10 @@ export function ScreenGallery({
             {shot.redacted ? ' · private details blacked out' : ''}
           </p>
         </div>
-        <h3 className="font-display text-[1.375rem] leading-snug text-steel-100 md:text-[1.625rem]">
+        {/* h2: the galleries put the player straight under the page's h1. */}
+        <h2 className="font-display text-[1.375rem] leading-snug text-steel-100 md:text-[1.625rem]">
           {shot.heading}
-        </h3>
+        </h2>
         <p className="max-w-4xl text-[0.9375rem] leading-relaxed text-steel-300">{shot.body}</p>
       </div>
 

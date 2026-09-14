@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { CtaBand, PageHero } from '@/components/layout/page-shell'
 import { ScreenGallery } from '@/components/platform/screen-gallery'
-import { Section, SectionHeader } from '@/components/ui/section'
+import { Section } from '@/components/ui/section'
 import { EMIL_SHORT, EMIL_TRADE } from '@/lib/brand'
 import { EMIL_GALLERY, EMIL_GALLERY_DATE } from '@/lib/emil-gallery'
 import { pageMetadata } from '@/lib/seo'
@@ -23,14 +23,7 @@ export default function EmilGalleryPage() {
       />
 
       <Section className="border-b border-line-1">
-        <SectionHeader
-          eyebrow="The Control Cockpit, running"
-          title="Where the intelligence layer is operated."
-          lead={`${EMIL_SHORT} is the intelligence inside the terminal, and the Control Cockpit is where you watch it think, set its limits and decide whether it may act. Each capture below carries a heading and a short explanation of what to look at. The player moves on every ten seconds; click the picture to stop and read it.`}
-        />
-        <div className="mt-12">
-          <ScreenGallery shots={EMIL_GALLERY} label={`${EMIL_SHORT} screenshots`} />
-        </div>
+        <ScreenGallery shots={EMIL_GALLERY} label={`${EMIL_SHORT} screenshots`} />
       </Section>
 
       <CtaBand
