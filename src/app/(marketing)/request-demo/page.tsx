@@ -32,6 +32,7 @@ export default function RequestDemoPage() {
       <PageHero
         eyebrow="Request a demo"
         heading="Bring your own requirements."
+        backdrop="warp"
         lead="The most useful demo is the one configured against your desk: your instruments, your onboarding flow, your commission structures, your risk limits. Tell us what matters and we will set it up before the call."
       />
 

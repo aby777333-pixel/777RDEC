@@ -47,6 +47,7 @@ import { IntercosmicBackdrop } from '@/components/backdrops/intercosmic-backdrop
 import { NoisycirclesBackdrop } from '@/components/backdrops/noisycircles-backdrop'
 import { LazyRacinglines } from '@/components/backdrops/lazy-racinglines'
 import { LazyZeropoint } from '@/components/backdrops/lazy-zeropoint'
+import { WarpBackdrop } from '@/components/backdrops/warp-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -115,6 +116,7 @@ export type PenBackdrop =
   | 'noisycircles'
   | 'racinglines'
   | 'zeropoint'
+  | 'warp'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -170,6 +172,9 @@ export function PageHero({
         backdrop === 'zeropoint' && 'min-h-[30rem] md:min-h-[38rem]',
         // The EMIL gallery's colour burst wants a little more room than its copy gives it.
         backdrop === 'colorburst' && 'md:min-h-[30rem]',
+        // The warp reveals the logo in the space beside the copy, and needs the
+        // height to show it whole.
+        backdrop === 'warp' && 'md:min-h-[36rem]',
         // The noisy rings reach to half the band's shorter side, so a taller
         // band is a bigger figure behind the search box.
         backdrop === 'noisycircles' && 'min-h-[30rem] md:min-h-[36rem]',
@@ -231,6 +236,7 @@ export function PageHero({
       {backdrop === 'noisycircles' ? <NoisycirclesBackdrop className="-z-10" /> : null}
       {backdrop === 'racinglines' ? <LazyRacinglines className="-z-10" /> : null}
       {backdrop === 'zeropoint' ? <LazyZeropoint className="-z-10" /> : null}
+      {backdrop === 'warp' ? <WarpBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM

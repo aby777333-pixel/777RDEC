@@ -1260,6 +1260,82 @@ html[data-reduce-motion='true'] *::after {
   background: #1e1e1e;
 }
 /*
+  Raptor warp (`warp`, the request-demo hero): the pen's ground, and its brand
+  overlay — eyebrow, logo, tagline and the status line — above the canvas. The
+  brand is centred on the vanishing point, which the scene publishes as
+  --warp-x. The pen never sets a text colour, which leaves its eyebrow, tagline
+  and status line black on black; they are white here, at the pen's opacities.
+  Below lg the copy spans the band, so the overlay is not shown.
+*/
+.pen-scene--warp {
+  background: #020306;
+}
+.warp-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  color: #fff;
+  display: none;
+}
+@media (min-width: 1024px) {
+  .warp-overlay {
+    display: block;
+  }
+}
+.warp-brand {
+  position: absolute;
+  left: var(--warp-x, 50%);
+  top: 50%;
+  width: max-content;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform: translate(-50%, -50%) scale(0.92);
+  opacity: 0;
+  filter: blur(12px);
+  transition:
+    opacity 1s ease,
+    filter 1.2s ease,
+    transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.warp-brand.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: translate(-50%, -50%) scale(1);
+}
+.warp-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.55em;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+.warp-logo {
+  display: block;
+  width: clamp(240px, 26vw, 460px);
+  height: auto;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.25)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.08));
+}
+.warp-tagline {
+  margin-top: 25px;
+  font-size: clamp(11px, 1.2vw, 16px);
+  letter-spacing: 0.45em;
+  opacity: 0.7;
+}
+.warp-status {
+  position: absolute;
+  bottom: 28px;
+  left: var(--warp-x, 50%);
+  transform: translateX(-50%);
+  font-size: 9px;
+  letter-spacing: 0.38em;
+  opacity: 0.35;
+  white-space: nowrap;
+}
+
+/*
   ZERO-POINT (`zeropoint`): the pen's black page, and the two parts of its HUD
   that are not text — the vignette its UI layer paints and the scanlines laid
   over everything at 15%. Drawn above the canvas and never catching the pointer.
