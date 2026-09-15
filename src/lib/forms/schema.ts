@@ -63,16 +63,15 @@ export const leadSchema = z.object({
   email: z.string().trim().toLowerCase().email('Please enter a valid email address.').max(200),
   company: z.string().trim().max(160).optional().or(z.literal('')),
   role: z.string().trim().max(120).optional().or(z.literal('')),
-  /** Optional. E.164, checked against the number's own country plan. */
+  /** Required. E.164, checked against the number's own country plan. */
   phone: z
-    .string()
+    .string({ required_error: 'Please enter your phone number.' })
     .trim()
+    .min(1, 'Please enter your phone number.')
     .max(32)
     .refine((value) => value === '' || isValidE164(value), {
       message: 'Please enter a valid phone number for the selected country.',
-    })
-    .optional()
-    .or(z.literal('')),
+    }),
   phoneCountry: z.string().trim().max(2).optional().or(z.literal('')),
   audience: z.enum(['trader', 'broker', 'institution', 'prop', 'developer', 'other'], {
     errorMap: () => ({ message: 'Please choose the option that best describes you.' }),

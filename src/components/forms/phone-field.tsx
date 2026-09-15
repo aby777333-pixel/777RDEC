@@ -30,10 +30,17 @@ import { cn } from '@/lib/utils'
 export function PhoneField({
   error,
   className,
+  onValidityChange,
 }: {
   /** The server's message for this field, when the last submission had one. */
   error?: string
   className?: string
+  /**
+   * Called whenever the number becomes valid or stops being valid — by typing,
+   * pasting a full international number, or choosing another country — so the
+   * form can clear its "check the highlighted fields" message.
+   */
+  onValidityChange?: (valid: boolean) => void
 }) {
   const countries = useMemo(() => phoneCountries(), [])
   const [country, setCountry] = useState<CountryCode>('GB')
@@ -131,6 +138,12 @@ export function PhoneField({
 
   const hasNumber = national.replace(/[^\d]/g, '').length > 0
   const valid = hasNumber && isValidPhone(national, country)
+
+  const onValidityRef = useRef(onValidityChange)
+  onValidityRef.current = onValidityChange
+  useEffect(() => {
+    onValidityRef.current?.(valid)
+  }, [valid])
   const localError = touched && hasNumber && !valid ? 'This does not look like a valid number for the selected country.' : undefined
   // The server's message stands until the number is edited; after that the
   // live check speaks for the field.
@@ -141,7 +154,7 @@ export function PhoneField({
     <div ref={rootRef} className={cn('relative flex flex-col gap-2', className)}>
       <label htmlFor="phoneNational" className="text-eyebrow uppercase text-steel-500">
         Phone
-        <span className="ml-1.5 normal-case tracking-normal text-steel-700">(optional)</span>
+        <span className="ml-1 text-signal">*</span>
       </label>
 
       <input type="hidden" name="phone" value={e164} />
@@ -183,6 +196,8 @@ export function PhoneField({
           type="tel"
           inputMode="tel"
           autoComplete="tel-national"
+          required
+          aria-required="true"
           placeholder="Phone number"
           value={national}
           onChange={(event) => {

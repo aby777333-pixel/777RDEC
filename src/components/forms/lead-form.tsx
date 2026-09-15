@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 // React 18 / Next 14: the form-state hook lives in react-dom.
 // (It becomes React's useActionState under React 19.)
 import { useFormState, useFormStatus } from 'react-dom'
@@ -18,7 +18,6 @@ import {
   type FormState,
 } from '@/lib/forms/schema'
 import { cn } from '@/lib/utils'
-import { isPhoneCountry, isValidPhone } from '@/lib/forms/phone'
 import { PhoneField } from './phone-field'
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
@@ -47,12 +46,6 @@ function fieldIsValid(field: HTMLInputElement | HTMLSelectElement | HTMLTextArea
       return value.length <= 80
     case 'message':
       return value.length <= 4000
-    case 'phoneNational': {
-      // Optional: empty is fine; otherwise it must fit the chosen country.
-      if (value.length === 0) return true
-      const country = field.form?.querySelector<HTMLInputElement>('input[name=phoneCountry]')?.value ?? ''
-      return isPhoneCountry(country) && isValidPhone(value, country)
-    }
     default:
       return false
   }
@@ -89,6 +82,17 @@ export function LeadForm({
   const hadFieldErrors = submittedErrors !== undefined && Object.keys(submittedErrors).length > 0
   const allCorrected = hadFieldErrors && Object.keys(fieldErrors ?? {}).length === 0
 
+  /** Records whether a field that came back with an error is now fixed. */
+  const markCorrected = useCallback((key: string, valid: boolean) => {
+    setCorrected((previous) => {
+      if (valid === previous.has(key)) return previous
+      const next = new Set(previous)
+      if (valid) next.add(key)
+      else next.delete(key)
+      return next
+    })
+  }, [])
+
   const trackCorrection = (event: React.FormEvent<HTMLFormElement>) => {
     if (!submittedErrors) return
     const field = event.target
@@ -99,17 +103,10 @@ export function LeadForm({
     ) {
       return
     }
-    // The phone's visible input reports against the submitted `phone` field.
-    const key = field.name === 'phoneNational' ? 'phone' : field.name
-    if (!(key in submittedErrors)) return
-    const valid = fieldIsValid(field)
-    setCorrected((previous) => {
-      if (valid === previous.has(key)) return previous
-      const next = new Set(previous)
-      if (valid) next.add(key)
-      else next.delete(key)
-      return next
-    })
+    // The phone field reports its own validity (see onValidityChange below),
+    // because its value is only settled after its country is.
+    if (field.name === 'phoneNational' || !(field.name in submittedErrors)) return
+    markCorrected(field.name, fieldIsValid(field))
   }
   const freemailWarning = email.includes('@') && isFreemail(email)
 
@@ -196,7 +193,12 @@ export function LeadForm({
             />
           </Field>
 
-          <PhoneField error={fieldErrors?.phone} />
+          <PhoneField
+            error={fieldErrors?.phone}
+            onValidityChange={(valid) => {
+              if (submittedErrors && 'phone' in submittedErrors) markCorrected('phone', valid)
+            }}
+          />
 
           <Field label="Company" name="company" error={fieldErrors?.company}>
             <input
