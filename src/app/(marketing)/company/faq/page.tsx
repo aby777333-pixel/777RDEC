@@ -4,7 +4,7 @@ import { AnswerGrid, CtaBand, PageHero } from '@/components/layout/page-shell'
 import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { FAQ_GROUPS, faq as copy } from '@/lib/copy/engage'
-import { pageMetadata } from '@/lib/seo'
+import { jsonLdScript, pageMetadata } from '@/lib/seo'
 import { SITE_URL } from '@/lib/brand'
 import { cn } from '@/lib/utils'
 
@@ -85,7 +85,7 @@ export default function FaqPage() {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd()) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd()) }}
       />
     </>
   )

@@ -5,7 +5,14 @@ import { ThemeProvider } from '@/components/layout/theme-provider'
 import { BrandProvider } from '@/components/layout/brand-provider'
 import { logoSources } from '@/lib/brand-assets'
 import { SITE_NAME, SITE_TAGLINE, SITE_URL } from '@/lib/brand'
-import { organizationJsonLd } from '@/lib/seo'
+import {
+  INDEXABLE_ROBOTS,
+  SITE_LOCALE,
+  jsonLdScript,
+  ogImageUrl,
+  organizationJsonLd,
+  websiteJsonLd,
+} from '@/lib/seo'
 
 const display = Space_Grotesk({
   subsets: ['latin'],
@@ -27,6 +34,25 @@ const mono = JetBrains_Mono({
   display: 'swap',
 })
 
+/**
+ * Search Console / Bing Webmaster Tools ownership tags. Each is emitted only
+ * when its variable is set in the Netlify build environment, so nothing ships
+ * with a placeholder code. DNS verification needs none of these.
+ */
+function siteVerification(): Metadata['verification'] {
+  const google = process.env.GOOGLE_SITE_VERIFICATION?.trim()
+  const bing = process.env.BING_SITE_VERIFICATION?.trim()
+  const yandex = process.env.YANDEX_SITE_VERIFICATION?.trim()
+  const other: Record<string, string> = {}
+  if (bing) other['msvalidate.01'] = bing
+  if (!google && !yandex && !bing) return undefined
+  return {
+    ...(google ? { google } : {}),
+    ...(yandex ? { yandex } : {}),
+    ...(bing ? { other } : {}),
+  }
+}
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -36,6 +62,27 @@ export const metadata: Metadata = {
   description:
     'The market does not stand still. Neither should your technology. Terminal, CRM, client portal, risk engine, API and an intelligence layer — one connected ecosystem.',
   applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: 'technology',
+  // Every page sets its own robots, canonical and cards through pageMetadata();
+  // these are the fallbacks for anything that does not.
+  robots: INDEXABLE_ROBOTS,
+  openGraph: {
+    type: 'website',
+    siteName: SITE_NAME,
+    locale: SITE_LOCALE,
+    url: SITE_URL,
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    images: [{ url: ogImageUrl(SITE_TAGLINE, '/'), width: 1200, height: 630, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    images: [ogImageUrl(SITE_TAGLINE, '/')],
+  },
+  verification: siteVerification(),
   formatDetection: { telephone: false, address: false, email: false },
   icons: {
     // The falcon mark alone, cut from the master logo and filling a black
@@ -72,7 +119,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script
           type="application/ld+json"
           // Static, build-time constant — no user input reaches this string.
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(organizationJsonLd()) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(websiteJsonLd()) }}
         />
       </body>
     </html>

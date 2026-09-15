@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 import { SITE_URL } from '@/lib/brand'
 import { NAV_GROUPS, NAV_MENUS } from '@/lib/navigation'
 import { LEGAL_DOCUMENTS } from '@/lib/copy/legal'
-import { BLOG_CATEGORIES, listContent } from '@/lib/content'
+import { BLOG_CATEGORIES, listContent, type ContentCollection } from '@/lib/content'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date()
@@ -27,9 +27,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .filter((href) => href !== '/intelligence/emil')
 
   const legalPaths = LEGAL_DOCUMENTS.map((doc) => `/legal/${doc.slug}`)
-  const researchPaths = listContent('research').map((e) => `/intelligence/research/${e.slug}`)
-  const newsPaths = listContent('news').map((e) => `/company/news/${e.slug}`)
-  const blogPaths = listContent('blog').map((e) => `/blog/${e.slug}`)
+
+  // Articles carry a real publication date; use it rather than the build time,
+  // so lastmod only moves when the article does.
+  const published = new Map<string, Date>()
+  const articlePaths = (collection: ContentCollection, base: string) =>
+    listContent(collection).map((entry) => {
+      const path = `${base}/${entry.slug}`
+      const date = new Date(entry.frontmatter.date)
+      if (!Number.isNaN(date.getTime()) && date.getTime() > 0) published.set(path, date)
+      return path
+    })
+  const researchPaths = articlePaths('research', '/intelligence/research')
+  const newsPaths = articlePaths('news', '/company/news')
+  const blogPaths = articlePaths('blog', '/blog')
   const blogCategoryPaths = BLOG_CATEGORIES.map((c) => `/blog/category/${c.slug}`)
 
   const all = Array.from(
@@ -46,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return all.map((path) => ({
     url: `${SITE_URL}${path === '/' ? '' : path}`,
-    lastModified: now,
+    lastModified: published.get(path) ?? now,
     changeFrequency: path === '/' ? 'weekly' : 'monthly',
     priority: path === '/' ? 1 : path.startsWith('/legal') ? 0.3 : 0.7,
   }))

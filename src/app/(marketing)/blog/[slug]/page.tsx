@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ArticlePage } from '@/components/content/article-page'
 import { categoryFor, getContent, listContent } from '@/lib/content'
-import { articleJsonLd, pageMetadata } from '@/lib/seo'
+import { articleJsonLd, jsonLdScript, pageMetadata } from '@/lib/seo'
 
 type Params = { params: { slug: string } }
 
@@ -17,6 +17,12 @@ export function generateMetadata({ params }: Params): Metadata {
     title: entry.frontmatter.title,
     description: entry.frontmatter.description,
     path: `/blog/${entry.slug}`,
+    article: {
+      publishedTime: entry.frontmatter.date,
+      authors: [entry.frontmatter.author],
+      section: categoryFor(entry.frontmatter.category)?.label,
+      tags: entry.frontmatter.tags,
+    },
   })
 }
 
@@ -43,13 +49,15 @@ export default function BlogPostPage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdScript(
             articleJsonLd({
               title: entry.frontmatter.title,
               description: entry.frontmatter.description,
               path: `/blog/${entry.slug}`,
               datePublished: entry.frontmatter.date,
               author: entry.frontmatter.author,
+              section: category?.label,
+              keywords: entry.frontmatter.tags,
             }),
           ),
         }}

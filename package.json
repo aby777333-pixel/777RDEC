@@ -7,11 +7,12 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "npm run check:copy && next build",
+    "build": "npm run check:copy && next build && npm run check:seo",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "check:copy": "tsx scripts/check-copy.ts",
+    "check:seo": "tsx scripts/check-seo.ts",
     "verify": "npm run typecheck && npm run lint && npm run check:copy"
   },
   "dependencies": {

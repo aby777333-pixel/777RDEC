@@ -10,7 +10,7 @@ import { RiskSection } from '@/components/home/risk-section'
 import { BrokersSection } from '@/components/home/brokers-section'
 import { ApiSection } from '@/components/home/api-section'
 import { Closing } from '@/components/home/closing'
-import { pageMetadata, softwareApplicationJsonLd } from '@/lib/seo'
+import { jsonLdScript, pageMetadata, softwareApplicationJsonLd } from '@/lib/seo'
 
 export const metadata: Metadata = pageMetadata({
   title: 'Trading Technology. Evolved.',
@@ -35,7 +35,7 @@ export default function HomePage() {
       <Closing />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareApplicationJsonLd()) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(softwareApplicationJsonLd()) }}
       />
     </>
   )

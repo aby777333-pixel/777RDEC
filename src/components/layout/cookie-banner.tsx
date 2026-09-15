@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Script from 'next/script'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { analyticsDomain, analyticsEnabled } from '@/lib/analytics'
+import { analyticsDomain, analyticsEnabled, gtmEnabled, gtmId } from '@/lib/analytics'
 
 const KEY = 'raptor-consent'
 /** Fired by the footer link so a visitor can revisit a decision they made. */
@@ -18,8 +18,8 @@ export function openCookiePreferences(): void {
 }
 
 /**
- * No non-essential script loads before consent — the Plausible tag is only
- * mounted once consent is explicitly granted.
+ * No non-essential script loads before consent — the Plausible and Google Tag
+ * Manager tags are only mounted once consent is explicitly granted.
  *
  * A decision is never final: the footer's "Cookie preferences" control fires
  * COOKIE_PREFERENCES_EVENT, which re-opens this dialog with the stored answer
@@ -60,6 +60,13 @@ export function CookieBanner() {
           src="https://plausible.io/js/script.js"
           strategy="lazyOnload"
         />
+      ) : null}
+
+      {consent === 'granted' && gtmEnabled ? (
+        // gtmId is validated against /^GTM-[A-Z0-9]+$/ in lib/analytics.
+        <Script id="gtm" strategy="afterInteractive">
+          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${gtmId}');`}
+        </Script>
       ) : null}
 
       {open ? (

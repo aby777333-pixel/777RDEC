@@ -5,7 +5,11 @@
 
 export const SITE_NAME = '777 Raptor'
 export const SITE_DOMAIN = '777raptor.com'
-export const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://777raptor.com'
+/**
+ * The live public origin, resolved at build time in next.config.mjs (explicit
+ * env var → Netlify's primary site URL → 777raptor.com). No trailing slash.
+ */
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://777raptor.com').replace(/\/+$/, '')
 export const SITE_TAGLINE = 'Trading Technology. Evolved.'
 export const LOGO_TAGLINE = 'PRECISION. POWER. PERFORMANCE.'
 

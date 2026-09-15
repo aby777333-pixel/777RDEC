@@ -2,6 +2,7 @@ import { Nav } from '@/components/layout/nav'
 import { Footer } from '@/components/layout/footer'
 import { CookieBanner } from '@/components/layout/cookie-banner'
 import { SkipLink } from '@/components/layout/skip-link'
+import { BreadcrumbJsonLd } from '@/components/layout/breadcrumb-json-ld'
 import { ScrollControls } from '@/components/layout/scroll-controls'
 
 export default function MarketingLayout({ children }: { children: React.ReactNode }) {
@@ -13,6 +14,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
       <Footer />
       <ScrollControls />
       <CookieBanner />
+      <BreadcrumbJsonLd />
     </>
   )
 }

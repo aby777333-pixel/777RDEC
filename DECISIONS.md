@@ -1130,3 +1130,37 @@ here pushed this page's long headline to six lines for no gain.
 
 Below `lg`, as with the other two: the bloom recentres under the full-width
 copy and drops to 0.45 opacity.
+
+## 44. Discoverability: one live origin, and a build that refuses to hide the site
+
+**The canonical origin follows the live domain.** Every canonical, sitemap
+entry, Open Graph image and JSON-LD id used to be built on `777raptor.com`,
+which does not resolve yet — so share cards had no image and the sitemap
+pointed at a host search engines cannot reach. `next.config.mjs` now resolves
+the origin as `NEXT_PUBLIC_SITE_URL` → Netlify's `URL` (the primary domain) →
+`777raptor.com`. When 777raptor.com is added in Netlify as the primary domain,
+everything moves to it on the next build, and Netlify redirects the
+netlify.app hostname there itself. No code change.
+
+**Crawlers are named by purpose.** `robots.ts` lists search engines, social
+previewers, AI search/assistant fetchers and AI training crawlers as separate
+groups, all open. The training group is the one to close if that is ever
+wanted, without affecting AI search visibility. `/api/og` is carved out of the
+`/api/` disallow so X, LinkedIn and Slack can fetch the share card.
+
+**Structured data describes what is on the page.** Organization and WebSite on
+every page (with stable `@id`s), BreadcrumbList from the URL and navigation
+labels, BlogPosting / NewsArticle / Article on posts, FAQPage on the FAQ.
+Nothing speculative: no ratings, prices or Product markup that the pages do not
+support. `/llms.txt` is generated from the same navigation and content.
+
+**`npm run build` now ends with `check:seo`.** It fails the deploy on a
+`noindex` outside `/design-system`, `/search` and 404; on robots.txt blocking
+the whole site; on a missing title, description or canonical; and on a sitemap
+that lists a noindex page or a second origin. A broken check means the old
+deploy stays live, never an invisible one.
+
+Verification tags (`GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION`) and
+Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) are wired but empty until set in
+Netlify. GTM, like Plausible, only loads after consent; the cookie copy must
+be widened before advertising tags go into the container.
