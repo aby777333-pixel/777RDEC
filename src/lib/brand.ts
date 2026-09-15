@@ -43,8 +43,8 @@ export const HQ_COUNTRY_LONG = 'United Kingdom of Great Britain and Northern Ire
 export const HQ_COUNTRY_CODE = 'GB'
 
 /** Dial-ready form is the href; the spaced form is what people read. */
-export const PHONE_E164 = '+919698000999'
-export const PHONE_DISPLAY = '+91 9698 000 999'
+export const PHONE_E164 = '+917012608089'
+export const PHONE_DISPLAY = '+91 70126 08089'
 export const JURISDICTION_NOTE =
   'Availability of products, markets, instruments and automation features differs by jurisdiction. Not all features described on this site are available or permitted in all regions.'
 

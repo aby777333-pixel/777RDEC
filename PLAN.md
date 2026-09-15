@@ -84,9 +84,8 @@ favicon from the wing mark, status page backed by `/api/status`.
   request and the hero falls back to the gradient and grid.
 - **Logo.** `RaptorLogo` composes the lockup from type plus the abstracted
   wing. Drop `public/brand/raptor-logo.png` in and swap it in that one file.
-- **Phone country code.** The supplied number is `+91 9698 000 999` — an
-  Indian dialling code against a UK headquarters. Used exactly as given; worth
-  confirming it is the intended public number.
+- **Phone number.** Confirmed by the owner as `+91 70126 08089`, the number
+  printed in the brochure; set once in `src/lib/brand.ts`.
 - **Supabase migration applied.** Both migrations are live on project
   `ixpqkvyxqvmllottnvgi`: the three lead tables with RLS, plus the grant
   revocation. Forms still need `SUPABASE_SERVICE_ROLE_KEY` set in Netlify
