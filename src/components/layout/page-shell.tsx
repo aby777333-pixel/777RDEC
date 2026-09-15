@@ -151,58 +151,25 @@ export function PageHero({
   return (
     <section
       className={cn(
-        'relative isolate overflow-hidden border-b border-line-1 pb-12 pt-14 md:pb-16 md:pt-20',
-        // The rig needs a band deep enough to hang in and still clear its
-        // control panel; the shorter headline alone does not leave one.
-        backdrop === 'puppet' && 'lg:min-h-[40rem]',
+        'hero-band relative isolate overflow-hidden border-b border-line-1 pb-12 pt-14 md:pb-16 md:pt-20',
+        // Every scene band is the same size, and centres its copy on that
+        // height — the platform hero's proportions, so moving between pages
+        // does not change the shape of the first screen. The scenes are drawn
+        // to the band, so each one scales into it. The image hero keeps its
+        // own, copy-sized height.
+        pen && 'flex min-h-[38rem] flex-col justify-center md:min-h-[48rem]',
         // The Cosmic Anomaly's target nav sits at the foot of the band — under
-        // the copy on a narrow one, which is padded to hold it — and the scene
-        // wants a deep band to turn in.
-        backdrop === 'anomaly' && 'pb-32 md:pb-32 lg:min-h-[40rem] lg:pb-16',
-        // The orb's preset row sits under the copy, and the orb wants a band
-        // deep enough to be more than a marble.
-        backdrop === 'orb' && 'pb-44 md:pb-44 lg:min-h-[36rem] lg:pb-36',
+        // the copy on a narrow one, which is padded to hold it.
+        backdrop === 'anomaly' && 'pb-32 md:pb-32 lg:pb-16',
+        // The orb's preset row sits under the copy.
+        backdrop === 'orb' && 'pb-44 md:pb-44 lg:pb-36',
         // These keep a control or a hint along the foot of the band, clear of
         // the copy.
         backdrop === 'tides' && 'pb-28 md:pb-28 lg:pb-28',
         backdrop === 'reactor' && 'pb-24 md:pb-24 lg:pb-24',
-        // The InterCosmic sphere is as wide as the band is tall, so a band
-        // sized to the copy alone leaves it too little room to turn in.
-        backdrop === 'intercosmic' && 'md:min-h-[29rem]',
-        // The client portal's morphing figure wants more height than its copy gives it.
-        backdrop === 'morph' && 'md:min-h-[34rem]',
-        // ZERO-POINT's core sits in the middle of a wide field of snow, and a
-        // band sized to the gallery's short copy would leave it a speck.
-        backdrop === 'zeropoint' && 'min-h-[30rem] md:min-h-[38rem]',
-        // The EMIL gallery's colour burst wants a little more room than its copy gives it.
-        backdrop === 'colorburst' && 'md:min-h-[30rem]',
-        // The warp reveals the logo in the space beside the copy, and needs the
-        // height to show it whole.
-        backdrop === 'warp' && 'md:min-h-[42rem]',
-        backdrop === 'cosmic' && 'md:min-h-[44rem]',
-        // The coaster ride is a first-person view down the track, and the band
-        // it plays in is the platform page's first impression: near a full
-        // screen on a desktop, and deep enough on a phone to see the track.
-        backdrop === 'velocity' && 'min-h-[38rem] md:min-h-[48rem]',
-        // The intelligence band's observers and series are laid out as shares
-        // of its height; a little more height gives the sight-lines room.
-        backdrop === 'attention' && 'min-h-[27rem] md:min-h-[32rem]',
-        // The three logo reveals are centred on the band's height, so the copy
-        // is centred on it too, level with the logo rather than above it; the
-        // intelligence band centres its copy so its extra height is shared
-        // above and below rather than left as a gap at the foot.
-        (backdrop === 'warp' ||
-          backdrop === 'cosmic' ||
-          backdrop === 'velocity' ||
-          backdrop === 'attention') &&
-          'flex flex-col justify-center',
-        // The noisy rings reach to half the band's shorter side, so a taller
-        // band is a bigger figure behind the search box.
-        backdrop === 'noisycircles' && 'min-h-[30rem] md:min-h-[36rem]',
-        // Racing Lines is a view down two floors of lanes; a deeper band shows
-        // more road between them. Extra top padding rather than only a minimum,
-        // because the EMIL Trade hero's own content already outgrows one.
-        backdrop === 'racinglines' && 'md:min-h-[44rem] md:pt-28 lg:pt-32',
+        // Racing Lines is a view down two floors of lanes. Extra top padding,
+        // because the EMIL Trade hero's own content outgrows the band.
+        backdrop === 'racinglines' && 'md:pt-28 lg:pt-32',
         // Both pens assume a black ground, so the band they back stops
         // following the theme. Only that band — the image hero themes as it
         // always did.

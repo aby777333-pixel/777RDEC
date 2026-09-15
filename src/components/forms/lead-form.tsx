@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 // React 18 / Next 14: the form-state hook lives in react-dom.
 // (It becomes React's useActionState under React 19.)
 import { useFormState, useFormStatus } from 'react-dom'
@@ -21,6 +21,35 @@ import { cn } from '@/lib/utils'
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
 
+/**
+ * Client-side mirror of the checks in `leadSchema`, used only to take an error
+ * message away once the visitor has fixed that field. The server still
+ * validates every submission; nothing here can let an invalid one through.
+ */
+function fieldIsValid(field: HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement): boolean {
+  const value = field.value.trim()
+  switch (field.name) {
+    case 'fullName':
+      return value.length >= 2 && value.length <= 120
+    case 'email':
+      return value.length <= 200 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+    case 'audience':
+      return value.length > 0
+    case 'consent':
+      return field instanceof HTMLInputElement && field.checked
+    case 'company':
+      return value.length <= 160
+    case 'role':
+      return value.length <= 120
+    case 'region':
+      return value.length <= 80
+    case 'message':
+      return value.length <= 4000
+    default:
+      return false
+  }
+}
+
 export function LeadForm({
   action,
   defaultAudience,
@@ -38,7 +67,40 @@ export function LeadForm({
   const pathname = usePathname()
   const [email, setEmail] = useState('')
 
-  const fieldErrors = state.status === 'error' ? state.fieldErrors : undefined
+  /** Fields the visitor has corrected since the last submission came back. */
+  const [corrected, setCorrected] = useState<ReadonlySet<string>>(() => new Set())
+  // Every response starts from its own errors; nothing carries over.
+  useEffect(() => setCorrected(new Set()), [state])
+
+  const submittedErrors = state.status === 'error' ? state.fieldErrors : undefined
+  const fieldErrors = submittedErrors
+    ? (Object.fromEntries(
+        Object.entries(submittedErrors).filter(([name]) => !corrected.has(name)),
+      ) as typeof submittedErrors)
+    : undefined
+  const hadFieldErrors = submittedErrors !== undefined && Object.keys(submittedErrors).length > 0
+  const allCorrected = hadFieldErrors && Object.keys(fieldErrors ?? {}).length === 0
+
+  const trackCorrection = (event: React.FormEvent<HTMLFormElement>) => {
+    if (!submittedErrors) return
+    const field = event.target
+    if (
+      !(field instanceof HTMLInputElement) &&
+      !(field instanceof HTMLSelectElement) &&
+      !(field instanceof HTMLTextAreaElement)
+    ) {
+      return
+    }
+    if (!(field.name in submittedErrors)) return
+    const valid = fieldIsValid(field)
+    setCorrected((previous) => {
+      if (valid === previous.has(field.name)) return previous
+      const next = new Set(previous)
+      if (valid) next.add(field.name)
+      else next.delete(field.name)
+      return next
+    })
+  }
   const freemailWarning = email.includes('@') && isFreemail(email)
 
   if (state.status === 'success') {
@@ -66,7 +128,12 @@ export function LeadForm({
         <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
       ) : null}
 
-      <form action={formAction} className="flex flex-col gap-6" noValidate>
+      <form
+        action={formAction}
+        onChange={trackCorrection}
+        className="flex flex-col gap-6"
+        noValidate
+      >
         <input type="hidden" name="sourcePath" value={pathname} />
         {/* Honeypot. Positioned off-screen rather than hidden so bots still fill it. */}
         <div aria-hidden className="absolute left-[-9999px] h-px w-px overflow-hidden">
@@ -74,7 +141,7 @@ export function LeadForm({
           <input id="companyWebsite" name="companyWebsite" type="text" tabIndex={-1} autoComplete="off" />
         </div>
 
-        {state.status === 'error' ? (
+        {state.status === 'error' && !allCorrected ? (
           <div
             role="alert"
             className="flex items-start gap-3 rounded-card border border-down/40 bg-down/[0.06] px-4 py-3 text-[0.9375rem] text-steel-100"

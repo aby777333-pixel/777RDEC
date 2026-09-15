@@ -1,5 +1,4 @@
 import { Panel } from '@/components/ui/panel'
-import { Chip } from '@/components/ui/chip'
 import {
   EMIL_TRADE_AUTHORITY,
   EMIL_TRADE_BUILD_STEPS,
@@ -45,16 +44,20 @@ export function AuthorityLadder({ className }: { className?: string }) {
       {EMIL_TRADE_AUTHORITY.map((step, index) => (
         <li key={step.label} className="flex">
           <Panel tintIndex={index} className="flex w-full flex-col gap-4 p-6">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
               <span className="tint-ink font-mono text-[0.75rem] font-medium" data-numeric>
                 Level {step.level}
               </span>
+              {/* Compact badges: status, not a second heading. */}
               {step.acts ? (
-                <Chip tone="armed" dot>
+                <span className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full border border-armed/40 px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.1em] text-armed">
+                  <span className="h-1 w-1 rounded-full bg-current" aria-hidden />
                   Acts when armed
-                </Chip>
+                </span>
               ) : (
-                <Chip tone="steel">Places nothing</Chip>
+                <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-line-2 px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.1em] text-steel-500">
+                  Places nothing
+                </span>
               )}
             </div>
             <h3 className="font-display text-[1.375rem] leading-snug text-steel-100">{step.label}</h3>

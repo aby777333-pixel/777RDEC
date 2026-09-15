@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { EMIL_SHORT } from '@/lib/brand'
 import { Panel } from '@/components/ui/panel'
 import { cn } from '@/lib/utils'
@@ -124,8 +124,29 @@ const MODES: readonly Mode[] = [
 
 export function EmilModes() {
   const [activeId, setActiveId] = useState('semi')
+  const detailRef = useRef<HTMLDivElement>(null)
   const active = MODES.find((mode) => mode.id === activeId) ?? MODES[0]
   if (!active) return null
+
+  /**
+   * The detail sits under the grid, often below the fold. Choosing a mode
+   * brings it into view — only as far as needed, and without the smooth
+   * scroll when motion is reduced — so the click visibly does something.
+   */
+  const choose = (id: string) => {
+    setActiveId(id)
+    window.requestAnimationFrame(() => {
+      const detail = detailRef.current
+      if (!detail) return
+      const rect = detail.getBoundingClientRect()
+      const fullyVisible = rect.top >= 88 && rect.bottom <= window.innerHeight
+      if (fullyVisible) return
+      const reduced =
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.dataset.reduceMotion === 'true'
+      detail.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' })
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -144,7 +165,8 @@ export function EmilModes() {
               type="button"
               role="radio"
               aria-checked={selected}
-              onClick={() => setActiveId(mode.id)}
+              aria-controls="emil-mode-detail"
+              onClick={() => choose(mode.id)}
               className={cn(
                 'flex flex-col gap-2 rounded-ui border p-4 text-left transition-colors duration-200 ease-raptor',
                 selected
@@ -173,7 +195,15 @@ export function EmilModes() {
         })}
       </div>
 
-      <Panel tone="raised" size="panel" className="overflow-hidden">
+      {/* scroll-mt clears the sticky header; the key replays the entry
+          animation so a change of mode reads as a change. */}
+      <div
+        ref={detailRef}
+        id="emil-mode-detail"
+        aria-live="polite"
+        className="scroll-mt-28 scroll-mb-6"
+      >
+      <Panel key={active.id} tone="raised" size="panel" className="overflow-hidden motion-safe:animate-ticker-in">
         <div className="flex flex-wrap items-center gap-3 border-b border-line-1 px-6 py-4">
           <span className="relative flex h-2.5 w-2.5 items-center justify-center" aria-hidden>
             {active.acts ? (
@@ -201,6 +231,7 @@ export function EmilModes() {
           <List label="Not permitted" tone="down" items={active.refused} />
         </div>
       </Panel>
+      </div>
     </div>
   )
 }

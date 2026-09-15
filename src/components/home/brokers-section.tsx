@@ -5,7 +5,8 @@ import { Upload, X } from 'lucide-react'
 import { PortalFrame, type BrandConfig } from '@/components/frames/portal-frame'
 import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
-import { Button, ButtonLink } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+import { PageLinkButton } from '@/components/ui/page-link-button'
 
 const SWATCHES = ['#0EA5E9', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#0C0E12'] as const
 
@@ -114,9 +115,9 @@ export function BrokersSection() {
             </p>
           </div>
 
-          <ButtonLink href="/brokers/white-label" variant="ghost" size="sm">
+          <PageLinkButton href="/brokers/white-label" className="self-start">
             White label
-          </ButtonLink>
+          </PageLinkButton>
         </Panel>
 
         <div className="lg:pl-4">

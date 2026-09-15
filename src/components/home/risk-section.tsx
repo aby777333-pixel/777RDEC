@@ -6,7 +6,7 @@ import { ExposureTreemap } from '@/components/charts/exposure-treemap'
 import { Gauge } from '@/components/charts/gauge'
 import { Panel } from '@/components/ui/panel'
 import { Section, SectionHeader } from '@/components/ui/section'
-import { ButtonLink } from '@/components/ui/button'
+import { PageLinkButton } from '@/components/ui/page-link-button'
 
 export function RiskSection() {
   return (
@@ -61,9 +61,9 @@ export function RiskSection() {
               </Tooltip.Root>
             </Tooltip.Provider>
 
-            <ButtonLink href="/platform/risk" variant="ghost" size="sm">
+            <PageLinkButton href="/platform/risk" className="self-start">
               Risk engine
-            </ButtonLink>
+            </PageLinkButton>
           </Panel>
         </div>
       </div>

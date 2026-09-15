@@ -2,16 +2,25 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDown, Menu, X } from 'lucide-react'
-import { NAV_GROUPS, NAV_MENUS } from '@/lib/navigation'
+import { NAV_GROUPS, NAV_MENUS, isCurrentPage } from '@/lib/navigation'
+import { cn } from '@/lib/utils'
 import { ButtonLink } from '@/components/ui/button'
 import { RaptorLogo } from '@/components/ui/raptor-logo'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 export function MobileDrawer() {
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
+  /** A drawer entry, in signal on a raised row when it is the page being viewed. */
+  const drawerLink = (href: string) =>
+    cn(
+      'block rounded-ui border-l-2 px-3 py-2.5 text-[0.9375rem]',
+      isCurrentPage(pathname, href) ? 'border-signal bg-bg-2 text-signal' : 'border-transparent text-steel-300',
+    )
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
@@ -68,7 +77,8 @@ export function MobileDrawer() {
                           <Link
                             href={link.href}
                             onClick={() => setOpen(false)}
-                            className="block rounded-ui px-3 py-2.5 text-[0.9375rem] text-steel-300"
+                            aria-current={isCurrentPage(pathname, link.href) ? 'page' : undefined}
+                            className={drawerLink(link.href)}
                           >
                             {link.label}
                           </Link>
@@ -100,7 +110,8 @@ export function MobileDrawer() {
                           <Link
                             href={link.href}
                             onClick={() => setOpen(false)}
-                            className="block rounded-ui px-3 py-2.5 text-[0.9375rem] text-steel-300"
+                            aria-current={isCurrentPage(pathname, link.href) ? 'page' : undefined}
+                            className={drawerLink(link.href)}
                           >
                             {link.label}
                           </Link>

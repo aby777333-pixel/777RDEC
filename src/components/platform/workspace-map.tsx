@@ -80,7 +80,7 @@ export function WorkspaceMap() {
         lead={WORKSPACE_SECTION.lead}
       />
 
-      <div className="mt-12 grid gap-4 lg:grid-cols-3 lg:items-start">
+      <div className="mt-12 grid gap-4 lg:grid-cols-3">
         {WORKSPACE_GROUPS.map((group) => (
           <Panel
             key={group.label}

@@ -4,7 +4,6 @@ import { RiskLine } from '@/components/layout/risk-line'
 import { AppShotFrame } from '@/components/platform/app-shot-frame'
 import { AppShotGallery } from '@/components/platform/app-shot-gallery'
 import { AuthorityLadder, BuildSteps, EmilTradeFigures } from '@/components/platform/emil-trade-parts'
-import { ButtonLink } from '@/components/ui/button'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { SpecGroups } from '@/components/ui/spec-groups'
 import {
@@ -142,14 +141,6 @@ export default function EmilTradePage() {
           lead={`${EMIL_TRADE} is the trader-facing surface of the same stack brokers run on. Put it in front of your own clients under your own name, or integrate with it directly.`}
         />
         <SpecGroups groups={EMIL_TRADE_BUSINESS} className="mt-12" />
-        <div className="mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/brokers/white-label" variant="ghost" size="lg">
-            White label
-          </ButtonLink>
-          <ButtonLink href="/developers" variant="ghost" size="lg">
-            Developers
-          </ButtonLink>
-        </div>
         <div className="mt-12 flex max-w-3xl flex-col gap-3">
           <RiskLine />
           <p className="text-data text-steel-500">

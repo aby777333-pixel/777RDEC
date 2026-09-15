@@ -1,4 +1,5 @@
 import type { SpecGroup } from '@/lib/copy/app-capabilities'
+import { ButtonLink } from './button'
 import { Panel } from './panel'
 import { cn } from '@/lib/utils'
 
@@ -38,21 +39,34 @@ export function SpecGroups({
         className,
       )}
     >
-      {groups.map((group, index) => (
-        <Panel key={group.label} tintIndex={index} className="p-6">
-          <p className="text-eyebrow uppercase text-steel-500">{group.label}</p>
-          <ul className="mt-4 flex flex-col gap-4">
-            {group.items.map((item) => (
-              <li
-                key={item}
-                className="border-t border-line-2 pt-3.5 text-[0.9375rem] leading-relaxed text-steel-300"
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Panel>
-      ))}
+      {groups.map((group, index) => {
+        const card = (
+          <Panel key={group.label} tintIndex={index} className={cn('p-6', group.action && 'flex-1')}>
+            <p className="text-eyebrow uppercase text-steel-500">{group.label}</p>
+            <ul className="mt-4 flex flex-col gap-4">
+              {group.items.map((item) => (
+                <li
+                  key={item}
+                  className="border-t border-line-2 pt-3.5 text-[0.9375rem] leading-relaxed text-steel-300"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </Panel>
+        )
+        if (!group.action) return card
+        // A group with a next step keeps its button directly under its own
+        // card, so in a row of several it is clear which button goes with which.
+        return (
+          <div key={group.label} className="flex flex-col gap-3">
+            {card}
+            <ButtonLink href={group.action.href} variant="ghost" size="lg" className="self-start">
+              {group.action.label}
+            </ButtonLink>
+          </div>
+        )
+      })}
     </div>
   )
 }

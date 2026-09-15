@@ -41,9 +41,14 @@ export function AppShotGallery({
         )}
       >
         {shots.map((shot) => (
-          <figure key={shot.id} className="flex flex-col gap-3">
-            <AppShotZoom src={shot.src} alt={shot.caption} />
-            <figcaption className="text-data leading-relaxed text-steel-500">
+          // Picture and caption in one card, so in a row of several each
+          // caption stays with its own capture.
+          <figure
+            key={shot.id}
+            className="flex flex-col gap-3 rounded-card border border-line-2 bg-bg-1 p-3 shadow-soft"
+          >
+            <AppShotZoom src={shot.src} alt={shot.caption} className="shadow-none" />
+            <figcaption className="px-1 pb-1 text-data leading-relaxed text-steel-300">
               {shot.caption}
             </figcaption>
           </figure>

@@ -23,7 +23,7 @@ export function Nav() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 transition-all duration-300 ease-raptor',
+        'sticky top-0 z-40 transition-[background-color,border-color,box-shadow] duration-300 ease-raptor',
         scrolled
           ? 'glass border-b border-line-1 shadow-soft'
           : 'border-b border-transparent bg-transparent',

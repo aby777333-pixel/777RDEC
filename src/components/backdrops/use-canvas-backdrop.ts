@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { isScrolling } from './scroll-activity'
 
 /**
  * What a backdrop hands back to the hook after it has claimed the canvas.
@@ -102,9 +103,22 @@ export function useCanvasBackdrop(
       renderer.resize(width, height)
     }
 
+    let lastTickAt = 0
     const tick = (now: number) => {
       if (disposed) return
       if (start === 0) start = now
+      if (isScrolling()) {
+        // Hold still while the page scrolls: skip the draw, and slide the
+        // clock's origin forward by the frame so the scene resumes where it
+        // stopped. The watchdog is kept fed, or it would read the hold as a
+        // dead loop and restart the scene from zero.
+        if (lastTickAt > 0) start += now - lastTickAt
+        lastTickAt = now
+        lastDrawAt = Date.now()
+        frame = window.requestAnimationFrame(tick)
+        return
+      }
+      lastTickAt = now
       renderer.draw((now - start) / 1000)
       lastDrawAt = Date.now()
       frame = window.requestAnimationFrame(tick)
@@ -114,6 +128,7 @@ export function useCanvasBackdrop(
       if (frame) window.cancelAnimationFrame(frame)
       frame = 0
       running = false
+      lastTickAt = 0
     }
 
     /** Start, restart after a pause, or draw the one static frame. */

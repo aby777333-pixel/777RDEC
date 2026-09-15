@@ -261,18 +261,26 @@ export function ScreenGallery({
         </button>
       </div>
 
-      {/* ---- stage ---- */}
+      {/* ---- stage ----
+          Fitted, a capture is shown at the full width of the stage — as large
+          as the column allows — and a capture taller than the stage scrolls
+          inside it with its own scrollbar, so reading the bottom of a tall
+          screen never means scrolling the page. At actual size the stage is a
+          fixed window onto the capture, panned by dragging. */}
       <div
         className={cn(
           'relative overflow-hidden rounded-md border border-line-1 bg-black',
-          fullscreen ? 'min-h-0 flex-1' : 'aspect-[16/9]',
+          fullscreen ? 'min-h-0 flex-1' : actualSize ? 'h-[min(78vh,56rem)]' : undefined,
         )}
       >
         <div
           ref={stageRef}
           className={cn(
-            'absolute inset-0 select-none',
-            actualSize ? 'cursor-grab overflow-auto active:cursor-grabbing' : 'cursor-pointer overflow-hidden',
+            'scroll-steel select-none',
+            fullscreen || actualSize ? 'absolute inset-0' : 'max-h-[min(78vh,56rem)]',
+            actualSize
+              ? 'cursor-grab overflow-auto active:cursor-grabbing'
+              : 'cursor-pointer overflow-y-auto overflow-x-hidden',
           )}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -297,11 +305,12 @@ export function ScreenGallery({
               key={shot.slug}
               src={galleryFull(shot)}
               alt={shot.title}
-              fill
+              width={shot.width}
+              height={shot.height}
               unoptimized
               priority={index === 0}
               draggable={false}
-              className="object-contain"
+              className="block h-auto w-full"
             />
           )}
         </div>
@@ -372,7 +381,8 @@ export function ScreenGallery({
       </div>
 
       <p className="px-1 text-[0.75rem] text-steel-500">
-        Click the picture to pause for inspection, click again to resume. With the gallery focused:
+        Click the picture to pause for inspection, click again to resume. A tall screen scrolls
+        inside the picture. With the gallery focused:
         ← → previous and next · Space play and pause · Z actual size (drag to pan) · Home and End
         first and last · F full screen.
       </p>

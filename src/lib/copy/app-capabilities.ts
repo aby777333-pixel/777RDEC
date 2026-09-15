@@ -26,6 +26,8 @@ export type SpecGroup = {
   label: string
   /** One line each. Counts are the product's own. */
   items: readonly string[]
+  /** Optional next step, shown directly under this group's card. */
+  action?: { label: string; href: string }
 }
 
 /**

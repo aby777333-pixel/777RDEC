@@ -31,6 +31,19 @@ export function Button({
   return <button className={cn(BASE, VARIANTS[variant], SIZES[size], className)} {...rest} />
 }
 
+/**
+ * A button-styled plain <a>, for targets that are not app routes — a file in
+ * /public, or another site — where next/link's client routing does not apply.
+ */
+export function ButtonAnchor({
+  variant = 'ghost',
+  size = 'md',
+  className,
+  ...rest
+}: React.AnchorHTMLAttributes<HTMLAnchorElement> & { variant?: Variant; size?: Size }) {
+  return <a className={cn(BASE, VARIANTS[variant], SIZES[size], className)} {...rest} />
+}
+
 export function ButtonLink({
   href,
   variant = 'ghost',

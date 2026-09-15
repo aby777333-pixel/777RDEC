@@ -391,6 +391,7 @@ export const EMIL_TRADE_BUSINESS: readonly SpecGroup[] = [
       'CRM, KYC / AML compliance, a multi-tier IB network and payment gateways',
       'LP bridge over FIX, prop challenge rules and payout management',
     ],
+    action: { label: 'White label', href: '/brokers/white-label' },
   },
   {
     label: 'For developers',
@@ -400,5 +401,6 @@ export const EMIL_TRADE_BUSINESS: readonly SpecGroup[] = [
       'A FIX 4.4 gateway and signed webhooks',
       'SDKs for JavaScript, Python and Go',
     ],
+    action: { label: 'Developers', href: '/developers' },
   },
 ]

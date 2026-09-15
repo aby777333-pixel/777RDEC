@@ -1184,3 +1184,46 @@ where it would print over the heading.
 
 `gravity-backdrop.tsx` stays registered but is no longer mounted anywhere, so
 switching back is one prop on the page.
+
+## 46. The QA report, the brochure and the retail partner
+
+**Panels lay out their children.** `<Panel>` wrapped its content in an extra
+`div.relative` that swallowed every flex, grid and gap class passed to it. The
+wrapper is gone; `.surface-sheen-under` keeps the sheen beneath the content by
+stacking order instead.
+
+**Every scene hero is one size.** 38rem, 48rem from `md`, copy centred — the
+platform hero's proportions, applied to every backdrop except the image hero,
+so the first screen keeps its shape between pages.
+
+**Scenes hold still while the page scrolls.** `scroll-activity.ts` tracks an
+active scroll (150ms idle). Both canvas hooks skip drawing during it with their
+clocks held, and CSS-animated scenes pause through `html[data-scrolling]`. The
+scroll stops competing with full-band WebGL and CSS 3D for the frame budget.
+
+**From the report, also:** field errors clear as each field is corrected; the
+API examples scroll inside their card under the transport tabs, with the
+disclaimer above the code; the navigation marks the current page (menu trigger
+rule, "You are here" entry, drawer row) and the White label / Risk engine
+section buttons become a "this page" marker on their own pages; the home EMIL
+quote moved into a card above the status card; workspace cards are equal height;
+the client portal's sections and funding tabs work; the gallery shows each
+capture at full stage width and scrolls tall ones inside the stage; integration
+subheads are real headers; the System theme names what the device is asking for;
+level badges are compact; spec groups can carry their own button under their
+card; screenshot captions sit inside their cards; the activation acknowledgements
+moved under the disclosure; choosing an operating mode brings its detail into
+view; status rows are capped in width; the footer is a balanced four-column
+layout with the brochure, the retail partner and the newsletter in one row.
+
+**Not changed, deliberately.** The contact and demo forms fail in production
+because `SUPABASE_SERVICE_ROLE_KEY` (or `RESEND_API_KEY` + `DEMO_NOTIFICATION_TO`)
+is not set in Netlify; the tables stay service-role only. And `cn()`'s
+tailwind-merge drops the custom `text-eyebrow` / `text-body` sizes when a colour
+class is merged with them, so `<Eyebrow>`, `<Chip>` and section leads render
+larger than designed; teaching tailwind-merge those sizes would shrink them
+site-wide, which is a look change to make on purpose, not in passing.
+
+**Brochure and retail partner.** The product brochure is served from
+`public/brochure` (view in a new tab, or download); GIO4X is the retail route to
+EMIL, linked from the footer with the short risk line.

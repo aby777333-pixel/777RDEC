@@ -59,44 +59,29 @@ const ACKNOWLEDGEMENTS: readonly string[] = [
 ]
 
 export function ActivationGate({ className }: { className?: string }) {
+  // The disclosure and the acknowledgements share the left column — they are
+  // the words shown and the words ticked, so they read as a pair — and the
+  // longer field sheet takes the right, which keeps the two columns level.
   return (
-    <div className={cn('grid gap-4 lg:grid-cols-2', className)}>
-      <Panel tintIndex={0} className="flex flex-col gap-4 p-6">
-        <p className="text-eyebrow uppercase text-steel-500">The disclosure</p>
-        {DISCLOSURE.map((paragraph, index) => (
-          <p
-            key={paragraph}
-            className={cn(
-              'border-t border-line-2 pt-3.5 text-[0.9375rem] leading-relaxed',
-              // The second line is the one the whole screen is built around.
-              index === 1 ? 'text-warn' : 'text-steel-300',
-            )}
-          >
-            {paragraph}
-          </p>
-        ))}
-        <p className="mt-2 text-data text-steel-500">
-          Shown every time, before anything can be armed. It is not a footnote and it is not
-          dismissible.
-        </p>
-      </Panel>
-
+    <div className={cn('grid gap-4 lg:grid-cols-2 lg:items-start', className)}>
       <div className="flex flex-col gap-4">
-        <Panel tintIndex={1} className="p-6">
-          <p className="text-eyebrow uppercase text-steel-500">
-            Reviewed before it will arm · {REVIEW.length} fields
-          </p>
-          <ul className="mt-4 grid gap-x-6 sm:grid-cols-2">
-            {REVIEW.map((row) => (
-              <li key={row.field} className="border-t border-line-2 py-3">
-                <p className="text-[0.9375rem] leading-snug text-steel-100">{row.field}</p>
-                <p className="mt-1 text-data leading-relaxed text-steel-500">{row.note}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-4 text-data text-steel-500">
-            The fields are the product. The values are whatever the operator set, which is why none
-            are quoted here.
+        <Panel tintIndex={0} className="flex flex-col gap-4 p-6">
+          <p className="text-eyebrow uppercase text-steel-500">The disclosure</p>
+          {DISCLOSURE.map((paragraph, index) => (
+            <p
+              key={paragraph}
+              className={cn(
+                'border-t border-line-2 pt-3.5 text-[0.9375rem] leading-relaxed',
+                // The second line is the one the whole screen is built around.
+                index === 1 ? 'text-warn' : 'text-steel-300',
+              )}
+            >
+              {paragraph}
+            </p>
+          ))}
+          <p className="mt-2 text-data text-steel-500">
+            Shown every time, before anything can be armed. It is not a footnote and it is not
+            dismissible.
           </p>
         </Panel>
 
@@ -120,6 +105,24 @@ export function ActivationGate({ className }: { className?: string }) {
           </ul>
         </Panel>
       </div>
+
+      <Panel tintIndex={1} className="p-6">
+        <p className="text-eyebrow uppercase text-steel-500">
+          Reviewed before it will arm · {REVIEW.length} fields
+        </p>
+        <ul className="mt-4 grid gap-x-6 sm:grid-cols-2">
+          {REVIEW.map((row) => (
+            <li key={row.field} className="border-t border-line-2 py-3">
+              <p className="text-[0.9375rem] leading-snug text-steel-100">{row.field}</p>
+              <p className="mt-1 text-data leading-relaxed text-steel-500">{row.note}</p>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-data text-steel-500">
+          The fields are the product. The values are whatever the operator set, which is why none
+          are quoted here.
+        </p>
+      </Panel>
     </div>
   )
 }

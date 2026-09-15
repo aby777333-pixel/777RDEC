@@ -6,8 +6,10 @@ import { NewsletterForm } from '@/components/forms/newsletter-form'
 import { CookiePreferencesButton } from './cookie-banner'
 import { SocialLinks } from './social-links'
 import { FOOTER_PRODUCT_LINKS, LEGAL_LINKS } from '@/lib/navigation'
-import { MapPin, Phone } from 'lucide-react'
+import { ArrowUpRight, Download, FileText, MapPin, Phone } from 'lucide-react'
+import { ButtonAnchor } from '@/components/ui/button'
 import {
+  BROCHURE,
   COMPANY_NUMBER,
   CONTACT_EMAIL,
   HQ_ADDRESS_LINES,
@@ -17,6 +19,8 @@ import {
   PHONE_DISPLAY,
   PHONE_E164,
   REGISTERED_ADDRESS,
+  RETAIL_PARTNER,
+  RISK_LINE_SHORT,
   SITE_TAGLINE,
   TECHNOLOGY_PROVIDER_DISCLOSURE,
 } from '@/lib/brand'
@@ -27,8 +31,17 @@ export function Footer() {
   return (
     <footer className="wash relative border-t border-line-1 bg-bg-1">
       <div className="container-raptor py-16">
-        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-          <div className="flex flex-col gap-4">
+        {/* Display preferences sit apart, top right, so the columns below
+            start level with each other. */}
+        <div className="flex flex-wrap items-center justify-end gap-x-5 gap-y-3">
+          <ReduceMotionToggle />
+          <ThemeToggle />
+        </div>
+
+        {/* The brand and the three ways to reach the company share one row,
+            spread across the full width rather than stacked to the left. */}
+        <div className="mt-8 grid gap-10 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.35fr)_repeat(3,minmax(0,1fr))] lg:gap-8">
+          <div className="flex flex-col gap-4 sm:col-span-2 lg:col-span-1">
             <RaptorLogo size="lg" showTagline />
             <p className="font-display text-[1.125rem] uppercase tracking-tight text-steel-300">
               {SITE_TAGLINE}
@@ -38,29 +51,24 @@ export function Footer() {
               <SocialLinks />
             </div>
           </div>
-          <div className="flex flex-col items-start gap-4 lg:items-end">
-            <ThemeToggle />
-            <ReduceMotionToggle />
-          </div>
-        </div>
-
-        <div className="mt-12 grid gap-8 border-t border-line-1 pt-8 sm:grid-cols-2 lg:grid-cols-3">
           <ContactBlock />
         </div>
 
-        <div className="mt-10 grid gap-6 border-t border-line-1 pt-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,32rem)] lg:gap-12">
-          <div className="flex flex-col gap-2">
+        <div className="mt-12 grid gap-10 border-t border-line-1 pt-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+          <BrochureBlock />
+          <RetailBlock />
+          <div className="flex flex-col gap-3 md:col-span-2 lg:col-span-1">
             <span className="tint-6 tint-ink text-eyebrow uppercase">Occasional dispatches</span>
             <p className="text-[0.9375rem] leading-relaxed text-steel-300">
               Method notes, release notes and market-structure writing. No signals, no
               performance claims, and nothing on a schedule.
             </p>
+            <NewsletterForm />
           </div>
-          <NewsletterForm />
         </div>
 
         <nav aria-label="Product" className="mt-10 border-t border-line-1 pt-8">
-          <ul className="flex flex-wrap gap-x-6 gap-y-3">
+          <ul className="flex flex-wrap justify-center gap-x-6 gap-y-3">
             {FOOTER_PRODUCT_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
@@ -77,30 +85,92 @@ export function Footer() {
         <div className="mt-10 flex flex-col gap-6 border-t border-line-1 pt-8">
           <LegalEntityBlock />
 
-          <nav aria-label="Legal">
-            <ul className="flex flex-wrap gap-x-5 gap-y-2">
-              {LEGAL_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-[0.8125rem] text-steel-500 transition-colors hover:text-steel-300"
-                  >
-                    {link.label}
-                  </Link>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <nav aria-label="Legal">
+              <ul className="flex flex-wrap gap-x-5 gap-y-2">
+                {LEGAL_LINKS.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-[0.8125rem] text-steel-500 transition-colors hover:text-steel-300"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  <CookiePreferencesButton className="text-[0.8125rem] text-steel-500 transition-colors hover:text-steel-300" />
                 </li>
-              ))}
-              <li>
-                <CookiePreferencesButton className="text-[0.8125rem] text-steel-500 transition-colors hover:text-steel-300" />
-              </li>
-            </ul>
-          </nav>
+              </ul>
+            </nav>
 
-          <p className="text-[0.8125rem] text-steel-500">
-            © {year} {LEGAL_ENTITY_NAME}. All rights reserved.
-          </p>
+            <p className="shrink-0 text-[0.8125rem] text-steel-500">
+              © {year} {LEGAL_ENTITY_NAME}. All rights reserved.
+            </p>
+          </div>
         </div>
       </div>
     </footer>
+  )
+}
+
+/** The product brochure: view it in a new tab, or download the PDF. */
+function BrochureBlock() {
+  return (
+    <div className="flex flex-col gap-3">
+      <span className="tint-5 tint-ink text-eyebrow uppercase">Brochure</span>
+      <p className="flex items-start gap-2.5 text-[0.9375rem] leading-relaxed text-steel-300">
+        <FileText size={15} strokeWidth={1.5} aria-hidden className="mt-1 shrink-0 text-steel-500" />
+        <span>
+          The platform, EMIL, the broker stack and the architecture in one document.
+          <span className="block text-steel-500">
+            PDF · {BROCHURE.pages} pages · {BROCHURE.size}
+          </span>
+        </span>
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <ButtonAnchor href={BROCHURE.href} target="_blank" rel="noopener" size="sm">
+          View brochure
+          <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+          <span className="sr-only">(opens in a new tab)</span>
+        </ButtonAnchor>
+        <ButtonAnchor href={BROCHURE.href} download={BROCHURE.downloadName} size="sm">
+          <Download size={14} strokeWidth={1.75} aria-hidden />
+          Download PDF
+        </ButtonAnchor>
+      </div>
+    </div>
+  )
+}
+
+/** Retail traders use EMIL through the retail partner, not through Raptor directly. */
+function RetailBlock() {
+  return (
+    <div className="flex flex-col gap-3">
+      <span className="tint-2 tint-ink text-eyebrow uppercase">For retail traders</span>
+      <a
+        href={RETAIL_PARTNER.url}
+        target="_blank"
+        rel="noopener"
+        aria-label={`Trade with EMIL on ${RETAIL_PARTNER.name} (opens in a new tab)`}
+        className="group flex w-fit flex-col gap-3 rounded-card border border-line-2 bg-bg-0 p-4 transition-colors hover:border-steel-700 hover:bg-bg-2"
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- small static partner mark, no optimisation needed */}
+        <img
+          src={RETAIL_PARTNER.logo}
+          alt={RETAIL_PARTNER.name}
+          width={RETAIL_PARTNER.logoWidth}
+          height={RETAIL_PARTNER.logoHeight}
+          loading="lazy"
+          className="h-10 w-auto"
+        />
+        <span className="inline-flex items-center gap-1.5 text-[0.9375rem] text-steel-300 transition-colors group-hover:text-steel-100">
+          Trade with EMIL on {RETAIL_PARTNER.name}
+          <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden />
+        </span>
+      </a>
+      <p className="max-w-md text-[0.8125rem] leading-relaxed text-steel-500">{RISK_LINE_SHORT}</p>
+    </div>
   )
 }
 

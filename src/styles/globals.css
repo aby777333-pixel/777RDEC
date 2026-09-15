@@ -494,6 +494,18 @@ html[data-reduce-motion='true'] *::after {
 }
 
 /*
+  Hero scenes built from CSS animation hold still while the page scrolls, the
+  same as the canvas scenes do (src/components/backdrops/scroll-activity.ts
+  sets data-scrolling on <html>). A band of dozens of animated 3D layers is
+  repainted every frame, and during a scroll that work is what made it stutter.
+*/
+html[data-scrolling='true'] .hero-band *,
+html[data-scrolling='true'] .hero-band *::before,
+html[data-scrolling='true'] .hero-band *::after {
+  animation-play-state: paused !important;
+}
+
+/*
   Card tint variants.
 
   Deliberately NOT inside @layer components: Tailwind tree-shakes layered

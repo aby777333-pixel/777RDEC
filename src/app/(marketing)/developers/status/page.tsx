@@ -36,7 +36,9 @@ export default function StatusPage() {
           lead={`All components below, read from the same source as /api/status. Last read ${new Date(payload.updatedAt).toUTCString()}.`}
         />
 
-        <Panel className="mt-10 overflow-hidden p-0">
+        {/* Capped in width so each state sits near the component it describes
+            rather than across a full-width gap. */}
+        <Panel className="mt-10 max-w-3xl overflow-hidden p-0">
           <ul>
             {payload.components.map((component) => (
               <li

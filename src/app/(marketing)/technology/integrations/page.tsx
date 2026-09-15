@@ -13,6 +13,14 @@ import {
 } from '@/lib/copy/integrations-directory'
 import { pageMetadata } from '@/lib/seo'
 
+/**
+ * The subsection headers inside each category card. Set in the card's own hue,
+ * heavier and ruled off, so they introduce the content under them rather than
+ * reading as one more line of it.
+ */
+const SUBHEAD =
+  'tint-ink flex items-center gap-2 border-b border-line-2 pb-2 text-[0.75rem] font-semibold uppercase tracking-[0.16em]'
+
 export const metadata: Metadata = pageMetadata({
   title: copy.title,
   description: copy.description,
@@ -68,9 +76,7 @@ export default function IntegrationsPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="text-eyebrow uppercase text-steel-500">
-                  How it connects
-                </span>
+                <h4 className={SUBHEAD}>How it connects</h4>
                 <div className="flex flex-wrap gap-1.5">
                   {category.standards.map((standard) => (
                     <span
@@ -84,7 +90,7 @@ export default function IntegrationsPage() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <span className="text-eyebrow uppercase text-steel-500">Providers</span>
+                <h4 className={SUBHEAD}>Providers</h4>
                 <ul className="flex flex-col">
                   {category.vendors.map((vendor) => (
                     <li

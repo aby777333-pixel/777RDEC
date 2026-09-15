@@ -89,6 +89,27 @@ export function socialProfileIsLive(profile: SocialProfile): boolean {
 
 export const LIVE_SOCIAL_PROFILES = SOCIAL_PROFILES.filter(socialProfileIsLive)
 
+/** The product brochure, served from public/brochure. Opens in a new tab or downloads. */
+export const BROCHURE = {
+  href: '/brochure/777-raptor-brochure-2026.pdf',
+  downloadName: '777-Raptor-Brochure-2026.pdf',
+  pages: 28,
+  size: '7.9 MB',
+} as const
+
+/**
+ * Where retail traders use EMIL. Raptor itself is a technology provider and
+ * does not take retail clients (see TECHNOLOGY_PROVIDER_DISCLOSURE), so the
+ * footer points them to GIO4X.
+ */
+export const RETAIL_PARTNER = {
+  name: 'GIO4X',
+  url: 'https://www.gio4x.com',
+  logo: '/partners/gio4x-logo.png',
+  logoWidth: 600,
+  logoHeight: 187,
+} as const
+
 export const CONTACT_EMAIL = `info@${SITE_DOMAIN}`
 export const DEVELOPERS_EMAIL = `developers@${SITE_DOMAIN}`
 

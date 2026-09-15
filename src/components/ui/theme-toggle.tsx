@@ -14,9 +14,14 @@ const OPTIONS = [
 /**
  * Three-state theme control. Rendered as a segmented switch so the current
  * choice is always visible rather than guessed from an icon.
+ *
+ * "System" follows the device's own light or dark setting, so on a device set
+ * to light it looks exactly like Light. To keep it from reading as a duplicate,
+ * its tooltip names what the device is currently asking for, and while it is
+ * selected a small sun or moon on the button shows which way it resolved.
  */
 export function ThemeToggle({ className }: { className?: string }) {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme, systemTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
 
@@ -31,20 +36,34 @@ export function ThemeToggle({ className }: { className?: string }) {
     >
       {OPTIONS.map(({ value, label, Icon }) => {
         const active = mounted && theme === value
+        const isSystem = value === 'system'
+        const deviceTheme = mounted && systemTheme ? systemTheme : null
+        const title = isSystem
+          ? `Match this device${deviceTheme ? ` (currently ${deviceTheme})` : ''}`
+          : `${label} theme`
+        const Resolved = deviceTheme === 'dark' ? Moon : Sun
         return (
           <button
             key={value}
             type="button"
             onClick={() => setTheme(value)}
             aria-pressed={active}
-            title={`${label} theme`}
+            title={title}
             className={cn(
-              'inline-flex h-7 w-8 items-center justify-center rounded-[4px] transition-colors duration-200',
+              'relative inline-flex h-7 w-8 items-center justify-center rounded-[4px] transition-colors duration-200',
               active ? 'bg-bg-3 text-steel-100' : 'text-steel-500 hover:text-steel-300',
             )}
           >
             <Icon size={15} strokeWidth={1.5} aria-hidden />
-            <span className="sr-only">{label} theme</span>
+            {isSystem && active && deviceTheme ? (
+              <Resolved
+                size={9}
+                strokeWidth={2.25}
+                aria-hidden
+                className="absolute bottom-0.5 right-0.5 text-signal"
+              />
+            ) : null}
+            <span className="sr-only">{title}</span>
           </button>
         )
       })}

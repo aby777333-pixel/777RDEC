@@ -2,7 +2,9 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { Quote } from 'lucide-react'
 import { ButtonLink } from '@/components/ui/button'
+import { Panel } from '@/components/ui/panel'
 import { Eyebrow } from '@/components/ui/eyebrow'
 import { EmilStatusCard } from '@/components/emil/emil-status-card'
 import { EMIL_EXPANSION, EMIL_SHORT } from '@/lib/brand'
@@ -28,6 +30,12 @@ const CLAIMS = [
   },
 ] as const
 
+/**
+ * The home page's EMIL band. The heading, the explanation and the four claims
+ * hold the left column; the right column is EMIL itself — the four-line quote
+ * in a card of its own, above the live status card — so the quote sits with
+ * the thing it describes and the heading leads the section.
+ */
 export function EmilReveal() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, amount: 0.3 })
@@ -35,28 +43,14 @@ export function EmilReveal() {
   return (
     <section className="relative border-b border-line-1 bg-bg-0 py-24 md:py-32">
       <div className="container-raptor" ref={ref}>
-        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-center lg:gap-14">
           <div className="flex flex-col gap-6">
             <Eyebrow>{EMIL_EXPANSION}</Eyebrow>
-
-            <div className="flex flex-col gap-1.5">
-              {LINES.map((line, index) => (
-                <motion.p
-                  key={line}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6, delay: index * 0.22, ease: [0.16, 1, 0.3, 1] }}
-                  className="font-display text-[1.5rem] leading-tight text-steel-500 md:text-[1.875rem]"
-                >
-                  {line}
-                </motion.p>
-              ))}
-            </div>
 
             <motion.h2
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.8, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="text-h2 uppercase text-chrome"
             >
               {EMIL_SHORT} evolves with them.
@@ -65,7 +59,7 @@ export function EmilReveal() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.7, delay: 1.4 }}
+              transition={{ duration: 0.7, delay: 0.35 }}
               className="max-w-xl text-body text-steel-300"
             >
               {EMIL_SHORT} adjusts its own inputs from what the market is actually doing — nobody
@@ -78,7 +72,7 @@ export function EmilReveal() {
             <motion.ul
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.7, delay: 1.5 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
               className="flex flex-col gap-3"
             >
               {CLAIMS.map((claim) => (
@@ -96,7 +90,7 @@ export function EmilReveal() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.7, delay: 1.6 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
               className="flex flex-wrap gap-3"
             >
               <ButtonLink href="/platform/emil" variant="primary">
@@ -108,13 +102,39 @@ export function EmilReveal() {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.9, delay: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <EmilStatusCard awake={inView} />
-          </motion.div>
+          <div className="flex flex-col gap-5">
+            <motion.figure
+              initial={{ opacity: 0, y: 12 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Panel tone="raised" size="panel" className="flex flex-col gap-4 p-6 md:p-8">
+                <Quote size={22} strokeWidth={1.5} aria-hidden className="text-signal" />
+                <blockquote className="flex flex-col gap-1">
+                  {LINES.map((line, index) => (
+                    <motion.p
+                      key={line}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      transition={{ duration: 0.6, delay: 0.4 + index * 0.22, ease: [0.16, 1, 0.3, 1] }}
+                      className="font-display text-[1.5rem] leading-tight text-steel-100 md:text-[1.875rem]"
+                    >
+                      {line}
+                    </motion.p>
+                  ))}
+                </blockquote>
+                <figcaption className="text-eyebrow uppercase text-steel-500">{EMIL_EXPANSION}</figcaption>
+              </Panel>
+            </motion.figure>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.9, delay: 1.1, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <EmilStatusCard awake={inView} />
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

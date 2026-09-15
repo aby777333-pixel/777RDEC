@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { isScrolling, subscribeScrollActivity } from './scroll-activity'
 
 /**
  * Shared lifecycle for the canvas pens behind the broker hero bands.
@@ -159,7 +160,9 @@ export function useBackdropCanvas(
         }
         return
       }
-      if (onScreen && document.visibilityState === 'visible') {
+      // Held while the page scrolls, so the scroll gets the frame budget; the
+      // clock does not move during the hold, so nothing jumps on resume.
+      if (onScreen && document.visibilityState === 'visible' && !isScrolling()) {
         play()
       } else {
         pause()
@@ -180,6 +183,7 @@ export function useBackdropCanvas(
 
     reduced.addEventListener('change', sync)
     document.addEventListener('visibilitychange', sync)
+    const unsubscribeScroll = subscribeScrollActivity(sync)
     // The site's toggle flips an attribute rather than firing an event.
     const motionObserver = new MutationObserver(sync)
     motionObserver.observe(document.documentElement, {
@@ -198,6 +202,7 @@ export function useBackdropCanvas(
       motionObserver.disconnect()
       reduced.removeEventListener('change', sync)
       document.removeEventListener('visibilitychange', sync)
+      unsubscribeScroll()
       try {
         live.dispose?.()
       } catch {

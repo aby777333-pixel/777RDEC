@@ -139,3 +139,16 @@ export const LEGAL_LINKS: readonly NavLink[] = [
   { label: 'Jurisdictions', href: '/legal/jurisdictions', description: '' },
   { label: 'Technology Provider', href: '/legal/technology-provider', description: '' },
 ]
+
+/** Whether `href` is exactly the page being viewed. */
+export function isCurrentPage(pathname: string | null, href: string): boolean {
+  if (!pathname) return false
+  const normalise = (path: string) => (path.length > 1 ? path.replace(/\/+$/, '') : path)
+  return normalise(pathname) === normalise(href)
+}
+
+/** Whether the page being viewed is `href` or sits underneath it. */
+export function isWithinSection(pathname: string | null, href: string): boolean {
+  if (!pathname) return false
+  return isCurrentPage(pathname, href) || pathname.startsWith(`${href.replace(/\/+$/, '')}/`)
+}

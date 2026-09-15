@@ -8,10 +8,13 @@ export function CodeBlock({
   code,
   label,
   className,
+  bodyClassName,
 }: {
   code: string
   label?: string
   className?: string
+  /** Extra classes for the scrolling code area, e.g. a max height so long examples scroll inside the card. */
+  bodyClassName?: string
 }) {
   const [copied, setCopied] = useState(false)
 
@@ -38,7 +41,7 @@ export function CodeBlock({
           {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
-      <pre className="scroll-steel w-full min-w-0 overflow-x-auto px-4 py-4 text-data">
+      <pre className={cn('scroll-steel w-full min-w-0 overflow-x-auto px-4 py-4 text-data', bodyClassName)}>
         <code className="font-mono text-steel-300">{code}</code>
       </pre>
     </div>

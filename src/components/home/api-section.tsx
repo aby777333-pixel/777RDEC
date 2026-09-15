@@ -1,6 +1,7 @@
 'use client'
 
 import * as Tabs from '@radix-ui/react-tabs'
+import { Info } from 'lucide-react'
 import { CodeBlock } from '@/components/ui/code-block'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { ButtonLink } from '@/components/ui/button'
@@ -50,17 +51,25 @@ export function ApiSection() {
             ))}
           </Tabs.List>
 
+          <p className="mb-3 flex items-center gap-2 text-[0.8125rem] text-steel-500">
+            <Info size={14} strokeWidth={1.5} aria-hidden className="shrink-0" />
+            Hostnames, keys and identifiers in these examples are illustrative.
+          </p>
+
           {API_EXAMPLES.map((example) => (
             <Tabs.Content key={example.id} value={example.id} className="focus-visible:outline-none">
-              <CodeBlock code={example.code} label={`${example.label} example`} />
+              {/* The code scrolls inside the card, so the transport tabs above it
+                  stay in view however long an example runs. */}
+              <CodeBlock
+                code={example.code}
+                label={`${example.label} example`}
+                bodyClassName="max-h-[26rem] overflow-y-auto"
+              />
             </Tabs.Content>
           ))}
         </Tabs.Root>
       </div>
 
-      <p className="mt-6 text-[0.8125rem] text-steel-500">
-        Hostnames, keys and identifiers in these examples are illustrative.
-      </p>
     </Section>
   )
 }

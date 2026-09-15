@@ -103,7 +103,9 @@ export function AppShotZoom({
           // The backdrop is the close affordance: anything that is not the
           // image itself dismisses, which is what "click outside" means.
           onClick={close}
-          className="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-bg-0/80 p-4 backdrop-blur-sm motion-safe:animate-ticker-in md:p-10"
+          // Tight padding: the capture is the point, so it gets as much of the
+          // window as possible and the chrome around it stays small.
+          className="fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-bg-0/85 p-2 backdrop-blur-sm motion-safe:animate-ticker-in md:p-4"
         >
           {/* Stop the click here so pressing the image does not dismiss it —
               a visitor reading an options chain wants to point at a row. The
@@ -120,7 +122,7 @@ export function AppShotZoom({
           <button
             type="button"
             onClick={close}
-            className="absolute right-4 top-4 rounded-ui border border-line-2 bg-bg-1 px-3 py-1.5 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-steel-300 transition-colors duration-200 hover:border-steel-700 hover:text-steel-100 md:right-8 md:top-8"
+            className="absolute right-3 top-3 rounded-ui border border-line-2 bg-bg-1 px-2.5 py-1 font-mono text-[0.625rem] uppercase tracking-[0.16em] text-steel-300 transition-colors duration-200 hover:border-steel-700 hover:text-steel-100 md:right-5 md:top-5"
           >
             Close
           </button>
