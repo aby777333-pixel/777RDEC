@@ -1613,7 +1613,8 @@ html[data-scrolling='true'] .hero-band *::after {
   the loop. The scene publishes its centre of view as --breach-x and sets
   data-phase each lap: `orb` (build-up, implosion, blackout), `blast`
   (detonation), `logo` (the logo is born white-hot and cools to steel-blue),
-  `cover` (the logo fades and the curtain closes so the orb restarts under it).
+  `zoom` (the cooled logo flies out of the screen toward the viewer), `cover`
+  (the curtain closes so the orb restarts under it).
   data-haze turns the haze on while the orb quakes. Below lg the copy spans the
   band, so the logo is not shown. No text and no replay button are drawn.
 */
@@ -1706,8 +1707,12 @@ html[data-scrolling='true'] .hero-band *::after {
     breach-logo-birth 5s cubic-bezier(0.12, 0.72, 0.15, 1) forwards,
     breach-logo-cool 5s ease-out forwards;
 }
+/* Out of the screen: accelerating toward the viewer, past the band's edges. */
+.pen-scene--breach[data-phase='zoom'] .breach-logo {
+  animation: breach-logo-zoom 1.6s cubic-bezier(0.55, 0, 0.9, 0.35) forwards;
+}
 .pen-scene--breach[data-phase='cover'] .breach-logo {
-  animation: breach-logo-out 1.2s ease forwards;
+  opacity: 0;
 }
 @keyframes breach-logo-birth {
   0% {
@@ -1760,16 +1765,21 @@ html[data-scrolling='true'] .hero-band *::after {
     filter: brightness(1) saturate(1) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
   }
 }
-@keyframes breach-logo-out {
-  from {
+@keyframes breach-logo-zoom {
+  0% {
     opacity: 1;
     transform: scale(1);
-    filter: brightness(1) saturate(1) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
+    filter: brightness(1) blur(0) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
   }
-  to {
+  45% {
+    opacity: 1;
+    transform: scale(2.4);
+    filter: brightness(1.25) blur(1px) drop-shadow(0 0 30px rgba(100, 170, 255, 0.45));
+  }
+  100% {
     opacity: 0;
-    transform: scale(1.04);
-    filter: blur(14px);
+    transform: scale(11);
+    filter: brightness(1.6) blur(18px) drop-shadow(0 0 60px rgba(120, 190, 255, 0.5));
   }
 }
 

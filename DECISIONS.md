@@ -1269,8 +1269,9 @@ The owner's "THE BREACH" pen now backs `/platform/emil/strategy-builder`, ported
 the dark orb leaks light through its fissures, accelerates, implodes and blacks
 out, detonates into the pen's prismatic supernova and shockwaves, and the site's
 logo is born white-hot out of the flash and cools to steel-blue — the pen's own
-birth and cooling animations. After a hold the logo fades, the band closes to
-black and the orb starts again under it: a lap of about 20s. The pen's closing
+birth and cooling animations. Once cooled, the logo zooms out of the screen
+toward the viewer, the supernova's afterglow lingers, the band closes to black
+and the orb starts again under it: a lap of about 19.5s. The pen's closing
 tagline and its REPLAY button are not drawn.
 
 The explosion is computed from time, not stepped: each particle cloud's

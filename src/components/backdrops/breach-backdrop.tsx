@@ -46,8 +46,9 @@ import { motionIsReduced } from './motion'
  * What changed:
  *
  * - **It loops, as asked.** The pen plays once and offers a REPLAY button that
- *   reloads the page. Here, after the logo has cooled and held, it fades, the
- *   band closes to black and the orb starts again under it. No replay button.
+ *   reloads the page. Here, once the logo has been born and cooled, it zooms out
+ *   of the screen toward the viewer, the supernova's afterglow lingers, the band
+ *   closes to black and the orb starts again under it. No replay button.
  * - **No text.** The pen's closing "777 RAPTOR / POWER UNDER CONTROL." lines are
  *   not drawn; the hero carries its own copy. The logo is the site's master
  *   logo (the pen leaves a placeholder).
@@ -73,11 +74,17 @@ const BLACKOUT_AT = 8.28
 const DETONATE_AT = 8.39
 /** After detonation. */
 const LOGO_AT = 0.72
-/** The pen's 5s logo birth and cool-down, then a hold, then the close to black. */
+/** The pen's 5s logo birth and cool-down. */
 const LOGO_SECONDS = 5
-const HOLD_SECONDS = 4
+/** The cooled logo holds this long, then zooms out of the screen toward the viewer. */
+const LOGO_HOLD_SECONDS = 0.6
+/** The zoom's length; matches `breach-logo-zoom` in globals.css. */
+const ZOOM_SECONDS = 1.6
+/** The supernova's afterglow, logo gone, before the close to black. */
+const AFTERGLOW_SECONDS = 1.2
 const COVER_SECONDS = 2
-const LAP = DETONATE_AT + LOGO_AT + LOGO_SECONDS + HOLD_SECONDS + COVER_SECONDS
+const ZOOM_AT = DETONATE_AT + LOGO_AT + LOGO_SECONDS + LOGO_HOLD_SECONDS
+const LAP = ZOOM_AT + ZOOM_SECONDS + AFTERGLOW_SECONDS + COVER_SECONDS
 
 /** From this band width the copy leaves room on the right. Tailwind's `lg`. */
 const WIDE_FROM = 1024
@@ -649,6 +656,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
         const elapsed = t - DETONATE_AT
         supernova(elapsed, dt)
         if (t >= LAP - COVER_SECONDS) setPhase('cover')
+        else if (t >= ZOOM_AT) setPhase('zoom')
         else if (elapsed >= LOGO_AT) setPhase('logo')
         else setPhase('blast')
       }
