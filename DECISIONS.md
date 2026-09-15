@@ -1170,10 +1170,12 @@ be widened before advertising tags go into the container.
 The owner's roller-coaster pen now backs `/platform`, ported in
 `velocity-backdrop.tsx`, where the full list of changes is written up. In short:
 the ride starts when the band does; none of the pen's text is drawn (start
-screen, speed HUD, status line, tagline); and instead of slamming into the final
-wall and cutting to a black logo screen, the coaster brakes evenly over the last
-straight and comes to rest facing the wall about thirty seconds in, where the
-site's logo rises out of the pen's light burst over the stopped scene.
+screen, speed HUD, status line, tagline); the pen's final wall is removed; and
+instead of slamming into that wall and cutting to a black logo screen, the
+coaster brakes evenly over the last straight and comes to rest about thirty
+seconds in, where the site's logo rises out of the pen's light burst over the
+stopped scene. It loops: after a hold the logo fades, the gradient closes to
+black, and the ride restarts from the station under it — a lap of about 38s.
 
 The band is `min-h-[38rem] md:min-h-[48rem]` — near a full desktop screen — with
 the copy centred on it like the warp and cosmic heroes. As with those, the logo

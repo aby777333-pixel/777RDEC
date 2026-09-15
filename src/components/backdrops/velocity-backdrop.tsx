@@ -45,8 +45,8 @@ import { motionIsReduced } from './motion'
  * and dust hang in the fog, sparks fly off the rails, and speed lines, a wider
  * field of view and a shaking camera come up with the speed.
  *
- * The track's path, the rails, sleepers, supports, pillars, tunnel frames, blast
- * doors and the final wall, the lights and materials, the fog, tone mapping and
+ * The track's path, the rails, sleepers, supports, pillars, tunnel frames and
+ * blast doors, the lights and materials, the fog, tone mapping and
  * exposure, the particles, sparks and lightning, the ride's pacing curve, the
  * speed model, the camera's vibration, shake, banking and field of view, the
  * speed lines and vignette, and the logo's light burst and reveal are the pen's,
@@ -59,14 +59,17 @@ import { motionIsReduced } from './motion'
  *   "ENTER THE RAPTOR" button and a headphones hint — and runs a HUD with the
  *   speed and a status line; its logo screen carries a tagline. None of it is
  *   drawn here. The ride begins when the band does.
- * - **The ride stops at the logo, as asked.** The pen runs flat out into the
- *   final wall, cuts to a white impact flash and a black frame, and brings the
- *   logo up on a screen of its own. Here the coaster brakes over the last
- *   straight and comes to rest facing that wall, and the logo — the site's
- *   master logo; the pen leaves a placeholder URL — rises out of the pen's light
- *   burst over the stopped scene, with the pen's logo-screen gradient drawn
- *   down over it rather than replacing it. The shake, speed lines, sparks and
- *   field of view settle with the speed as it brakes.
+ * - **The ride stops at the logo, and loops, as asked.** The pen runs flat out
+ *   into a wall at the end of the track, cuts to a white impact flash and a
+ *   black frame, and brings the logo up on a screen of its own, once. Here the
+ *   wall is gone: the coaster brakes over the last straight and comes to rest
+ *   looking down the empty track, and the logo — the site's master logo; the
+ *   pen leaves a placeholder URL — rises out of the pen's light burst over the
+ *   stopped scene, with the pen's logo-screen gradient drawn down over it
+ *   rather than replacing it. The shake, speed lines, sparks and field of view
+ *   settle with the speed as it brakes. After a hold the logo fades, the
+ *   gradient closes to black, and under it the ride restarts from the station,
+ *   so the jump back is never seen.
  * - **It shares the hero with its copy.** On a wide band the camera's centre of
  *   view, the speed lines, the vignette and the logo sit in the space to the
  *   right of the heading; on a narrow one the ride stays centred behind the
@@ -75,8 +78,7 @@ import { motionIsReduced } from './motion'
  *   animation frame; here those steps are taken at its 60 a second, whatever
  *   the screen's rate. The ride runs on the band's own clock, which pauses while
  *   the band is off screen, and the pen's timers — the lightning's 70ms — are
- *   read off the same clock. Once the logo is up and the scene is still, it
- *   stops drawing.
+ *   read off the same clock.
  * - **Cheaper to draw, drawn the same.** The six hundred identical sleepers are
  *   one instanced mesh, and the sparks share one geometry and material rather
  *   than each making (and never releasing) its own. The red warning lights are
@@ -85,19 +87,21 @@ import { motionIsReduced } from './motion'
  *   black one. The backing store is capped at 1.5x, since seventy-odd point
  *   lights are shaded on every pixel.
  * - **A still band is a composed one.** With motion reduced there is one frame:
- *   the coaster stopped at the wall, the logo up.
+ *   the coaster stopped at the end of the track, the logo up.
  * - **Its size follows the band** rather than the window.
  */
 
 const RIDE_DURATION = 29
-/** Where along the track the coaster comes to rest, just short of the final wall (.992). */
+/** Where along the track the coaster comes to rest, on the final straight. */
 const STOP_T = 0.982
 /** Seconds of braking on the final straight. */
 const BRAKE_SECONDS = 3.5
 /** Pause between coming to rest and the logo's light burst. */
 const REVEAL_DELAY = 0.4
-/** The logo's reveal runs 3.5s; after that nothing on the canvas moves enough to redraw. */
-const SETTLE_SECONDS = 5
+/** From coming to rest until the logo fades: the delay, the 3.5s reveal, then a hold. */
+const HOLD_SECONDS = 6.5
+/** The curtain closing to black before the ride restarts under it (its transition is 1.4s). */
+const COVER_SECONDS = 1.6
 
 const STEP = 1 / 60
 const MAX_STEPS = 4
@@ -187,10 +191,11 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
   const speedLines = host.querySelector<HTMLElement>('[data-velocity-lines]')
   const flash = host.querySelector<HTMLElement>('[data-velocity-flash]')
-  const reveal = host.querySelector<HTMLElement>('[data-velocity-reveal]')
 
   const brake = brakePlan()
   const stopAt = brake.start + BRAKE_SECONDS
+  /** One lap: the ride, the logo held over the stopped scene, the close to black. */
+  const loop = stopAt + HOLD_SECONDS + COVER_SECONDS
 
   /** Track position for a ride time: the pen's curve, then an even brake to rest. */
   const rideProgress = (elapsed: number) => {
@@ -367,14 +372,6 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   rightDoor.position.y += 10
   scene.add(leftDoor, rightDoor)
 
-  // FINAL WALL
-  const wallGeometry = keep(new BoxGeometry(80, 70, 8))
-  const wallMaterial = keep(new MeshStandardMaterial({ color: 0x17191c, metalness: 0.65, roughness: 0.6 }))
-  const finalWall = new Mesh(wallGeometry, wallMaterial)
-  finalWall.position.copy(curve.getPointAt(0.992))
-  finalWall.position.y += 28
-  scene.add(finalWall)
-
   // PARTICLES / RAIN / DUST
   const particleCount = 8000
   const positions = new Float32Array(particleCount * 3)
@@ -414,7 +411,8 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
   let height = 1
   let nextLightning = 4
   let flashUntil = -1
-  let revealed = false
+  let phase = ''
+  let lap = -1
   let lastDrawn = -1
   let stepsTaken = -1
   let clockOffset = 0
@@ -505,10 +503,21 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
     }
   }
 
-  const showLogo = () => {
-    if (revealed) return
-    revealed = true
-    reveal?.classList.add('reveal')
+  /** `ride`, `logo` (up over the stopped scene) or `cover` (closing to black). Styled in CSS. */
+  const setPhase = (next: string) => {
+    if (next === phase) return
+    phase = next
+    host.dataset.phase = next
+  }
+
+  /** A new lap starts from the station with the doors open and the sky quiet. */
+  const resetLap = () => {
+    leftDoor.position.x = doorPoint.x - 13
+    rightDoor.position.x = doorPoint.x + 13
+    nextLightning = 4
+    flashUntil = -1
+    for (const spark of sparks) scene.remove(spark.mesh)
+    sparks.length = 0
   }
 
   const applyView = () => {
@@ -526,22 +535,25 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       renderer.setPixelRatio(dpr)
       renderer.setSize(w, h, false)
       applyView()
-      // A settled band stops drawing, so a resize must draw the new size itself.
+      // A still band draws no frames of its own, so a resize draws the new size.
       if (lastDrawn >= 0) renderer.render(scene, camera)
     },
     frame(seconds) {
       if (stepsTaken < 0 && motionIsReduced()) {
-        // The end of the ride is the frame to keep: stopped at the wall, logo
-        // up. Moving the clock there, rather than drawing it once, means motion
-        // switched back on later does not replay the ride under a logo.
-        clockOffset = stopAt + SETTLE_SECONDS + 1
+        // The end of the ride is the frame to keep: stopped, logo up. Moving
+        // the clock there, rather than drawing it once, means motion switched
+        // back on later carries on from the hold instead of starting mid-ride.
+        clockOffset = stopAt + REVEAL_DELAY + 4
       }
       const elapsed = seconds + clockOffset
-      const settled = stopAt + SETTLE_SECONDS
+      const thisLap = Math.floor(elapsed / loop)
+      const lapTime = elapsed - thisLap * loop
+      if (thisLap !== lap) {
+        if (lap >= 0) resetLap()
+        lap = thisLap
+      }
 
-      if (elapsed > settled && lastDrawn > settled) return
-
-      pose(elapsed)
+      pose(Math.min(lapTime, stopAt + HOLD_SECONDS))
 
       const due = Math.floor(elapsed / STEP)
       if (stepsTaken < 0) stepsTaken = due - 1
@@ -549,7 +561,9 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       stepsTaken = Math.max(due, stepsTaken)
       for (let i = 0; i < count; i++) step()
 
-      if (elapsed >= stopAt + REVEAL_DELAY) showLogo()
+      if (lapTime >= stopAt + HOLD_SECONDS) setPhase('cover')
+      else if (lapTime >= stopAt + REVEAL_DELAY) setPhase('logo')
+      else setPhase('ride')
 
       renderer.render(scene, camera)
       lastDrawn = elapsed
@@ -574,8 +588,8 @@ export function VelocityBackdrop({ className }: { className?: string }) {
       <div className="velocity-lines" data-velocity-lines />
       <div className="velocity-vignette" />
       <div className="velocity-flash" data-velocity-flash />
-      <div className="velocity-reveal" data-velocity-reveal>
-        <div className="velocity-curtain" />
+      <div className="velocity-curtain" />
+      <div className="velocity-reveal">
         <div className="velocity-light" />
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element -- static brand asset, no optimisation needed

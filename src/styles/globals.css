@@ -1394,11 +1394,16 @@ html[data-reduce-motion='true'] *::after {
 /*
   VELOCITY (`velocity`, the platform hero): the pen's ground, and the parts of
   its page that are not text, above the canvas — the speed lines, the vignette,
-  the lightning flash and the logo reveal with its light burst and the logo
-  screen's gradient. The ride publishes its centre of view as --velocity-x, and
-  the lines, vignette and reveal are centred on it. The pen's start screen, HUD
-  and tagline are not drawn. Below lg the copy spans the band and the reveal is
-  not shown.
+  the lightning flash, the logo screen's gradient and the logo with its light burst.
+  The ride publishes its centre of view as --velocity-x, and the lines,
+  vignette, gradient and logo are centred on it. The pen's start screen, HUD
+  and tagline are not drawn.
+
+  The scene sets data-phase on the band each lap: `logo` draws the gradient
+  down over the stopped ride and brings the logo up, `cover` fades the logo and
+  closes the gradient to black so the ride can restart under it, and `ride`
+  opens it again. Below lg the copy spans the band, so the logo is not shown;
+  the gradient still covers the restart.
 */
 .pen-scene--velocity {
   background: #010204;
@@ -1444,7 +1449,7 @@ html[data-reduce-motion='true'] *::after {
 .velocity-reveal {
   position: absolute;
   inset: 0;
-  z-index: 4;
+  z-index: 5;
   display: none;
 }
 @media (min-width: 1024px) {
@@ -1456,6 +1461,7 @@ html[data-reduce-motion='true'] *::after {
 .velocity-curtain {
   position: absolute;
   inset: 0;
+  z-index: 4;
   opacity: 0;
   background: radial-gradient(
     circle at var(--velocity-x, 50%) 50%,
@@ -1465,8 +1471,11 @@ html[data-reduce-motion='true'] *::after {
   );
   transition: opacity 1.4s ease;
 }
-.velocity-reveal.reveal .velocity-curtain {
+.pen-scene--velocity[data-phase='logo'] .velocity-curtain {
   opacity: 0.8;
+}
+.pen-scene--velocity[data-phase='cover'] .velocity-curtain {
+  opacity: 1;
 }
 .velocity-light {
   position: absolute;
@@ -1496,11 +1505,14 @@ html[data-reduce-motion='true'] *::after {
   transform: scale(0.45);
   filter: blur(20px);
 }
-.velocity-reveal.reveal .velocity-light {
+.pen-scene--velocity[data-phase='logo'] .velocity-light {
   animation: velocity-logo-flash 2.5s forwards;
 }
-.velocity-reveal.reveal .velocity-logo {
+.pen-scene--velocity[data-phase='logo'] .velocity-logo {
   animation: velocity-logo-reveal 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.pen-scene--velocity[data-phase='cover'] .velocity-logo {
+  animation: velocity-logo-out 1.2s ease forwards;
 }
 @keyframes velocity-logo-reveal {
   0% {
@@ -1518,6 +1530,18 @@ html[data-reduce-motion='true'] *::after {
     opacity: 1;
     transform: scale(1);
     filter: blur(0) drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
+  }
+}
+@keyframes velocity-logo-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0) drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.04);
+    filter: blur(14px);
   }
 }
 @keyframes velocity-logo-flash {
