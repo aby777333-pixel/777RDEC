@@ -18,6 +18,8 @@ import {
   type FormState,
 } from '@/lib/forms/schema'
 import { cn } from '@/lib/utils'
+import { isPhoneCountry, isValidPhone } from '@/lib/forms/phone'
+import { PhoneField } from './phone-field'
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ''
 
@@ -45,6 +47,12 @@ function fieldIsValid(field: HTMLInputElement | HTMLSelectElement | HTMLTextArea
       return value.length <= 80
     case 'message':
       return value.length <= 4000
+    case 'phoneNational': {
+      // Optional: empty is fine; otherwise it must fit the chosen country.
+      if (value.length === 0) return true
+      const country = field.form?.querySelector<HTMLInputElement>('input[name=phoneCountry]')?.value ?? ''
+      return isPhoneCountry(country) && isValidPhone(value, country)
+    }
     default:
       return false
   }
@@ -91,13 +99,15 @@ export function LeadForm({
     ) {
       return
     }
-    if (!(field.name in submittedErrors)) return
+    // The phone's visible input reports against the submitted `phone` field.
+    const key = field.name === 'phoneNational' ? 'phone' : field.name
+    if (!(key in submittedErrors)) return
     const valid = fieldIsValid(field)
     setCorrected((previous) => {
-      if (valid === previous.has(field.name)) return previous
+      if (valid === previous.has(key)) return previous
       const next = new Set(previous)
-      if (valid) next.add(field.name)
-      else next.delete(field.name)
+      if (valid) next.add(key)
+      else next.delete(key)
       return next
     })
   }
@@ -185,6 +195,8 @@ export function LeadForm({
               className={inputClass(fieldErrors?.email)}
             />
           </Field>
+
+          <PhoneField error={fieldErrors?.phone} />
 
           <Field label="Company" name="company" error={fieldErrors?.company}>
             <input

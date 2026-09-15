@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { isValidE164 } from './phone'
 
 export const AUDIENCE_OPTIONS = [
   { value: 'trader', label: 'Trader' },
@@ -62,6 +63,17 @@ export const leadSchema = z.object({
   email: z.string().trim().toLowerCase().email('Please enter a valid email address.').max(200),
   company: z.string().trim().max(160).optional().or(z.literal('')),
   role: z.string().trim().max(120).optional().or(z.literal('')),
+  /** Optional. E.164, checked against the number's own country plan. */
+  phone: z
+    .string()
+    .trim()
+    .max(32)
+    .refine((value) => value === '' || isValidE164(value), {
+      message: 'Please enter a valid phone number for the selected country.',
+    })
+    .optional()
+    .or(z.literal('')),
+  phoneCountry: z.string().trim().max(2).optional().or(z.literal('')),
   audience: z.enum(['trader', 'broker', 'institution', 'prop', 'developer', 'other'], {
     errorMap: () => ({ message: 'Please choose the option that best describes you.' }),
   }),
