@@ -196,7 +196,8 @@ export function ScreenGallery({
       )}
     >
       {/* ---- toolbar ---- */}
-      <div className="flex flex-wrap items-center gap-2">
+      {/* Centred on a phone, where the controls wrap to several rows. */}
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
         <button type="button" className={button} onClick={() => go(0)} aria-label="First screenshot" title="First (Home)">
           <SkipBack className="h-4 w-4" aria-hidden />
         </button>
@@ -243,7 +244,7 @@ export function ScreenGallery({
           </select>
         </label>
 
-        <span className="flex-1" />
+        <span className="hidden flex-1 sm:block" />
 
         <button
           type="button"
@@ -266,21 +267,31 @@ export function ScreenGallery({
           as the column allows — and a capture taller than the stage scrolls
           inside it with its own scrollbar, so reading the bottom of a tall
           screen never means scrolling the page. At actual size the stage is a
-          fixed window onto the capture, panned by dragging. */}
+          fixed window onto the capture, panned by dragging.
+
+          On a phone, and in full screen at any size, the capture is instead
+          shown whole in a frame of fixed shape: every capture the same size,
+          nothing cut off, and the picture given the space rather than the
+          controls around it. */}
       <div
         className={cn(
           'relative overflow-hidden rounded-md border border-line-1 bg-black',
-          fullscreen ? 'min-h-0 flex-1' : actualSize ? 'h-[min(78vh,56rem)]' : undefined,
+          fullscreen
+            ? 'min-h-0 flex-1'
+            : actualSize
+              ? 'h-[min(78vh,56rem)]'
+              : 'aspect-[4/3] sm:aspect-auto',
         )}
       >
         <div
           ref={stageRef}
           className={cn(
             'scroll-steel select-none',
-            fullscreen || actualSize ? 'absolute inset-0' : 'max-h-[min(78vh,56rem)]',
             actualSize
-              ? 'cursor-grab overflow-auto active:cursor-grabbing'
-              : 'cursor-pointer overflow-y-auto overflow-x-hidden',
+              ? 'absolute inset-0 cursor-grab overflow-auto active:cursor-grabbing'
+              : fullscreen
+                ? 'absolute inset-0 cursor-pointer overflow-hidden'
+                : 'absolute inset-0 cursor-pointer overflow-hidden sm:static sm:max-h-[min(78vh,56rem)] sm:overflow-y-auto sm:overflow-x-hidden',
           )}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -310,14 +321,18 @@ export function ScreenGallery({
               unoptimized
               priority={index === 0}
               draggable={false}
-              className="block h-auto w-full"
+              className={cn(
+                'absolute inset-0 h-full w-full object-contain',
+                !fullscreen && 'sm:static sm:block sm:h-auto sm:w-full sm:object-fill',
+              )}
             />
           )}
         </div>
 
         <div
           className={cn(
-            'pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full border px-3 py-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] backdrop-blur',
+            // Small on a phone, so the badge does not cover the capture.
+            'pointer-events-none absolute left-1/2 top-2 -translate-x-1/2 whitespace-nowrap rounded-full border px-2 py-0.5 font-mono text-[0.5625rem] uppercase tracking-[0.1em] backdrop-blur sm:top-3 sm:px-3 sm:py-1 sm:text-[0.6875rem] sm:tracking-[0.12em]',
             playing ? 'border-signal/40 bg-black/70 text-signal' : 'border-amber-400/50 bg-black/75 text-amber-300',
           )}
           aria-hidden
@@ -346,7 +361,15 @@ export function ScreenGallery({
         <h2 className="font-display text-[1.375rem] leading-snug text-steel-100 md:text-[1.625rem]">
           {shot.heading}
         </h2>
-        <p className="max-w-4xl text-[0.9375rem] leading-relaxed text-steel-300">{shot.body}</p>
+        <p
+          className={cn(
+            'max-w-4xl text-[0.9375rem] leading-relaxed text-steel-300',
+            // In full screen on a phone the picture needs the height more than the paragraph.
+            fullscreen && 'hidden sm:block',
+          )}
+        >
+          {shot.body}
+        </p>
       </div>
 
       {/* ---- strip ---- */}
@@ -360,7 +383,8 @@ export function ScreenGallery({
             aria-label={`Show ${item.title}`}
             aria-current={i === index}
             className={cn(
-              'group relative w-36 flex-none overflow-hidden rounded-md border-2 bg-bg-2 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal',
+              'group relative flex-none overflow-hidden rounded-md border-2 bg-bg-2 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal',
+              fullscreen ? 'w-24 sm:w-36' : 'w-36',
               i === index ? 'border-signal' : 'border-transparent hover:border-line-2',
             )}
           >
@@ -371,7 +395,7 @@ export function ScreenGallery({
               height={76}
               unoptimized
               loading="lazy"
-              className="block h-[76px] w-full object-cover object-left-top"
+              className={cn('block w-full object-cover object-left-top', fullscreen ? 'h-[50px] sm:h-[76px]' : 'h-[76px]')}
             />
             <span className="block truncate px-2 py-1 text-[0.6875rem] text-steel-300">
               {String(i + 1).padStart(2, '0')} · {item.title}
@@ -380,7 +404,7 @@ export function ScreenGallery({
         ))}
       </div>
 
-      <p className="px-1 text-[0.75rem] text-steel-500">
+      <p className={cn('px-1 text-[0.75rem] text-steel-500', fullscreen ? 'hidden' : 'hidden sm:block')}>
         Click the picture to pause for inspection, click again to resume. A tall screen scrolls
         inside the picture. With the gallery focused:
         ← → previous and next · Space play and pause · Z actual size (drag to pan) · Home and End

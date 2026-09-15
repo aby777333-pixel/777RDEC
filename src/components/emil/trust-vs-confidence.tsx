@@ -81,7 +81,7 @@ export function TrustVsConfidence({ className }: { className?: string }) {
           <ul className="mt-4 flex flex-col">
             {BANDS.map((row) => (
               <li key={row.band} className="border-t border-line-2 py-3.5">
-                <p className="flex flex-wrap items-baseline gap-x-2">
+                <p className="flex flex-col gap-0.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:gap-x-2">
                   <span className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-signal">
                     {row.band}
                   </span>

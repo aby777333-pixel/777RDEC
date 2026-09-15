@@ -9,7 +9,14 @@ import { SITE_DOMAIN, SITE_NAME } from './brand'
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY ?? ''
 const NOTIFICATION_TO = process.env.DEMO_NOTIFICATION_TO ?? ''
-const FROM = `${SITE_NAME} <notifications@${SITE_DOMAIN}>`
+/**
+ * The sender. Resend only sends from a domain verified in its dashboard, so
+ * set EMAIL_FROM (e.g. `777 Raptor <hello@yourdomain.com>`) to an address on a
+ * verified domain. The fallback is the site's own domain.
+ */
+const FROM = (process.env.EMAIL_FROM ?? '').trim() || `${SITE_NAME} <notifications@${SITE_DOMAIN}>`
+/** Where a visitor's reply to an acknowledgement goes, when set. */
+const REPLY_TO = (process.env.EMAIL_REPLY_TO ?? '').trim()
 
 export type EmailMessage = { subject: string; body: string }
 
@@ -66,4 +73,41 @@ export function getEmailProvider(): EmailProvider {
 
 export async function sendNotification(message: EmailMessage): Promise<boolean> {
   return getEmailProvider().send(message)
+}
+
+/**
+ * A confirmation to the person who submitted a form — "we have it, a person
+ * will reply". Sent only when Resend is configured; without it this does
+ * nothing and says so in the log. Never throws, and its result never decides
+ * whether a submission succeeded: the enquiry is already saved by then.
+ */
+export async function sendAcknowledgement(to: string, message: EmailMessage): Promise<boolean> {
+  if (RESEND_API_KEY.length === 0) {
+    console.info('[email:acknowledgement] Resend not configured; no confirmation sent')
+    return false
+  }
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: FROM,
+        to: [to],
+        subject: message.subject,
+        text: message.body,
+        ...(REPLY_TO ? { reply_to: REPLY_TO } : {}),
+      }),
+    })
+    if (!response.ok) {
+      console.error('[email:acknowledgement] failed', response.status, await response.text())
+      return false
+    }
+    return true
+  } catch (error) {
+    console.error('[email:acknowledgement] threw', error)
+    return false
+  }
 }

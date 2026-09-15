@@ -1,8 +1,8 @@
 'use server'
 
-import { CONTACT_EMAIL } from '@/lib/brand'
+import { CONTACT_EMAIL, SITE_NAME, TECHNOLOGY_PROVIDER_DISCLOSURE } from '@/lib/brand'
 import { insertRow } from '@/lib/supabase/server'
-import { sendNotification } from '@/lib/email'
+import { sendAcknowledgement, sendNotification } from '@/lib/email'
 import { verifyTurnstile } from './turnstile'
 import { leadSchema, type FormState, type LeadInput } from './schema'
 
@@ -117,6 +117,26 @@ async function submit(target: Target, formData: FormData): Promise<FormState> {
       message: `Something went wrong on our side and your message did not reach us. Please try again, or email ${CONTACT_EMAIL} directly.`,
     }
   }
+
+  // Confirmation to the person who wrote in. Best effort: the enquiry is
+  // already saved or delivered, so a failed confirmation changes nothing here.
+  const firstName = data.fullName.split(/\s+/)[0] ?? data.fullName
+  const what = target === 'demo_requests' ? 'demo request' : 'message'
+  await sendAcknowledgement(data.email, {
+    subject: `${SITE_NAME} — we have your ${what}`,
+    body: [
+      `Hello ${firstName},`,
+      '',
+      `Thank you for your ${what}. It has reached us, and a member of the ${SITE_NAME} team will reply within one business day.`,
+      '',
+      'If you need to add anything in the meantime, simply reply to this email.',
+      '',
+      ...(data.message ? ['What you sent:', data.message, ''] : []),
+      `— ${SITE_NAME}`,
+      '',
+      TECHNOLOGY_PROVIDER_DISCLOSURE,
+    ].join('\n'),
+  })
 
   return { status: 'success', message: SUCCESS[target] }
 }

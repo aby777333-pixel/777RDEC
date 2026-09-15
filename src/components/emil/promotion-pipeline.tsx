@@ -47,7 +47,7 @@ export function PromotionPipeline({ className }: { className?: string }) {
         <p className="text-eyebrow uppercase text-steel-500">
           In the lab · {LAB.length} stages before a person looks
         </p>
-        <ol className="mt-4 flex flex-wrap gap-2">
+        <ol className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
           {LAB.map((stage, index) => (
             <li
               key={stage}

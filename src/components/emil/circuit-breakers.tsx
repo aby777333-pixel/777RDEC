@@ -87,13 +87,15 @@ export function CircuitBreakers({ className }: { className?: string }) {
         <ul className="grid gap-px bg-line-1 sm:grid-cols-2 lg:grid-cols-3">
           {BREAKERS.map((breaker) => (
             <li key={breaker.label} className="flex flex-col gap-2 bg-bg-2 px-5 py-4">
-              <span className="flex flex-wrap items-center gap-2">
+              {/* Title left, badge pinned right — the same place in every card,
+                  whatever the length of the title. */}
+              <span className="flex items-start justify-between gap-3">
                 <span className="text-[0.9375rem] leading-snug text-steel-100">
                   {breaker.label}
                 </span>
                 <span
                   className={cn(
-                    'rounded-full border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em]',
+                    'shrink-0 whitespace-nowrap rounded-full border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em]',
                     breaker.action === 'Alert only'
                       ? 'border-line-2 text-steel-500'
                       : 'border-warn/40 text-warn',

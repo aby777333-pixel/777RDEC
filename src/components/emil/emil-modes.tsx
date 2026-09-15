@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { EMIL_SHORT } from '@/lib/brand'
 import { Panel } from '@/components/ui/panel'
 import { cn } from '@/lib/utils'
@@ -124,19 +124,23 @@ const MODES: readonly Mode[] = [
 
 export function EmilModes() {
   const [activeId, setActiveId] = useState('semi')
-  const detailRef = useRef<HTMLDivElement>(null)
+  const inlineRef = useRef<HTMLDivElement>(null)
+  const belowRef = useRef<HTMLDivElement>(null)
   const active = MODES.find((mode) => mode.id === activeId) ?? MODES[0]
   if (!active) return null
 
   /**
-   * The detail sits under the grid, often below the fold. Choosing a mode
-   * brings it into view — only as far as needed, and without the smooth
-   * scroll when motion is reduced — so the click visibly does something.
+   * On a phone the detail opens directly under the card that was tapped; from
+   * sm up it sits under the whole grid. Either way, choosing a mode brings the
+   * detail into view — only as far as needed, and without the smooth scroll
+   * when motion is reduced — so the tap visibly does something.
    */
   const choose = (id: string) => {
     setActiveId(id)
     window.requestAnimationFrame(() => {
-      const detail = detailRef.current
+      const detail = [inlineRef.current, belowRef.current].find(
+        (element) => element !== null && element.offsetParent !== null,
+      )
       if (!detail) return
       const rect = detail.getBoundingClientRect()
       const fullyVisible = rect.top >= 88 && rect.bottom <= window.innerHeight
@@ -147,6 +151,38 @@ export function EmilModes() {
       detail.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' })
     })
   }
+
+  // The key replays the entry animation so a change of mode reads as a change.
+  const detail = (
+    <Panel key={active.id} tone="raised" size="panel" className="overflow-hidden motion-safe:animate-ticker-in">
+      <div className="flex flex-wrap items-center gap-3 border-b border-line-1 px-6 py-4">
+        <span className="relative flex h-2.5 w-2.5 items-center justify-center" aria-hidden>
+          {active.acts ? (
+            <span className="absolute inset-0 rounded-full bg-armed opacity-30 motion-safe:animate-breathe" />
+          ) : null}
+          <span
+            className={cn(
+              'h-1.5 w-1.5 rounded-full',
+              active.acts ? 'bg-armed' : 'bg-steel-700',
+            )}
+          />
+        </span>
+        <span className="font-display text-[1.125rem] uppercase tracking-tight text-steel-100">
+          {active.label}
+        </span>
+        <span className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-steel-500">
+          {active.acts ? 'Can reach the market' : 'Cannot reach the market'}
+        </span>
+      </div>
+
+      <p className="px-6 py-5 text-body text-steel-300">{active.detail}</p>
+
+      <div className="grid gap-px border-t border-line-1 bg-line-1 sm:grid-cols-2">
+        <List label="Permitted" tone="up" items={active.permitted} />
+        <List label="Not permitted" tone="down" items={active.refused} />
+      </div>
+    </Panel>
+  )
 
   return (
     <div className="flex flex-col gap-6">
@@ -160,77 +196,56 @@ export function EmilModes() {
         {MODES.map((mode) => {
           const selected = mode.id === activeId
           return (
-            <button
-              key={mode.id}
-              type="button"
-              role="radio"
-              aria-checked={selected}
-              aria-controls="emil-mode-detail"
-              onClick={() => choose(mode.id)}
-              className={cn(
-                'flex flex-col gap-2 rounded-ui border p-4 text-left transition-colors duration-200 ease-raptor',
-                selected
-                  ? 'border-signal bg-bg-2'
-                  : 'border-line-2 bg-bg-1 hover:border-steel-700 hover:bg-bg-2',
-              )}
-            >
-              <span className="flex flex-wrap items-center gap-2">
-                <span className="font-display text-[1rem] uppercase tracking-tight text-steel-100">
-                  {mode.label}
+            <Fragment key={mode.id}>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={selected}
+                aria-controls="emil-mode-detail"
+                onClick={() => choose(mode.id)}
+                className={cn(
+                  'flex flex-col gap-2 rounded-ui border p-4 text-left transition-colors duration-200 ease-raptor',
+                  selected
+                    ? 'border-signal bg-bg-2'
+                    : 'border-line-2 bg-bg-1 hover:border-steel-700 hover:bg-bg-2',
+                )}
+              >
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="font-display text-[1rem] uppercase tracking-tight text-steel-100">
+                    {mode.label}
+                  </span>
+                  <span
+                    className={cn(
+                      'rounded-full border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em]',
+                      mode.acts
+                        ? 'border-armed/40 text-armed'
+                        : 'border-line-2 text-steel-500',
+                    )}
+                  >
+                    {mode.acts ? 'Can act' : 'No execution'}
+                  </span>
                 </span>
-                <span
-                  className={cn(
-                    'rounded-full border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.14em]',
-                    mode.acts
-                      ? 'border-armed/40 text-armed'
-                      : 'border-line-2 text-steel-500',
-                  )}
-                >
-                  {mode.acts ? 'Can act' : 'No execution'}
-                </span>
-              </span>
-              <span className="text-[0.875rem] leading-relaxed text-steel-500">{mode.detail}</span>
-            </button>
+                <span className="text-[0.875rem] leading-relaxed text-steel-500">{mode.detail}</span>
+              </button>
+              {/* Phones only: the detail opens right under the tapped card. */}
+              {selected ? (
+                <div ref={inlineRef} aria-live="polite" className="scroll-mt-28 scroll-mb-6 sm:hidden">
+                  {detail}
+                </div>
+              ) : null}
+            </Fragment>
           )
         })}
       </div>
 
-      {/* scroll-mt clears the sticky header; the key replays the entry
-          animation so a change of mode reads as a change. */}
+      {/* From sm up: the detail under the whole grid. scroll-mt clears the sticky header. */}
       <div
-        ref={detailRef}
+        ref={belowRef}
         id="emil-mode-detail"
         aria-live="polite"
-        className="scroll-mt-28 scroll-mb-6"
+        className="hidden scroll-mt-28 scroll-mb-6 sm:block"
       >
-      <Panel key={active.id} tone="raised" size="panel" className="overflow-hidden motion-safe:animate-ticker-in">
-        <div className="flex flex-wrap items-center gap-3 border-b border-line-1 px-6 py-4">
-          <span className="relative flex h-2.5 w-2.5 items-center justify-center" aria-hidden>
-            {active.acts ? (
-              <span className="absolute inset-0 rounded-full bg-armed opacity-30 motion-safe:animate-breathe" />
-            ) : null}
-            <span
-              className={cn(
-                'h-1.5 w-1.5 rounded-full',
-                active.acts ? 'bg-armed' : 'bg-steel-700',
-              )}
-            />
-          </span>
-          <span className="font-display text-[1.125rem] uppercase tracking-tight text-steel-100">
-            {active.label}
-          </span>
-          <span className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-steel-500">
-            {active.acts ? 'Can reach the market' : 'Cannot reach the market'}
-          </span>
-        </div>
-
-        <p className="px-6 py-5 text-body text-steel-300">{active.detail}</p>
-
-        <div className="grid gap-px border-t border-line-1 bg-line-1 sm:grid-cols-2">
-          <List label="Permitted" tone="up" items={active.permitted} />
-          <List label="Not permitted" tone="down" items={active.refused} />
-        </div>
-      </Panel>
+        {detail}
       </div>
     </div>
   )

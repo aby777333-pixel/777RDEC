@@ -5,6 +5,7 @@ import { Chip } from '@/components/ui/chip'
 import { Section, SectionHeader } from '@/components/ui/section'
 import { careers as copy } from '@/lib/copy/company'
 import { APPLY_TO, ROLES } from '@/lib/copy/roles'
+import { ExpandOnMobile } from '@/components/ui/expand-on-mobile'
 import { pageMetadata } from '@/lib/seo'
 
 export const metadata: Metadata = pageMetadata({
@@ -51,7 +52,9 @@ export default function CareersPage() {
                   </a>
                 </div>
 
-                <div className="grid min-w-0 flex-1 gap-8 sm:grid-cols-2">
+                {/* On a phone the full role folds behind "Read more", so the list
+                    can be scanned and each Apply link reached quickly. */}
+                <ExpandOnMobile className="grid min-w-0 flex-1 gap-8 sm:grid-cols-2">
                   <div className="flex flex-col gap-3">
                     <span className="text-eyebrow uppercase text-steel-500">What you would do</span>
                     <ul className="flex flex-col gap-2.5">
@@ -82,7 +85,7 @@ export default function CareersPage() {
                       ))}
                     </ul>
                   </div>
-                </div>
+                </ExpandOnMobile>
               </div>
             </Panel>
           ))}

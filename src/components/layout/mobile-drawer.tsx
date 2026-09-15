@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
 import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronDown, Menu, X } from 'lucide-react'
-import { NAV_GROUPS, NAV_MENUS, isCurrentPage } from '@/lib/navigation'
+import { NAV_GROUPS, NAV_MENUS, isCurrentPage, isWithinSection } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 import { ButtonLink } from '@/components/ui/button'
 import { RaptorLogo } from '@/components/ui/raptor-logo'
@@ -15,6 +15,26 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 export function MobileDrawer() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  /** Sections holding the page being viewed: marked, and opened when the drawer opens. */
+  const activeSections = [
+    ...NAV_GROUPS.filter(
+      (group) =>
+        isWithinSection(pathname, group.href) ||
+        group.links.some((link) => isWithinSection(pathname, link.href)),
+    ).map((group) => group.label),
+    ...NAV_MENUS.filter((menu) => menu.links.some((link) => isCurrentPage(pathname, link.href))).map(
+      (menu) => menu.label,
+    ),
+  ]
+  const sectionLabel = (label: string) =>
+    cn(
+      'flex items-center gap-2.5 font-display text-[1.125rem] uppercase tracking-tight',
+      activeSections.includes(label) ? 'text-signal' : 'text-steel-100',
+    )
+  const sectionMarker = (label: string) =>
+    activeSections.includes(label) ? (
+      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-signal" aria-hidden />
+    ) : null
   /** A drawer entry, in signal on a raised row when it is the page being viewed. */
   const drawerLink = (href: string) =>
     cn(
@@ -32,7 +52,10 @@ export function MobileDrawer() {
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-50 bg-bg-0/80 backdrop-blur-sm xl:hidden" />
-        <Dialog.Content className="fixed inset-0 z-50 flex flex-col bg-bg-0 xl:hidden">
+        {/* h-dvh, not inset-0: on phones the browser's own toolbar covers the
+            bottom of a full-height layout viewport, which cut off the last
+            items. The dynamic viewport is the part actually on screen. */}
+        <Dialog.Content className="fixed inset-x-0 top-0 z-50 flex h-dvh flex-col bg-bg-0 xl:hidden">
           <Dialog.Title className="sr-only">Navigation</Dialog.Title>
           <div className="flex items-center justify-between border-b border-line-1 px-5 py-4">
             <RaptorLogo size="sm" />
@@ -44,14 +67,18 @@ export function MobileDrawer() {
             </Dialog.Close>
           </div>
 
-          <div className="scroll-steel flex-1 overflow-y-auto px-5 py-4">
-            <Accordion.Root type="multiple" className="flex flex-col">
+          <div className="scroll-steel min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4">
+            <Accordion.Root type="multiple" defaultValue={activeSections} className="flex flex-col">
               {NAV_GROUPS.map((group) => (
                 <Accordion.Item key={group.label} value={group.label} className="border-b border-line-1">
                   <Accordion.Header>
                     <Accordion.Trigger className="group flex w-full items-center justify-between py-4 text-left">
-                      <span className="font-display text-[1.125rem] uppercase tracking-tight text-steel-100">
+                      <span className={sectionLabel(group.label)}>
+                        {sectionMarker(group.label)}
                         {group.label}
+                        {activeSections.includes(group.label) ? (
+                          <span className="sr-only">(current section)</span>
+                        ) : null}
                       </span>
                       <ChevronDown
                         size={16}
@@ -92,8 +119,12 @@ export function MobileDrawer() {
                 <Accordion.Item key={menu.label} value={menu.label} className="border-b border-line-1">
                   <Accordion.Header>
                     <Accordion.Trigger className="group flex w-full items-center justify-between py-4 text-left">
-                      <span className="font-display text-[1.125rem] uppercase tracking-tight text-steel-100">
+                      <span className={sectionLabel(menu.label)}>
+                        {sectionMarker(menu.label)}
                         {menu.label}
+                        {activeSections.includes(menu.label) ? (
+                          <span className="sr-only">(current section)</span>
+                        ) : null}
                       </span>
                       <ChevronDown
                         size={16}
@@ -124,7 +155,7 @@ export function MobileDrawer() {
             </Accordion.Root>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-line-1 px-5 py-5">
+          <div className="flex flex-col gap-3 border-t border-line-1 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5">
             <div className="flex items-center justify-between">
               <span className="text-eyebrow uppercase text-steel-500">Theme</span>
               <ThemeToggle />

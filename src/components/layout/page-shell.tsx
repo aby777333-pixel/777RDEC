@@ -259,13 +259,15 @@ export function PageHero({
           <h1 className="text-hero uppercase text-chrome">{heading}</h1>
           <p className="max-w-2xl text-body text-steel-300">{lead}</p>
           {actions && actions.length > 0 ? (
-            <div className="flex flex-wrap gap-3">
+            // Stacked and full width on a phone, a row from sm up.
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               {actions.map((action) => (
                 <ButtonLink
                   key={action.href}
                   href={action.href}
                   variant={action.variant ?? 'ghost'}
                   size="lg"
+                  className="w-full sm:w-auto"
                 >
                   {action.label}
                 </ButtonLink>
@@ -357,13 +359,14 @@ export function CtaBand({
       >
         <h2 className="mx-auto max-w-5xl text-h2 uppercase text-steel-100">{heading}</h2>
         <p className="mx-auto max-w-4xl text-body text-steel-300">{body}</p>
-        <div className="flex flex-wrap justify-center gap-3">
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center">
           {actions.map((action) => (
             <ButtonLink
               key={action.href}
               href={action.href}
               variant={action.variant ?? 'ghost'}
               size="lg"
+              className="w-full sm:w-auto"
             >
               {action.label}
             </ButtonLink>

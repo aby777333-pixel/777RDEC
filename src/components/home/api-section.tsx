@@ -14,7 +14,9 @@ export function ApiSection() {
 
   return (
     <Section className="border-b border-line-1">
-      <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-start">
+      {/* minmax(0,1fr): the code examples do not wrap, so without it the single
+          mobile column widens to the longest line and the page scrolls sideways. */}
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-12 lg:grid-cols-[1fr_1.4fr] lg:items-start">
         <div className="flex flex-col gap-6">
           <SectionHeader
             eyebrow="API Hub"

@@ -43,13 +43,13 @@ export default function StatusPage() {
             {payload.components.map((component) => (
               <li
                 key={component.id}
-                className="flex flex-wrap items-center justify-between gap-3 border-b border-line-1 px-5 py-4 last:border-b-0"
+                className="flex items-center justify-between gap-4 border-b border-line-1 px-5 py-4 last:border-b-0"
               >
-                <div className="flex flex-col gap-0.5">
+                <div className="flex min-w-0 flex-col gap-0.5">
                   <span className="text-[0.9375rem] text-steel-100">{component.name}</span>
                   <span className="text-[0.8125rem] text-steel-500">{component.description}</span>
                 </div>
-                <span className={cn('flex items-center gap-2 text-[0.8125rem]', STATE_TONE[component.state])}>
+                <span className={cn('flex shrink-0 items-center gap-2 text-[0.8125rem]', STATE_TONE[component.state])}>
                   <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden />
                   {STATE_LABELS[component.state]}
                 </span>

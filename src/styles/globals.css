@@ -245,6 +245,10 @@
   }
 
   body {
+    /* Anything wider than a phone is clipped, never scrolled to. clip, not
+       hidden: hidden would make the body a scroll container and stop the
+       sticky header sticking. */
+    overflow-x: clip;
     background-color: var(--bg-0);
     color: var(--steel-100);
     font-family: var(--font-body, system-ui), system-ui, sans-serif;
@@ -1756,7 +1760,12 @@ html[data-scrolling='true'] .hero-band *::after {
   .anomaly-nav {
     right: auto;
     bottom: 24px;
-    left: 16px;
+    /* Centred under the copy on a narrow band. max-content, because a box
+       starting at the middle would otherwise shrink to the half it has left
+       and wrap its label. */
+    left: 50%;
+    width: max-content;
+    transform: translateX(-50%);
   }
 }
 

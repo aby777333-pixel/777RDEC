@@ -235,11 +235,11 @@ export function LeadForm({
           <legend className="mb-1 text-eyebrow uppercase text-steel-500">
             Products of interest
           </legend>
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
             {INTEREST_OPTIONS.map((interest) => (
               <label
                 key={interest}
-                className="inline-flex cursor-pointer items-center gap-2 rounded-ui border border-line-2 px-3 py-1.5 text-[0.8125rem] text-steel-300 transition-colors duration-200 hover:bg-bg-2 has-[:checked]:border-signal/50 has-[:checked]:bg-signal/[0.08] has-[:checked]:text-steel-100"
+                className="flex cursor-pointer items-center gap-2 rounded-ui border border-line-2 px-3 py-1.5 text-[0.8125rem] leading-snug text-steel-300 sm:inline-flex transition-colors duration-200 hover:bg-bg-2 has-[:checked]:border-signal/50 has-[:checked]:bg-signal/[0.08] has-[:checked]:text-steel-100"
               >
                 <input
                   type="checkbox"

@@ -24,11 +24,14 @@ export function Chip({
 }) {
   return (
     <span
-      className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border bg-bg-1/60 px-2.5 py-1 text-eyebrow uppercase',
+      // text-eyebrow is added after the merge on purpose: tailwind-merge reads
+      // the custom size as a colour and drops it in favour of the tone's text
+      // colour, which left every chip at body size.
+      className={`${cn(
+        'inline-flex items-center gap-1.5 rounded-full border bg-bg-1/60 px-2.5 py-1 uppercase',
         TONES[tone],
         className,
-      )}
+      )} text-eyebrow`}
     >
       {dot ? <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden /> : null}
       {children}

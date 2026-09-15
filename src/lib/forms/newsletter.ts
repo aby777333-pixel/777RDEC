@@ -2,6 +2,8 @@
 
 import { z } from 'zod'
 import { insertRow } from '@/lib/supabase/server'
+import { sendAcknowledgement } from '@/lib/email'
+import { SITE_NAME } from '@/lib/brand'
 import { verifyTurnstile } from './turnstile'
 
 export type NewsletterState =
@@ -78,6 +80,20 @@ export async function subscribeToNewsletter(
       message: 'Something went wrong on our side and we could not add you. Please try again shortly.',
     }
   }
+
+  // Best effort, like the lead forms: the subscription is already saved.
+  await sendAcknowledgement(data.email, {
+    subject: `You are subscribed to ${SITE_NAME}`,
+    body: [
+      'Thank you for subscribing.',
+      '',
+      'We send method notes, release notes and market-structure writing when there is something worth reading — no signals, no performance claims, and nothing on a schedule.',
+      '',
+      'You can unsubscribe at any time by replying to this email.',
+      '',
+      `— ${SITE_NAME}`,
+    ].join('\n'),
+  })
 
   return { status: 'success', message: SUCCESS }
 }
