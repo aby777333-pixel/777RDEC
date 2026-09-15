@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
  * plus a tagline stacked into a ~2:1 frame, so height is what makes it legible:
  * at 40px the tagline was unreadable and the bird was a smudge.
  *
- * Sizes now: 64px in an 88px header, 96px in the footer, 40px in the mobile
+ * Sizes now: 72px in an 88px header, 112px in the footer, 40px in the mobile
  * drawer. The width cap is a backstop against a replacement file with a
  * different aspect ratio pushing the navigation into wrapping — at 2:1 the
  * height is what binds, not the cap.
@@ -23,8 +23,10 @@ import { cn } from '@/lib/utils'
  */
 const SCALE = {
   sm: { type: 'text-[1.25rem]', wing: 'h-6 w-10', raster: 'h-10 max-w-[11rem]', tagline: 'text-[0.5rem]' },
-  md: { type: 'text-[2rem]', wing: 'h-9 w-16', raster: 'h-16 max-w-[17rem]', tagline: 'text-[0.625rem]' },
-  lg: { type: 'text-[3rem]', wing: 'h-14 w-24', raster: 'h-24 max-w-[24rem]', tagline: 'text-[0.6875rem]' },
+  // 72px, except from 1280 to 1359px wide: there the full menu bar is shown
+  // and the extra 17px of mark would push "Gallery" into the search control.
+  md: { type: 'text-[2rem]', wing: 'h-9 w-16', raster: 'h-[4.5rem] max-w-[19rem] xl:h-16 min-[1360px]:h-[4.5rem]', tagline: 'text-[0.625rem]' },
+  lg: { type: 'text-[3rem]', wing: 'h-14 w-24', raster: 'h-28 max-w-[28rem]', tagline: 'text-[0.6875rem]' },
 } as const
 
 type Size = keyof typeof SCALE

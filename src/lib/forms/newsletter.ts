@@ -68,7 +68,7 @@ export async function subscribeToNewsletter(
   const result = await insertRow(
     'newsletter_subscribers',
     { email: data.email, consent: data.consent },
-    { ignoreDuplicates: true },
+    { ignoreDuplicates: true, onConflict: 'email' },
   )
 
   if (!result.ok) {

@@ -29,6 +29,12 @@ export async function insertRow(
      * expected outcome and must not read as an error.
      */
     ignoreDuplicates?: boolean
+    /**
+     * The unique column a duplicate is judged on. PostgREST only detects a
+     * duplicate on the primary key unless told otherwise, so without this a
+     * re-subscribe on a unique email would fail with a conflict error.
+     */
+    onConflict?: string
   },
 ): Promise<InsertResult> {
   if (!supabaseConfigured) {
@@ -41,7 +47,8 @@ export async function insertRow(
   }
 
   try {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    const conflict = options?.onConflict ? `?on_conflict=${encodeURIComponent(options.onConflict)}` : ''
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}${conflict}`, {
       method: 'POST',
       headers: {
         apikey: SERVICE_ROLE_KEY,

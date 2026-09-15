@@ -162,7 +162,9 @@ function RetailBlock() {
           width={RETAIL_PARTNER.logoWidth}
           height={RETAIL_PARTNER.logoHeight}
           loading="lazy"
-          className="h-10 w-auto"
+          // self-start: as a flex-column child the image would otherwise be
+          // stretched to the width of the line under it, squashing the mark.
+          className="h-14 w-auto self-start sm:h-16"
         />
         <span className="inline-flex items-center gap-1.5 text-[0.9375rem] text-steel-300 transition-colors group-hover:text-steel-100">
           Trade with EMIL on {RETAIL_PARTNER.name}
