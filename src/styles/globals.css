@@ -1392,6 +1392,152 @@ html[data-reduce-motion='true'] *::after {
 }
 
 /*
+  VELOCITY (`velocity`, the platform hero): the pen's ground, and the parts of
+  its page that are not text, above the canvas — the speed lines, the vignette,
+  the lightning flash and the logo reveal with its light burst and the logo
+  screen's gradient. The ride publishes its centre of view as --velocity-x, and
+  the lines, vignette and reveal are centred on it. The pen's start screen, HUD
+  and tagline are not drawn. Below lg the copy spans the band and the reveal is
+  not shown.
+*/
+.pen-scene--velocity {
+  background: #010204;
+}
+.velocity-lines {
+  position: absolute;
+  z-index: 1;
+  width: 200%;
+  height: 200%;
+  left: calc(var(--velocity-x, 50%) - 100%);
+  top: -50%;
+  opacity: 0;
+  background: repeating-conic-gradient(
+    from 0deg at 50% 50%,
+    transparent 0deg,
+    transparent 0.7deg,
+    rgba(130, 190, 255, 0.12) 0.9deg,
+    transparent 1.15deg,
+    transparent 5deg
+  );
+  filter: blur(2px);
+  transform: scale(1.8);
+  mix-blend-mode: screen;
+}
+.velocity-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: radial-gradient(
+    circle at var(--velocity-x, 50%) 50%,
+    transparent 30%,
+    rgba(0, 0, 0, 0.12) 55%,
+    rgba(0, 0, 0, 0.8) 110%
+  );
+}
+.velocity-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: #d9ebff;
+  opacity: 0;
+}
+.velocity-reveal {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: none;
+}
+@media (min-width: 1024px) {
+  .velocity-reveal {
+    display: block;
+  }
+}
+/* The pen's logo screen, drawn down over the stopped ride rather than replacing it. */
+.velocity-curtain {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle at var(--velocity-x, 50%) 50%,
+    #202932 0%,
+    #080b0f 30%,
+    #000 72%
+  );
+  transition: opacity 1.4s ease;
+}
+.velocity-reveal.reveal .velocity-curtain {
+  opacity: 0.8;
+}
+.velocity-light {
+  position: absolute;
+  left: var(--velocity-x, 50%);
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  box-shadow:
+    0 0 30px 10px #fff,
+    0 0 100px 35px rgba(120, 190, 255, 0.7),
+    0 0 280px 90px rgba(80, 140, 255, 0.25);
+}
+.velocity-logo {
+  position: absolute;
+  left: var(--velocity-x, 50%);
+  top: 50%;
+  width: min(460px, 30vw);
+  max-height: 40%;
+  margin-left: calc(min(460px, 30vw) / -2);
+  object-fit: contain;
+  opacity: 0;
+  translate: 0 -50%;
+  transform: scale(0.45);
+  filter: blur(20px);
+}
+.velocity-reveal.reveal .velocity-light {
+  animation: velocity-logo-flash 2.5s forwards;
+}
+.velocity-reveal.reveal .velocity-logo {
+  animation: velocity-logo-reveal 3.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes velocity-logo-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+    filter: blur(25px);
+  }
+  25% {
+    opacity: 1;
+  }
+  65% {
+    filter: blur(0) drop-shadow(0 0 40px rgba(160, 210, 255, 0.3));
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0) drop-shadow(0 0 25px rgba(255, 255, 255, 0.2));
+  }
+}
+@keyframes velocity-logo-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.1);
+  }
+  20% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(12);
+  }
+}
+
+/*
   ZERO-POINT (`zeropoint`): the pen's black page, and the two parts of its HUD
   that are not text — the vignette its UI layer paints and the scanlines laid
   over everything at 15%. Drawn above the canvas and never catching the pointer.

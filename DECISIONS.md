@@ -1164,3 +1164,21 @@ Verification tags (`GOOGLE_SITE_VERIFICATION`, `BING_SITE_VERIFICATION`) and
 Google Tag Manager (`NEXT_PUBLIC_GTM_ID`) are wired but empty until set in
 Netlify. GTM, like Plausible, only loads after consent; the cookie copy must
 be widened before advertising tags go into the container.
+
+## 45. VELOCITY replaces the gravity pen on the platform hero
+
+The owner's roller-coaster pen now backs `/platform`, ported in
+`velocity-backdrop.tsx`, where the full list of changes is written up. In short:
+the ride starts when the band does; none of the pen's text is drawn (start
+screen, speed HUD, status line, tagline); and instead of slamming into the final
+wall and cutting to a black logo screen, the coaster brakes evenly over the last
+straight and comes to rest facing the wall about thirty seconds in, where the
+site's logo rises out of the pen's light burst over the stopped scene.
+
+The band is `min-h-[38rem] md:min-h-[48rem]` — near a full desktop screen — with
+the copy centred on it like the warp and cosmic heroes. As with those, the logo
+sits in the space right of the copy on a wide band and is not shown below `lg`,
+where it would print over the heading.
+
+`gravity-backdrop.tsx` stays registered but is no longer mounted anywhere, so
+switching back is one prop on the page.
