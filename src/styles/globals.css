@@ -1707,9 +1707,12 @@ html[data-scrolling='true'] .hero-band *::after {
     breach-logo-birth 5s cubic-bezier(0.12, 0.72, 0.15, 1) forwards,
     breach-logo-cool 5s ease-out forwards;
 }
-/* Out of the screen: accelerating toward the viewer, past the band's edges. */
+/* Out of the screen: flying at the viewer, accelerating past the band's edges.
+   The keyframes carry the acceleration, so the timing between them is linear;
+   the logo stays solid until it is almost at the "camera", then streaks out. */
 .pen-scene--breach[data-phase='zoom'] .breach-logo {
-  animation: breach-logo-zoom 1.6s cubic-bezier(0.55, 0, 0.9, 0.35) forwards;
+  animation: breach-logo-zoom 2.2s linear forwards;
+  will-change: transform, opacity, filter;
 }
 .pen-scene--breach[data-phase='cover'] .breach-logo {
   opacity: 0;
@@ -1769,17 +1772,34 @@ html[data-scrolling='true'] .hero-band *::after {
   0% {
     opacity: 1;
     transform: scale(1);
-    filter: brightness(1) blur(0) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
+    filter: brightness(1) blur(0px) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
   }
-  45% {
+  25% {
+    transform: scale(1.18);
+    filter: brightness(1.05) blur(0px) drop-shadow(0 0 16px rgba(100, 170, 255, 0.3));
+  }
+  50% {
+    transform: scale(1.9);
+    filter: brightness(1.15) blur(0px) drop-shadow(0 0 24px rgba(100, 170, 255, 0.4));
+  }
+  70% {
+    transform: scale(3.6);
+    filter: brightness(1.25) blur(0.5px) drop-shadow(0 0 34px rgba(110, 180, 255, 0.45));
+  }
+  84% {
     opacity: 1;
-    transform: scale(2.4);
-    filter: brightness(1.25) blur(1px) drop-shadow(0 0 30px rgba(100, 170, 255, 0.45));
+    transform: scale(7.5);
+    filter: brightness(1.4) blur(2px) drop-shadow(0 0 48px rgba(120, 190, 255, 0.5));
+  }
+  93% {
+    opacity: 0.85;
+    transform: scale(14);
+    filter: brightness(1.6) blur(6px) drop-shadow(0 0 60px rgba(130, 200, 255, 0.5));
   }
   100% {
     opacity: 0;
-    transform: scale(11);
-    filter: brightness(1.6) blur(18px) drop-shadow(0 0 60px rgba(120, 190, 255, 0.5));
+    transform: scale(26);
+    filter: brightness(1.8) blur(14px) drop-shadow(0 0 70px rgba(140, 210, 255, 0.5));
   }
 }
 

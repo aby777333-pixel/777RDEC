@@ -79,7 +79,7 @@ const LOGO_SECONDS = 5
 /** The cooled logo holds this long, then zooms out of the screen toward the viewer. */
 const LOGO_HOLD_SECONDS = 0.6
 /** The zoom's length; matches `breach-logo-zoom` in globals.css. */
-const ZOOM_SECONDS = 1.6
+const ZOOM_SECONDS = 2.2
 /** The supernova's afterglow, logo gone, before the close to black. */
 const AFTERGLOW_SECONDS = 1.2
 const COVER_SECONDS = 2
