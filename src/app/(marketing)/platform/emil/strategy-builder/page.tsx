@@ -44,8 +44,8 @@ export default function StrategyBuilderPage() {
       <Section grid className="border-b border-line-1">
         <SectionHeader
           eyebrow="Live demo"
-          title="Run the pipeline yourself."
-          lead="This is the builder itself, running on simulated accounts. Start the agent pipeline from the dashboard, open a strategy's backtest, or read the audit trail. Quotes and charts come from the Raptor Market API; nothing you do here places an order."
+          title="Build one yourself."
+          lead="This is the builder itself, running on simulated accounts. Open Builder, pick an engine, backtest it on live candles, then download it or attach it to EMIL Trade. Quotes and charts come from the Raptor Market API; nothing you do here places an order."
         />
         <div className="mt-12 hidden overflow-hidden rounded-panel border border-line-2 bg-bg-0 shadow-panel md:block">
           <iframe
@@ -59,8 +59,8 @@ export default function StrategyBuilderPage() {
           <ButtonAnchor href={APP_HREF} size="md" className="w-full sm:w-auto">
             Open full screen
           </ButtonAnchor>
-          <ButtonAnchor href={`${APP_HREF}#/pipeline`} variant="quiet" size="md" className="w-full sm:w-auto">
-            Go to the agent pipeline
+          <ButtonAnchor href={`${APP_HREF}#/builder`} variant="quiet" size="md" className="w-full sm:w-auto">
+            Go to the builder
           </ButtonAnchor>
           <ButtonAnchor href={`${APP_HREF}#/audit`} variant="quiet" size="md" className="w-full sm:w-auto">
             Go to the audit trail

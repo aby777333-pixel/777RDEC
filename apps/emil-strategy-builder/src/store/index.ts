@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { TradingMode, AgentStatus, MarketTick } from '../types';
+import type { EmilStrategySpec } from '../kit';
 
 export interface Toast {
   id: number;
@@ -43,6 +44,10 @@ interface AppState {
 
   pipelineRunning: boolean;
   setPipelineRunning: (r: boolean) => void;
+
+  /** A strategy to open in the Builder (from Strategies, Explore or My strategies). */
+  builderSeed: { spec?: EmilStrategySpec; symbol?: string } | null;
+  setBuilderSeed: (seed: { spec?: EmilStrategySpec; symbol?: string } | null) => void;
 }
 
 let toastId = 0;
@@ -84,4 +89,7 @@ export const useStore = create<AppState>((set) => ({
 
   pipelineRunning: false,
   setPipelineRunning: (pipelineRunning) => set({ pipelineRunning }),
+
+  builderSeed: null,
+  setBuilderSeed: (builderSeed) => set({ builderSeed }),
 }));

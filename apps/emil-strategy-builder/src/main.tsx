@@ -7,6 +7,7 @@ import './index.css';
 import { APP_TITLE, BRAND } from './brand';
 
 document.title = `${APP_TITLE} · ${BRAND.company}`;
+document.querySelector('link[rel="icon"]')?.setAttribute('href', BRAND.favicon);
 
 const queryClient = new QueryClient({
   defaultOptions: {

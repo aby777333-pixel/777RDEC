@@ -8,9 +8,13 @@ import {
   MonthlyHeatmap,
   MetricsTable,
 } from './BacktestCharts';
+import { useNavigate } from 'react-router-dom';
+import { Blocks } from 'lucide-react';
 import { VotePanel } from './AgentVotes';
 import { EaViewer } from './EaViewer';
+import { StrategyActions } from './StrategyActions';
 import { useStrategy } from '../hooks/useApi';
+import { useStore } from '../store';
 import type { Strategy } from '../types';
 
 type Tab = 'overview' | 'backtest' | 'code' | 'agents';
@@ -24,6 +28,8 @@ export function StrategyDetail({
 }) {
   const { data: full } = useStrategy(strategy?.id ?? null);
   const [tab, setTab] = useState<Tab>('overview');
+  const navigate = useNavigate();
+  const setBuilderSeed = useStore((st) => st.setBuilderSeed);
   const s = full || strategy;
 
   const equity = s?.backtest?.equity_curve || [];
@@ -52,6 +58,22 @@ export function StrategyDetail({
         <Badge status={s.status as string}>{s.status}</Badge>
       </div>
     }>
+      {s.spec && (
+        <div className="flex items-start justify-between flex-wrap gap-3 mb-4 pb-4 border-b border-border">
+          <StrategyActions spec={s.spec} compact />
+          <button
+            className="btn-ghost !py-1.5 text-xs"
+            onClick={() => {
+              setBuilderSeed({ spec: s.spec });
+              onClose();
+              navigate('/builder');
+            }}
+          >
+            <Blocks size={13} /> Open in Builder
+          </button>
+        </div>
+      )}
+
       <div className="flex gap-1 mb-4 flex-wrap">
         {tabs.map((t) => (
           <button
@@ -104,7 +126,7 @@ export function StrategyDetail({
               Performance concentrates in {String(s.config?.best_regime || 'favourable').toLowerCase()} regimes; during
               {' '}{String(s.config?.worst_regime || 'adverse').toLowerCase()} conditions, whipsaws and gap risk raise
               drawdown. Results assume modelled spreads/slippage — thinner liquidity or wider spreads on some venues
-              would reduce the edge. Not a guarantee of future performance.
+              would reduce the edge. Past and backtested performance is not indicative of future results.
             </p>
           </div>
           {equity.length > 0 && <EquityCurveChart data={equity} />}
@@ -128,7 +150,12 @@ export function StrategyDetail({
         </div>
       )}
 
-      {tab === 'code' && <EaViewer strategyId={s.id} strategyName={s.name} />}
+      {tab === 'code' &&
+        (s.spec ? (
+          <EaViewer spec={s.spec} />
+        ) : (
+          <div className="text-subtext text-sm text-center py-8">This strategy has no runnable definition to generate code from.</div>
+        ))}
 
       {tab === 'agents' && <VotePanel votes={s.votes || []} />}
     </Modal>

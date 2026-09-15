@@ -1,3 +1,5 @@
+import type { EmilStrategySpec } from '../kit';
+
 export type TradingMode = 'demo' | 'paper' | 'live';
 
 export type AgentStatus = 'idle' | 'running' | 'complete' | 'error';
@@ -106,6 +108,8 @@ export interface Strategy {
   status: StrategyStatus | string;
   mode: string;
   config: StrategyConfig;
+  /** The runnable definition: engine, inputs, timeframe, symbols, risk. */
+  spec?: EmilStrategySpec;
   created_at?: string | null;
   approved_at?: string | null;
   approved_by?: string | null;

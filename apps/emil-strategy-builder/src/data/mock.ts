@@ -9,6 +9,7 @@ import type {
   Trade,
   Regime,
 } from '../types';
+import { ENGINES, backtest, createSpec, type EmilStrategySpec, type EngineId, type Timeframe } from '../kit';
 
 export const SYMBOL_GROUPS: Record<string, string[]> = {
   Forex: ['EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'USDCAD', 'NZDUSD', 'EURGBP'],
@@ -126,34 +127,92 @@ const AGENT_NAMES = [
   'RiskCheckAgent', 'RankingAgent', 'VotingAgent',
 ];
 
-const STRAT_TEMPLATES = [
-  { name: 'Trend Rider SMA', description: 'Fast/slow SMA crossover trend-following system that rides sustained momentum.', markets: ['EURUSD', 'BTCUSDT'], risk_level: 'Medium', best_regime: 'Trending', worst_regime: 'Ranging' },
-  { name: 'RSI Mean Reversion', description: 'Fades RSI extremes for short-term reversals in range-bound markets.', markets: ['AAPL', 'NIFTY50'], risk_level: 'Low', best_regime: 'Ranging', worst_regime: 'Trending' },
-  { name: 'MACD Momentum', description: 'MACD histogram cross momentum entries with ATR-based exits.', markets: ['NVDA', 'ETHUSDT'], risk_level: 'High', best_regime: 'Volatile', worst_regime: 'Quiet' },
-  { name: 'Donchian Breakout', description: '20-bar breakout with volatility-scaled ATR stops for trend capture.', markets: ['GOLD', 'CRUDEOIL'], risk_level: 'Medium', best_regime: 'Breakout', worst_regime: 'Ranging' },
-  { name: 'Bollinger Squeeze', description: 'Trades expansion after low-volatility Bollinger Band squeezes.', markets: ['SPX500', 'NASDAQ'], risk_level: 'Medium', best_regime: 'Volatile', worst_regime: 'Trending' },
-  { name: 'Momentum Rotation', description: 'Rotates capital into the strongest relative-strength assets each period.', markets: ['MSFT', 'GOOGL'], risk_level: 'Low', best_regime: 'Trending', worst_regime: 'Choppy' },
+// Demo strategies, each on one of EMIL Trade's engines, so "Details", the EA
+// code, "Open in Builder" and "Attach to EMIL Trade" all act on a real,
+// runnable definition. Their numbers are real backtests of that definition —
+// on simulated candles, and labelled as such.
+const STRAT_TEMPLATES: {
+  id: string;
+  name: string;
+  engine: EngineId;
+  params?: Record<string, number>;
+  symbols: string[];
+  timeframe: Timeframe;
+  risk_level: string;
+  best_regime: string;
+  worst_regime: string;
+}[] = [
+  { id: 'demo-ema-trend-regime', name: 'Trend Rider EMA 20/50', engine: 'trend_reversal', symbols: ['EURUSD', 'BTCUSDT'], timeframe: '1H', risk_level: 'Medium', best_regime: 'Trending', worst_regime: 'Ranging' },
+  { id: 'demo-bollinger-macd', name: 'Band Fade with MACD Turn', engine: 'boll_macd', symbols: ['EURUSD', 'GBPUSD'], timeframe: '1H', risk_level: 'Low', best_regime: 'Ranging', worst_regime: 'Trending' },
+  { id: 'demo-rsi-macd', name: 'RSI + MACD Momentum', engine: 'rsi_macd', symbols: ['NVDA', 'ETHUSDT'], timeframe: '4H', risk_level: 'High', best_regime: 'Volatile', worst_regime: 'Quiet' },
+  { id: 'demo-ssl-breakout', name: 'SSL Channel Breakout', engine: 'ssl', symbols: ['GOLD', 'CRUDEOIL'], timeframe: '1H', risk_level: 'Medium', best_regime: 'Breakout', worst_regime: 'Choppy' },
+  { id: 'demo-ichimoku-cloud', name: 'Ichimoku Cloud Trend', engine: 'ichimoku', symbols: ['SPX500', 'NASDAQ'], timeframe: '4H', risk_level: 'Medium', best_regime: 'Trending', worst_regime: 'Ranging' },
+  { id: 'demo-ema-pullback', name: 'EMA 9/21 Pullback', engine: 'ema_pullback', symbols: ['MSFT', 'GOOGL'], timeframe: '1H', risk_level: 'Low', best_regime: 'Trending', worst_regime: 'Choppy' },
 ];
 
 const STATUSES = ['PENDING', 'PAPER', 'APPROVED', 'REJECTED', 'PENDING', 'PAPER'];
 
-function metricsFor(i: number) {
-  const rng = (a: number, b: number) => Number((a + Math.random() * (b - a)).toFixed(2));
-  return {
-    total_return_pct: rng(8, 65),
-    cagr_pct: rng(6, 40),
-    max_drawdown_pct: rng(4, 22),
-    sharpe: rng(0.8, 2.6),
-    sortino: rng(1.0, 3.2),
-    calmar: rng(0.6, 2.4),
-    win_rate_pct: rng(42, 68),
-    profit_factor: rng(1.1, 2.5),
-    avg_trade: rng(-20, 90),
-    num_trades: Math.floor(30 + Math.random() * 200),
-    max_consecutive_losses: Math.floor(2 + Math.random() * 8),
-    final_equity: rng(10800, 16500),
+/** Deterministic simulated candles, so a demo strategy's numbers do not change on every refresh. */
+function seededCandles(symbol: string, bars: number, seed: number) {
+  let s = seed >>> 0;
+  const rand = () => {
+    s = (Math.imul(s ^ (s >>> 15), 2246822507) + 0x9e3779b9) >>> 0;
+    return ((s ^ (s >>> 13)) >>> 0) / 4294967296;
+  };
+  const base = BASE_PRICE[symbol] ?? 100;
+  const vol = 0.006;
+  let price = base;
+  let drift = 0;
+  const start = Date.UTC(2026, 0, 1) / 1000;
+  const out: { time: number; open: number; high: number; low: number; close: number }[] = [];
+  for (let i = 0; i < bars; i++) {
+    if (i % 70 === 0) drift = (rand() - 0.5) * vol * 0.5;
+    const open = price;
+    const close = Math.max(open * (1 + drift + (rand() - 0.5) * vol), 0.0001);
+    out.push({ time: start + i * 3600, open, high: Math.max(open, close) * (1 + rand() * vol * 0.5), low: Math.min(open, close) * (1 - rand() * vol * 0.5), close });
+    price = close;
+  }
+  return out;
+}
+
+function demoSpec(t: (typeof STRAT_TEMPLATES)[number]): EmilStrategySpec {
+  const spec = createSpec({ id: t.id, engine: t.engine, name: t.name, app: 'EMIL Strategy Builder demo', symbols: t.symbols, timeframe: t.timeframe, now: new Date('2026-09-01T00:00:00Z') });
+  return t.params ? { ...spec, params: { ...spec.params, ...t.params } } : spec;
+}
+
+function demoBacktest(spec: EmilStrategySpec, seed: number) {
+  const r = backtest(spec, seededCandles(spec.symbols[0], 700, seed));
+  const iso = (t: number) => new Date(t * 1000).toISOString();
+  let peak = r.equity[0] ?? 10000;
+  const equity_curve: EquityPoint[] = r.equity.map((equity, i) => {
+    peak = Math.max(peak, equity);
+    return {
+      time: iso(i === 0 ? (r.trades[0]?.entryTime ?? 0) : r.trades[i - 1].exitTime),
+      equity: Number(equity.toFixed(2)),
+      drawdown: Number((((equity - peak) / peak) * 100).toFixed(2)),
+    };
+  });
+  const trades: Trade[] = r.trades.map((t) => ({
+    entry_time: iso(t.entryTime),
+    exit_time: iso(t.exitTime),
+    side: t.direction === 'BUY' ? 'buy' : 'sell',
+    entry: t.entry,
+    exit: t.exit,
+    pnl: Number(t.pnl.toFixed(2)),
+    return_pct: Number(t.retPct.toFixed(2)),
+  }));
+  const metrics = {
+    total_return_pct: Number(((r.netProfit / 10000) * 100).toFixed(2)),
+    max_drawdown_pct: r.maxDrawdownPct,
+    sharpe: r.sharpe,
+    win_rate_pct: r.winRate,
+    profit_factor: r.profitFactor,
+    avg_trade: r.numTrades ? Number((r.netProfit / r.numTrades).toFixed(2)) : 0,
+    num_trades: r.numTrades,
+    final_equity: Number((r.equity[r.equity.length - 1] ?? 10000).toFixed(2)),
     initial_capital: 10000,
   };
+  return { metrics, equity_curve, trades };
 }
 
 function votesFor(): Strategy['votes'] {
@@ -169,36 +228,42 @@ function votesFor(): Strategy['votes'] {
   });
 }
 
+let demoStrategies: Strategy[] | null = null;
+
 export function mockStrategies(): Strategy[] {
-  return STRAT_TEMPLATES.map((t, i) => ({
-    id: i + 1,
-    name: t.name,
-    description: t.description,
-    status: STATUSES[i % STATUSES.length],
-    mode: 'demo',
-    config: {
-      markets: t.markets,
-      symbol: t.markets[0],
-      timeframe: '1H',
-      risk_pct: 0.02,
-      sl_atr: 1.5,
-      tp_atr: 3,
-      risk_level: t.risk_level,
-      best_regime: t.best_regime,
-      worst_regime: t.worst_regime,
-      expected_return: Number((10 + Math.random() * 40).toFixed(1)),
-      explanation: `${t.name} exploits ${t.best_regime.toLowerCase()} conditions. It enters on confirmed signals and manages risk with ATR-scaled stops, historically outperforming in ${t.best_regime.toLowerCase()} regimes while underperforming during ${t.worst_regime.toLowerCase()} phases.`,
-    },
-    created_at: new Date(Date.now() - i * 3600_000).toISOString(),
-    approved_at: null,
-    approved_by: null,
-    backtest: {
-      metrics: metricsFor(i),
-      equity_curve: mockEquityCurve(),
-      trades: mockTrades(),
-    },
-    votes: votesFor(),
-  }));
+  if (demoStrategies) return demoStrategies;
+  demoStrategies = STRAT_TEMPLATES.map((t, i) => {
+    const spec = demoSpec(t);
+    const engine = ENGINES[t.engine];
+    const rules = engine.rules(spec.params);
+    return {
+      id: i + 1,
+      name: t.name,
+      description: engine.summary,
+      status: STATUSES[i % STATUSES.length],
+      mode: 'demo',
+      spec,
+      config: {
+        markets: t.symbols,
+        symbol: t.symbols[0],
+        timeframe: t.timeframe,
+        sl_atr: spec.risk.slAtrMult,
+        tp_atr: spec.risk.tpAtrMult,
+        entry_logic: rules.long,
+        exit_logic: rules.short,
+        risk_level: t.risk_level,
+        best_regime: t.best_regime,
+        worst_regime: t.worst_regime,
+        explanation: `Long when ${rules.long.charAt(0).toLowerCase()}${rules.long.slice(1)} Short when ${rules.short.charAt(0).toLowerCase()}${rules.short.slice(1)} Best suited to ${t.best_regime.toLowerCase()} markets. Backtest shown is on simulated candles.`,
+      },
+      created_at: new Date(Date.now() - i * 3600_000).toISOString(),
+      approved_at: null,
+      approved_by: null,
+      backtest: demoBacktest(spec, 17 + i * 31),
+      votes: votesFor(),
+    };
+  });
+  return demoStrategies;
 }
 
 export function mockPositions(): Position[] {
@@ -254,7 +319,7 @@ export function mockEvents(): AuditEvent[] {
     { event_type: 'strategy_generated', message: 'StrategyGenerationAgent produced 6 candidate strategies.' },
     { event_type: 'backtest_complete', message: 'BacktestingAgent completed 6 backtests.' },
     { event_type: 'risk_check', message: 'RiskCheckAgent validated 4/6 strategies against risk limits.' },
-    { event_type: 'strategy_approved', message: "Strategy 'Trend Rider SMA' approved; moved to PAPER trading." },
+    { event_type: 'strategy_approved', message: "Strategy 'Trend Rider EMA 20/50' approved; moved to PAPER trading." },
     { event_type: 'position_opened', message: 'Opened BUY 1.2 BTCUSDT @ 67,120.' },
     { event_type: 'market_tick', message: 'EURUSD ticked +0.12%.' },
   ];
