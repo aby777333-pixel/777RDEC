@@ -62,12 +62,13 @@ import { motionIsReduced } from './motion'
  * - **The ride stops at the logo, and loops, as asked.** The pen runs flat out
  *   into a wall at the end of the track, cuts to a white impact flash and a
  *   black frame, and brings the logo up on a screen of its own, once. Here the
- *   wall is gone: the coaster brakes over the last straight and comes to rest
- *   looking down the empty track, and the logo — the site's master logo; the
- *   pen leaves a placeholder URL — rises out of the pen's light burst over the
- *   stopped scene, with the pen's logo-screen gradient drawn down over it
- *   rather than replacing it. The shake, speed lines, sparks and field of view
- *   settle with the speed as it brakes. After a hold the logo fades, the
+ *   wall is gone: the coaster brakes over the last straight, and in its last
+ *   second of rolling the pen's light burst fires where the rails meet in the
+ *   distance and the logo — the site's master logo; the pen leaves a
+ *   placeholder URL — rises out of it, while the end of the track dissolves
+ *   outward from that point into the logo and the pen's logo-screen gradient
+ *   draws down over what is left. The shake, speed lines, sparks and field of
+ *   view settle with the speed as it brakes. After a hold the logo fades, the
  *   gradient closes to black, and under it the ride restarts from the station,
  *   so the jump back is never seen.
  * - **It shares the hero with its copy.** On a wide band the camera's centre of
@@ -96,9 +97,11 @@ const RIDE_DURATION = 29
 const STOP_T = 0.982
 /** Seconds of braking on the final straight. */
 const BRAKE_SECONDS = 3.5
-/** Pause between coming to rest and the logo's light burst. */
-const REVEAL_DELAY = 0.4
-/** From coming to rest until the logo fades: the delay, the 3.5s reveal, then a hold. */
+/** The light burst and the logo arrive this long before the coaster comes to rest. */
+const REVEAL_LEAD = 1.2
+/** How long the end of the track takes to dissolve into the logo, from the burst. */
+const DISSOLVE_SECONDS = 2.4
+/** From coming to rest until the logo fades: the rest of the 3.5s reveal, then a hold. */
 const HOLD_SECONDS = 6.5
 /** The curtain closing to black before the ride restarts under it (its transition is 1.4s, plus margin for a slow frame). */
 const COVER_SECONDS = 2
@@ -503,6 +506,30 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
     }
   }
 
+  let dissolve = -1
+  /** 0 → 1 as the end of the track dissolves into the logo; drives the canvas mask in CSS. */
+  const setDissolve = (value: number) => {
+    const rounded = Math.round(value * 1000) / 1000
+    if (rounded === dissolve) return
+    dissolve = rounded
+    host.style.setProperty('--velocity-dissolve', String(rounded))
+  }
+
+  /**
+   * Where the rails meet in the distance once the coaster is at rest, as a
+   * share of the band's height. The logo, its light burst and the dissolve are
+   * centred there, so the track visibly runs into the logo. Measured from the
+   * resting pose, which has no shake, so it is steady.
+   */
+  const trackEnd = new Vector3()
+  const measureTrackEnd = () => {
+    pose(stopAt)
+    camera.updateMatrixWorld()
+    trackEnd.copy(curve.getPointAt(1)).project(camera)
+    const y = MathUtils.clamp((1 - trackEnd.y) / 2, 0.3, 0.6)
+    host.style.setProperty('--velocity-y', `${(y * 100).toFixed(2)}%`)
+  }
+
   /** `ride`, `logo` (up over the stopped scene) or `cover` (closing to black). Styled in CSS. */
   const setPhase = (next: string) => {
     if (next === phase) return
@@ -535,6 +562,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       renderer.setPixelRatio(dpr)
       renderer.setSize(w, h, false)
       applyView()
+      measureTrackEnd()
       // A still band draws no frames of its own, so a resize draws the new size.
       if (lastDrawn >= 0) renderer.render(scene, camera)
     },
@@ -543,7 +571,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
         // The end of the ride is the frame to keep: stopped, logo up. Moving
         // the clock there, rather than drawing it once, means motion switched
         // back on later carries on from the hold instead of starting mid-ride.
-        clockOffset = stopAt + REVEAL_DELAY + 4
+        clockOffset = stopAt + 4
       }
       const elapsed = seconds + clockOffset
       const thisLap = Math.floor(elapsed / loop)
@@ -561,9 +589,13 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       stepsTaken = Math.max(due, stepsTaken)
       for (let i = 0; i < count; i++) step()
 
+      const revealAt = stopAt - REVEAL_LEAD
       if (lapTime >= stopAt + HOLD_SECONDS) setPhase('cover')
-      else if (lapTime >= stopAt + REVEAL_DELAY) setPhase('logo')
+      else if (lapTime >= revealAt) setPhase('logo')
       else setPhase('ride')
+      const d = MathUtils.clamp((lapTime - revealAt) / DISSOLVE_SECONDS, 0, 1)
+      // Ease in-out, so the dissolve starts from the burst and settles gently.
+      setDissolve(d * d * (3 - 2 * d))
 
       renderer.render(scene, camera)
       lastDrawn = elapsed

@@ -184,9 +184,17 @@ export function PageHero({
         // it plays in is the platform page's first impression: near a full
         // screen on a desktop, and deep enough on a phone to see the track.
         backdrop === 'velocity' && 'min-h-[38rem] md:min-h-[48rem]',
-        // All three reveal a logo centred on the band's height, so the copy is
-        // centred on it too, level with the logo rather than above it.
-        (backdrop === 'warp' || backdrop === 'cosmic' || backdrop === 'velocity') &&
+        // The intelligence band's observers and series are laid out as shares
+        // of its height; a little more height gives the sight-lines room.
+        backdrop === 'attention' && 'min-h-[27rem] md:min-h-[32rem]',
+        // The three logo reveals are centred on the band's height, so the copy
+        // is centred on it too, level with the logo rather than above it; the
+        // intelligence band centres its copy so its extra height is shared
+        // above and below rather than left as a gap at the foot.
+        (backdrop === 'warp' ||
+          backdrop === 'cosmic' ||
+          backdrop === 'velocity' ||
+          backdrop === 'attention') &&
           'flex flex-col justify-center',
         // The noisy rings reach to half the band's shorter side, so a taller
         // band is a bigger figure behind the search box.

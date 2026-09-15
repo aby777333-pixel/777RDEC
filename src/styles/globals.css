@@ -1399,11 +1399,15 @@ html[data-reduce-motion='true'] *::after {
   vignette, gradient and logo are centred on it. The pen's start screen, HUD
   and tagline are not drawn.
 
-  The scene sets data-phase on the band each lap: `logo` draws the gradient
-  down over the stopped ride and brings the logo up, `cover` fades the logo and
-  closes the gradient to black so the ride can restart under it, and `ride`
-  opens it again. Below lg the copy spans the band, so the logo is not shown;
-  the gradient still covers the restart.
+  The scene sets data-phase on the band each lap: `logo` — from the coaster's
+  last second of rolling — draws the gradient down and brings the logo up out
+  of the light burst, `cover` fades the logo and closes the gradient to black
+  so the ride can restart under it, and `ride` opens it again. The logo and the
+  burst sit where the rails meet in the distance, published as --velocity-y,
+  and as the logo arrives the canvas is masked away outward from that point by
+  --velocity-dissolve (0 to 1), so the end of the track dissolves into the
+  logo. Below lg the copy spans the band, so the logo and the dissolve are not
+  shown; the gradient still covers the restart.
 */
 .pen-scene--velocity {
   background: #010204;
@@ -1456,15 +1460,30 @@ html[data-reduce-motion='true'] *::after {
   .velocity-reveal {
     display: block;
   }
+  /* The end of the track dissolving into the logo: a soft hole in the ride,
+     opening outward from where the rails meet. At 0 the ride is whole. */
+  .pen-scene--velocity > canvas {
+    --velocity-hole: calc(var(--velocity-dissolve, 0) * 34%);
+    -webkit-mask-image: radial-gradient(
+      circle at var(--velocity-x, 50%) var(--velocity-y, 50%),
+      transparent var(--velocity-hole),
+      #000 calc(var(--velocity-hole) + var(--velocity-dissolve, 0) * 26%)
+    );
+    mask-image: radial-gradient(
+      circle at var(--velocity-x, 50%) var(--velocity-y, 50%),
+      transparent var(--velocity-hole),
+      #000 calc(var(--velocity-hole) + var(--velocity-dissolve, 0) * 26%)
+    );
+  }
 }
-/* The pen's logo screen, drawn down over the stopped ride rather than replacing it. */
+/* The pen's logo screen, drawn down over the ride as it comes to rest rather than replacing it. */
 .velocity-curtain {
   position: absolute;
   inset: 0;
   z-index: 4;
   opacity: 0;
   background: radial-gradient(
-    circle at var(--velocity-x, 50%) 50%,
+    circle at var(--velocity-x, 50%) var(--velocity-y, 50%),
     #202932 0%,
     #080b0f 30%,
     #000 72%
@@ -1480,7 +1499,7 @@ html[data-reduce-motion='true'] *::after {
 .velocity-light {
   position: absolute;
   left: var(--velocity-x, 50%);
-  top: 50%;
+  top: var(--velocity-y, 50%);
   width: 5px;
   height: 5px;
   margin: -2.5px 0 0 -2.5px;
@@ -1495,7 +1514,7 @@ html[data-reduce-motion='true'] *::after {
 .velocity-logo {
   position: absolute;
   left: var(--velocity-x, 50%);
-  top: 50%;
+  top: var(--velocity-y, 50%);
   width: min(460px, 30vw);
   max-height: 40%;
   margin-left: calc(min(460px, 30vw) / -2);
