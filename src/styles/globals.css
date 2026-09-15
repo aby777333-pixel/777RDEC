@@ -379,6 +379,16 @@
     background: var(--panel-tint), var(--panel-sheen);
     pointer-events: none;
   }
+  /* <Panel>'s variant: its own stacking context, so a z-index of -1 puts the
+     sheen above the panel's background but below every child, in flow or
+     positioned, with no wrapper element — which leaves the panel's own flex,
+     grid and gap classes free to lay its children out. */
+  .surface-sheen-under {
+    isolation: isolate;
+  }
+  .surface-sheen-under::before {
+    z-index: -1;
+  }
 
   /* Interactive cards rise slightly. Transform only — cheap to animate. */
   .lift {

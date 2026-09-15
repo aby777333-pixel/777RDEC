@@ -22,6 +22,12 @@ type PanelProps = React.HTMLAttributes<HTMLDivElement> & {
  * and a quiet vertical gradient, which is what makes a card read as lit rather
  * than as a flat rectangle. Both re-tint with the theme because every value in
  * them is a token.
+ *
+ * Children render directly inside the panel, so layout classes passed in
+ * `className` — flex, grid, gap — apply to them. (They used to sit in an extra
+ * wrapper that lifted them above the sheen, which also swallowed every gap:
+ * the closing call-to-action's heading, text and buttons sat flush.) The sheen
+ * now stays underneath by stacking order instead; see `.surface-sheen-under`.
  */
 export function Panel({
   as: Tag = 'div',
@@ -41,6 +47,7 @@ export function Panel({
       className={cn(
         'border',
         'surface-sheen',
+        'surface-sheen-under',
         size === 'card' ? 'rounded-card' : 'rounded-panel',
         tone === 'card' && 'border-line-2 bg-bg-1',
         tone === 'raised' && 'border-line-2 bg-bg-2 shadow-raised',
@@ -51,7 +58,7 @@ export function Panel({
       )}
       {...rest}
     >
-      <div className="relative">{children}</div>
+      {children}
     </Tag>
   )
 }
