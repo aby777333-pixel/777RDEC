@@ -1702,21 +1702,22 @@ html[data-scrolling='true'] .hero-band *::after {
   translate: 0 -50%;
   transform: scale(0.08);
 }
-/* Born: grows in to full size in 1.6s with no overshoot, then holds perfectly
-   still while the cool-down (1.6s + the 2s hold) finishes. The layer is promoted
-   here, not at the zoom, so nothing re-rasterises as the zoom begins. */
+/* Born: fades in and grows smoothly to full size in 1.2s — no overshoot — then
+   holds perfectly still while the cool-down (1.2s + the 2s hold) finishes.
+   No will-change: it would freeze the logo's raster at its tiny starting size
+   and pop when the browser re-rasterises it at full size. */
 .pen-scene--breach[data-phase='logo'] .breach-logo {
   animation:
-    breach-logo-birth 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards,
-    breach-logo-cool 3.6s ease-out forwards;
-  will-change: transform, opacity, filter;
+    breach-logo-birth 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    breach-logo-cool 3.2s ease-out forwards;
 }
-/* Out of the screen at the viewer, fast: 0.6s, accelerating from the first frame,
-   solid until the last moment. The keyframes carry the acceleration, so the
-   timing between them is linear. */
+/* Out of the screen at the viewer, lightning fast: 0.45s, transform and opacity
+   only, so the compositor runs it smoothly even with the supernova drawing
+   behind it. The cooled glow is held, not animated. Accelerating keyframes,
+   linear between them. */
 .pen-scene--breach[data-phase='zoom'] .breach-logo {
-  animation: breach-logo-zoom 0.6s linear forwards;
-  will-change: transform, opacity, filter;
+  animation: breach-logo-zoom 0.45s linear forwards;
+  filter: brightness(1) saturate(1) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
 }
 .pen-scene--breach[data-phase='cover'] .breach-logo {
   opacity: 0;
@@ -1724,9 +1725,9 @@ html[data-scrolling='true'] .hero-band *::after {
 @keyframes breach-logo-birth {
   0% {
     opacity: 0;
-    transform: scale(0.08);
+    transform: scale(0.55);
   }
-  30% {
+  35% {
     opacity: 1;
   }
   100% {
@@ -1763,30 +1764,24 @@ html[data-scrolling='true'] .hero-band *::after {
   0% {
     opacity: 1;
     transform: scale(1);
-    filter: brightness(1) blur(0px) drop-shadow(0 0 12px rgba(100, 170, 255, 0.25));
   }
-  30% {
-    transform: scale(1.6);
-    filter: brightness(1.15) blur(0px) drop-shadow(0 0 24px rgba(100, 170, 255, 0.4));
+  25% {
+    transform: scale(1.7);
   }
-  55% {
-    transform: scale(3.4);
-    filter: brightness(1.3) blur(1px) drop-shadow(0 0 36px rgba(110, 180, 255, 0.45));
+  50% {
+    transform: scale(4);
   }
-  75% {
+  72% {
     opacity: 1;
-    transform: scale(8);
-    filter: brightness(1.5) blur(3px) drop-shadow(0 0 50px rgba(120, 190, 255, 0.5));
+    transform: scale(10);
   }
-  90% {
-    opacity: 0.8;
-    transform: scale(18);
-    filter: brightness(1.7) blur(8px) drop-shadow(0 0 64px rgba(130, 200, 255, 0.5));
+  88% {
+    opacity: 0.7;
+    transform: scale(22);
   }
   100% {
     opacity: 0;
-    transform: scale(32);
-    filter: brightness(1.9) blur(14px) drop-shadow(0 0 70px rgba(140, 210, 255, 0.5));
+    transform: scale(40);
   }
 }
 

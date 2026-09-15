@@ -48,7 +48,7 @@ import { motionIsReduced } from './motion'
  * - **It loops, as asked.** The pen plays once and offers a REPLAY button that
  *   reloads the page. Here the logo grows in (without the pen's overshoot, which
  *   read as hesitation), holds perfectly still for two seconds while it finishes
- *   cooling, then zooms out of the screen at the viewer in 0.6s; the supernova's
+ *   cooling, then zooms out of the screen at the viewer in 0.45s; the supernova's
  *   afterglow lingers, the band closes to black and the orb starts again under
  *   it. No replay button.
  * - **No text.** The pen's closing "777 RAPTOR / POWER UNDER CONTROL." lines are
@@ -77,11 +77,11 @@ const DETONATE_AT = 8.39
 /** After detonation. */
 const LOGO_AT = 0.72
 /** The logo grows in to full size, without overshoot; matches `breach-logo-birth`. */
-const LOGO_BIRTH_SECONDS = 1.6
+const LOGO_BIRTH_SECONDS = 1.2
 /** Then holds perfectly still while it finishes cooling; birth + hold matches `breach-logo-cool`. */
 const LOGO_STEADY_SECONDS = 2
 /** The zoom out of the screen at the viewer; matches `breach-logo-zoom`. */
-const ZOOM_SECONDS = 0.6
+const ZOOM_SECONDS = 0.45
 /** The supernova's afterglow, logo gone, before the close to black. */
 const AFTERGLOW_SECONDS = 1.2
 const COVER_SECONDS = 2
@@ -598,9 +598,12 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       wave.material.opacity = elapsed < wave.delay ? 0 : Math.max(0, wave.start - elapsed * wave.fade)
     }
 
-    if (elapsed > 0.07 && elapsed < 1.3) {
-      const impact = (1.3 - elapsed) * 0.38
-      camera.position.set((Math.random() - 0.5) * impact, (Math.random() - 0.5) * impact, 12 + Math.sin(elapsed * 38) * impact * 2)
+    // The pen's impact shake, kept to the blast itself: it is over before the logo
+    // appears, and without the pen's forward-and-back pumping of the camera, which
+    // made the whole scene — and the logo over it — read as bouncing.
+    if (elapsed > 0.07 && elapsed < LOGO_AT) {
+      const impact = ((LOGO_AT - elapsed) / (LOGO_AT - 0.07)) * 0.3
+      camera.position.set((Math.random() - 0.5) * impact, (Math.random() - 0.5) * impact, 12)
     } else {
       const settle = Math.pow(0.86, dt * 60)
       camera.position.x *= settle

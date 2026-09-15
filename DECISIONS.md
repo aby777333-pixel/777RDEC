@@ -1269,13 +1269,21 @@ The owner's "THE BREACH" pen now backs `/platform/emil/strategy-builder`, ported
 the dark orb leaks light through its fissures, accelerates, implodes and blacks
 out, detonates into the pen's prismatic supernova and shockwaves, and the site's
 logo is born white-hot out of the flash and cools to steel-blue — the pen's own
-cooling colours. The logo grows in to full size in 1.6s without the pen's
-overshoot (its bounce read as the logo hesitating), holds perfectly still for 2s
-while it finishes cooling, then zooms out of the screen at the viewer in 0.6s —
-accelerating from the first frame to about 32 times its size, solid until its last
-moment. The supernova's afterglow lingers, the band closes to black and the orb
-starts again under it: a lap of about 16.5s. The pen's closing tagline and its
-REPLAY button are not drawn.
+cooling colours. The logo fades in and grows smoothly to full size in 1.2s, holds
+perfectly still for 2s while it finishes cooling, then zooms out of the screen at
+the viewer in 0.45s — to about 40 times its size, solid until its last moment. The
+supernova's afterglow lingers, the band closes to black and the orb starts again
+under it: a lap of about 16s. The pen's closing tagline and its REPLAY button are
+not drawn.
+
+Three things made the reveal read as bouncing and slow, and are changed on purpose:
+the pen's logo birth overshoots (1.13x, 0.97x, 1.02x); the pen's camera pumps
+forward and back after the blast (`sin(elapsed * 38)` on z for 1.3s), which moved
+the whole supernova behind the logo as it appeared; and a zoom that animated blur
+and glow on a hugely scaled image dropped frames. Now the birth has no overshoot,
+the camera shake is x/y only and over before the logo appears, and the zoom
+animates transform and opacity only, with no `will-change` (which would freeze the
+logo's raster at its small starting size).
 
 The explosion is computed from time, not stepped: each particle cloud's
 positions are its launch velocities and one scale places the whole cloud along
