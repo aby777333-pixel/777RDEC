@@ -40,15 +40,17 @@ import { motionIsReduced } from './motion'
  * spirals, the starfield, the particle counts, palette and speed bands, the
  * debris and polar jets, the shockwave timings, the heartbeat, spin, heat haze,
  * quaking, implosion and blackout timeline, the camera impact, the supernova
- * flash, and the logo's birth and hot-to-cool animation are the pen's, values
+ * flash, and the logo's hot-to-cool colours are the pen's, values
  * included.
  *
  * What changed:
  *
  * - **It loops, as asked.** The pen plays once and offers a REPLAY button that
- *   reloads the page. Here, once the logo has been born and cooled, it zooms out
- *   of the screen toward the viewer, the supernova's afterglow lingers, the band
- *   closes to black and the orb starts again under it. No replay button.
+ *   reloads the page. Here the logo grows in (without the pen's overshoot, which
+ *   read as hesitation), holds perfectly still for two seconds while it finishes
+ *   cooling, then zooms out of the screen at the viewer in 0.6s; the supernova's
+ *   afterglow lingers, the band closes to black and the orb starts again under
+ *   it. No replay button.
  * - **No text.** The pen's closing "777 RAPTOR / POWER UNDER CONTROL." lines are
  *   not drawn; the hero carries its own copy. The logo is the site's master
  *   logo (the pen leaves a placeholder).
@@ -74,16 +76,16 @@ const BLACKOUT_AT = 8.28
 const DETONATE_AT = 8.39
 /** After detonation. */
 const LOGO_AT = 0.72
-/** The pen's 5s logo birth and cool-down. */
-const LOGO_SECONDS = 5
-/** The cooled logo holds this long, then zooms out of the screen toward the viewer. */
-const LOGO_HOLD_SECONDS = 0.6
-/** The zoom's length; matches `breach-logo-zoom` in globals.css. */
-const ZOOM_SECONDS = 2.2
+/** The logo grows in to full size, without overshoot; matches `breach-logo-birth`. */
+const LOGO_BIRTH_SECONDS = 1.6
+/** Then holds perfectly still while it finishes cooling; birth + hold matches `breach-logo-cool`. */
+const LOGO_STEADY_SECONDS = 2
+/** The zoom out of the screen at the viewer; matches `breach-logo-zoom`. */
+const ZOOM_SECONDS = 0.6
 /** The supernova's afterglow, logo gone, before the close to black. */
 const AFTERGLOW_SECONDS = 1.2
 const COVER_SECONDS = 2
-const ZOOM_AT = DETONATE_AT + LOGO_AT + LOGO_SECONDS + LOGO_HOLD_SECONDS
+const ZOOM_AT = DETONATE_AT + LOGO_AT + LOGO_BIRTH_SECONDS + LOGO_STEADY_SECONDS
 const LAP = ZOOM_AT + ZOOM_SECONDS + AFTERGLOW_SECONDS + COVER_SECONDS
 
 /** From this band width the copy leaves room on the right. Tailwind's `lg`. */
@@ -625,7 +627,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
     frame(seconds) {
       if (last < 0 && motionIsReduced()) {
         // The composed end state: the supernova's shell out, the logo up and cool.
-        clockOffset = DETONATE_AT + LOGO_AT + LOGO_SECONDS
+        clockOffset = DETONATE_AT + LOGO_AT + LOGO_BIRTH_SECONDS + LOGO_STEADY_SECONDS / 2
       }
       const now = seconds + clockOffset
       const dt = last < 0 ? 0 : Math.min(Math.max(now - last, 0), 0.033)
