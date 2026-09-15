@@ -25,7 +25,7 @@ export const metadata: Metadata = pageMetadata({
 export default function StrategyBuilderPage() {
   return (
     <>
-      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} imageVariant="emil">
+      <PageHero eyebrow={copy.eyebrow} heading={copy.heading} lead={copy.lead} backdrop="breach">
         <div className="flex max-w-2xl flex-col gap-6">
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <ButtonAnchor href={APP_HREF} variant="primary" size="lg" className="w-full sm:w-auto">

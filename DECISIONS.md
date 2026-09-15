@@ -1262,3 +1262,21 @@ simulation — the same screens, without the failing requests.
 dark palette, `--signal` as primary. The remote Google Fonts import was dropped
 (no third-party request before consent); the app uses Inter when installed,
 otherwise the system face. Chart series colours are still in the components.
+## 48. THE BREACH behind the EMIL Strategy Builder hero
+
+The owner's "THE BREACH" pen now backs `/platform/emil/strategy-builder`, ported in
+`breach-backdrop.tsx`, where the full list of changes is written up. In short:
+the dark orb leaks light through its fissures, accelerates, implodes and blacks
+out, detonates into the pen's prismatic supernova and shockwaves, and the site's
+logo is born white-hot out of the flash and cools to steel-blue — the pen's own
+birth and cooling animations. After a hold the logo fades, the band closes to
+black and the orb starts again under it: a lap of about 20s. The pen's closing
+tagline and its REPLAY button are not drawn.
+
+The explosion is computed from time, not stepped: each particle cloud's
+positions are its launch velocities and one scale places the whole cloud along
+the pen's damped flight, so eighty thousand points cost nothing per frame and the
+loop resets exactly. The renderer outputs linear colour so the r128 pen's values
+render as written. As with VELOCITY, the orb and logo sit to the right of the copy
+from `lg`, the heading is held to 52% of the band there, and below `lg` the logo
+is not shown.
