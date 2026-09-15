@@ -1271,7 +1271,9 @@ out, detonates into the pen's prismatic supernova and shockwaves, and the site's
 logo is born white-hot out of the flash and cools to steel-blue — the pen's own
 birth and cooling animations. Once cooled, the logo zooms out of the screen
 toward the viewer, the supernova's afterglow lingers, the band closes to black
-and the orb starts again under it: a lap of about 19.5s. The pen's closing
+and the orb starts again under it: a lap of about 20s. The zoom holds the logo
+solid while it accelerates to about 26 times its size, and blurs and fades only in
+its last moment, so it reads as flying at the viewer rather than fading. The pen's closing
 tagline and its REPLAY button are not drawn.
 
 The explosion is computed from time, not stepped: each particle cloud's
