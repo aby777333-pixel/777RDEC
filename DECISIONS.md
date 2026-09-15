@@ -1262,3 +1262,46 @@ simulation — the same screens, without the failing requests.
 dark palette, `--signal` as primary. The remote Google Fonts import was dropped
 (no third-party request before consent); the app uses Inter when installed,
 otherwise the system face. Chart series colours are still in the components.
+## 48. One strategy, connected across the EMIL universe
+
+A strategy is now one thing everywhere: an **EMIL Strategy Spec**, defined in
+`packages/emil-strategy-kit` (README there). The EMIL Strategy Builder creates
+it; EMIL Trade runs it; the EMIL Cockpit learns from it; MQL5 and Pine Script are
+generated from it.
+
+**Built on EMIL Trade's engines, not free text.** The builder used to describe
+strategies in prose and show one placeholder EA for all of them. It now builds on
+EMIL Trade's eleven EA engines with their real inputs. The kit's rules and
+indicators are ports of EMIL Trade's `ea-engine.ts` and `indicators.ts`, verified
+bar by bar against that code (226,710 decisions, no differences). Demo strategies
+are engine-backed too, with real backtests on labelled simulated candles.
+
+**Backtests and generated code trade like EMIL Trade's live runtime**: a decision
+per closed bar, a position only when the regime changes, ATR(14) stop and target,
+no re-entry after a stop until the regime changes. EMIL Trade's own Strategy
+Tester re-enters on the next bar instead; that inconsistency is EMIL Trade's to
+resolve and is reported, not patched here.
+
+**Three exits from the builder, all of which save and teach first.**
+- *Download*: an MQL5 EA and a Pine Script v5 strategy using the same formulas
+  (not the platforms' built-ins, which seed differently). Structurally checked by
+  the kit self-test; they have not been compiled in MetaEditor or TradingView.
+- *Attach to EMIL Trade*: opens `/terminal#emil-strategy=<spec>`. EMIL Trade keeps
+  the link through sign-in, shows the strategy, and on confirmation adds it to the
+  EA library on the same engine, with inputs as EA input overrides and lot / stop
+  / target as EA Properties. Attaching still passes the per-EA disclaimer.
+- *Teach EMIL*: `/api/emil/teach` validates the spec and forwards it with a
+  server-held key (scope `strategies_write`) to the Cockpit's
+  `POST /api/v1/strategies`, which stores a LEARNED "builder" blueprint (a changed
+  re-send is a new version). From the public site it is rate-limited and
+  same-origin only; it moves forward only through the Strategy Lab and a human
+  approval. Off (503, stated in the UI) until `EMIL_COCKPIT_URL` and
+  `EMIL_COCKPIT_API_KEY` are set.
+
+**One builder.** EMIL Trade's `/ai-lab` is now this builder, built from
+`apps/emil-strategy-builder` with EMIL Trade branding (`apps/README.md`); its old
+`ai-lab-source` copy is removed in the EMIL repo.
+
+**Copy follows the product.** The page no longer claims cost and slippage
+modelling, walk-forward and Monte Carlo filtering, or Python and cTrader export —
+the demo does none of those.

@@ -20,6 +20,7 @@ const WATCH_KEY = 'raptor_lab_watchlist';
 export default function Explore() {
   const navigate = useNavigate();
   const pushToast = useStore((s) => s.pushToast);
+  const setBuilderSeed = useStore((s) => s.setBuilderSeed);
   const [q, setQ] = useState('');
   const [results, setResults] = useState<Result[]>([]);
   const [searching, setSearching] = useState(false);
@@ -249,7 +250,7 @@ export default function Explore() {
               <button className="btn-primary justify-center" onClick={() => { pushToast({ type: 'info', message: `Briefing agents on ${sel.symbol}` }); navigate('/pipeline'); }}>
                 <Brain size={15} /> Analyse with 15 agents
               </button>
-              <button className="btn-ghost justify-center" onClick={() => { pushToast({ type: 'info', message: `Opening builder for ${sel.symbol}` }); navigate('/builder'); }}>
+              <button className="btn-ghost justify-center" onClick={() => { setBuilderSeed({ symbol: sel.symbol }); pushToast({ type: 'info', message: `Opening builder for ${sel.symbol}` }); navigate('/builder'); }}>
                 <Blocks size={15} /> Build a strategy
               </button>
               <button className="btn-ghost justify-center" onClick={() => toggleWatch(sel.symbol)}>

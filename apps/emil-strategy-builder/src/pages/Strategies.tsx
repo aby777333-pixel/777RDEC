@@ -27,7 +27,9 @@ export default function Strategies() {
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
           <h2 className="text-xl font-bold">Strategies</h2>
-          <p className="text-sm text-subtext">AI-generated strategies with backtests, votes & EA export.</p>
+          <p className="text-sm text-subtext">
+            Strategies on EMIL Trade&apos;s engines: backtested, exportable as MQL5 and Pine Script, and ready to attach to EMIL Trade.
+          </p>
         </div>
         <button className="btn-primary" onClick={() => generate.mutate()} disabled={generate.isPending}>
           <Play size={15} /> Generate Strategies

@@ -119,6 +119,30 @@ export const api = {
     );
   },
 
+  /**
+   * Candles for a backtest, and whether they are live. Unlike marketData this
+   * says so when it falls back to simulated bars, so a backtest never passes
+   * simulated data off as market data.
+   */
+  async marketCandles(
+    symbol: string,
+    timeframe: string,
+    bars = 500,
+  ): Promise<{ candles: Candle[]; live: boolean }> {
+    try {
+      const data = await marketReq<{ candles?: Candle[] }>(
+        `/market-data/${encodeURIComponent(symbol)}?timeframe=${encodeURIComponent(timeframe)}&bars=${bars}`,
+      );
+      const candles = (data.candles || []).filter(
+        (c) => [c.open, c.high, c.low, c.close].every((v) => typeof v === 'number' && Number.isFinite(v)),
+      );
+      if (candles.length >= 80) return { candles, live: true };
+    } catch {
+      /* fall through to simulated bars */
+    }
+    return { candles: mockCandles(symbol, bars), live: false };
+  },
+
   async strategies(status?: string): Promise<Strategy[]> {
     const q = status ? `?status=${status}` : '';
     const data = await withFallback(

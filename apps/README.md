@@ -23,6 +23,30 @@ the site's type-check, lint, copy check and Netlify build never touch `apps/`.
 - **No phantom backends.** An app that has no backend on this site must not poll
   one: gate those calls behind a build-time variable and use its demo data.
 
+## The EMIL Strategy Builder on other hosts
+
+The same source is EMIL Trade's `/ai-lab`. Build it into an EMIL repo checkout:
+
+```bash
+cd apps/emil-strategy-builder
+EMIL_APP_BASE=/ai-lab/ \
+EMIL_APP_OUT_DIR=<EMIL repo>/emil-trade/public/ai-lab \
+VITE_BRAND_COMPANY="EMIL Trade" VITE_BRAND_HOME_HREF=/terminal \
+VITE_BRAND_FAVICON=/emil-trade-mark.svg \
+VITE_BRAND_SANDBOX_HREF=https://777raptor.netlify.app/developers/sandbox \
+VITE_EMIL_TRADE_URL=same-origin VITE_TEACH_API=/api/emil/teach VITE_MARKET_API_BASE=/api \
+npm run build
+```
+
+Commit the output in the EMIL repo. Rebuild both hosts whenever the builder or
+`packages/emil-strategy-kit` changes, and copy the kit's `src/` to its two EMIL
+repo copies (see the kit README).
+
+**Connecting to EMIL.** "Save & teach EMIL" is off until the host has
+`EMIL_COCKPIT_URL` and `EMIL_COCKPIT_API_KEY` set (server-side). Issue the key in
+the Cockpit under **Developers** as a *live* key with the `strategies_write`
+scope — not from the CRM, which issues read-only keys.
+
 ## Bringing in the next app
 
 1. Copy the source (no `node_modules`, `dist`, or generated `vite.config.js`)

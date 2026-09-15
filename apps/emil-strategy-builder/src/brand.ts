@@ -25,7 +25,19 @@ export const BRAND = {
   homeHref: pick(ENV.VITE_BRAND_HOME_HREF, '/platform/emil/strategy-builder'),
   /** Where visitors ask for API keys against simulated data. */
   sandboxHref: pick(ENV.VITE_BRAND_SANDBOX_HREF, '/developers/sandbox'),
+  /**
+   * EMIL Trade, where "Attach to EMIL Trade" sends a strategy. Set it to
+   * "same-origin" when the builder is served by EMIL Trade itself.
+   */
+  emilTradeUrl: pick(ENV.VITE_EMIL_TRADE_URL, 'https://emil-trade.netlify.app'),
+  /** The host's server route that forwards a strategy to EMIL for review. */
+  teachApi: pick(ENV.VITE_TEACH_API, '/api/emil/teach'),
+  /** Tab icon, from the host site. */
+  favicon: pick(ENV.VITE_BRAND_FAVICON, '/favicon.png'),
 } as const;
+
+/** EMIL Trade's base URL for links; '' when the builder runs inside EMIL Trade. */
+export const EMIL_TRADE_BASE = BRAND.emilTradeUrl === 'same-origin' ? '' : BRAND.emilTradeUrl;
 
 /** "EMIL Strategy Builder". */
 export const APP_TITLE = `${BRAND.family} ${BRAND.appName}`;
