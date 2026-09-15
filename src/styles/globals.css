@@ -1249,15 +1249,15 @@ html[data-reduce-motion='true'] *::after {
   from the first paint instead of flashing black before the first frame lands.
 */
 /*
-  Two pens do not open on black. The gravitation swarm is drawn on the pen's
-  own dark blue, and the ring wake on its near-black grey — set here so the
-  band is that colour from the first paint rather than flashing black.
+  The gravitation swarm does not open on black: it is drawn on the pen's own
+  dark blue, set here so the band is that colour from the first paint rather
+  than flashing black. The ring wake is black, matching what its canvas paints.
 */
 .pen-scene--gravity {
   background: #111a22;
 }
 .pen-scene--bursts {
-  background: #1e1e1e;
+  background: #000;
 }
 /*
   Raptor deep space (`cosmic`, the white-label hero): the pen's black ground,

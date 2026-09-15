@@ -30,7 +30,13 @@ import { type BackdropScene, trackPointer, useBackdropCanvas } from './use-backd
  *
  * One placement change, as elsewhere: the wake opens right of centre rather
  * than under the headline, and then follows the pointer as the pen does.
+ *
+ * And one colour change, as asked: the pen's ground is a near-black grey
+ * (#1e1e1e); here it is black, like the other hero bands.
  */
+
+/** The ground, repainted every frame. */
+const GROUND = '#000'
 
 /** The pen's ring: thirty across, eight counts of life, a tenth spent a frame. */
 const RING_RADIUS = 30
@@ -82,7 +88,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     },
     frame() {
-      ctx.fillStyle = '#1e1e1e'
+      ctx.fillStyle = GROUND
       ctx.fillRect(0, 0, width, height)
 
       rings.push({
