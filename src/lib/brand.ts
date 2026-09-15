@@ -23,6 +23,12 @@ export const EMIL_SHORT = 'EMIL'
 /** The trading platform EMIL ships inside. One spelling, everywhere. */
 export const EMIL_TRADE = 'EMIL Trade'
 
+/**
+ * The multi-agent strategy lab, in the EMIL family. The app itself is
+ * registered in src/lib/emil-apps.ts.
+ */
+export const EMIL_STRATEGY_BUILDER = `${EMIL_SHORT} Strategy Builder`
+
 /** Legal entity block. Rendered by <LegalEntityBlock> in the footer. */
 export const LEGAL_ENTITY_NAME = '777 Capital Markets Limited'
 export const LEGAL_ENTITY_JURISDICTION = 'United Kingdom'

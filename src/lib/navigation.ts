@@ -1,4 +1,5 @@
 import { EMIL_SHORT, EMIL_TRADE } from './brand'
+import { EMIL_APPS } from './emil-apps'
 
 export type NavLink = { label: string; href: string; description: string }
 export type NavGroup = { label: string; href: string; blurb: string; links: readonly NavLink[] }
@@ -14,6 +15,8 @@ export const NAV_GROUPS: readonly NavGroup[] = [
       { label: 'Modules', href: '/platform/modules', description: 'The twenty modules the stack is built from.' },
       { label: EMIL_SHORT, href: '/platform/emil', description: 'The intelligence layer inside the terminal.' },
       { label: `${EMIL_SHORT} Gallery`, href: '/platform/emil/gallery', description: 'The running apps, screen by screen.' },
+      // Every registered EMIL app gets its page in the menu.
+      ...EMIL_APPS.map((app) => ({ label: app.name, href: app.page, description: app.navDescription })),
       { label: 'Global Markets', href: '/platform/markets', description: 'Multi-asset coverage, session by session.' },
       { label: 'Trading Tools', href: '/platform/trading-tools', description: 'Charting, scanners, alerts, journaling.' },
       { label: 'Raptor Risk Engine', href: '/platform/risk', description: 'Exposure, limits, kill switches.' },

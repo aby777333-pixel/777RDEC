@@ -1,4 +1,4 @@
-import { EMIL_EXPANSION, EMIL_SHORT } from '@/lib/brand'
+import { EMIL_EXPANSION, EMIL_SHORT, EMIL_STRATEGY_BUILDER } from '@/lib/brand'
 import { DEFAULT_CTA_ACTIONS, type PageCopy } from './types'
 
 export const platformHub: PageCopy = {
@@ -74,6 +74,7 @@ export const emil: PageCopy = {
   // this page is long, and the Lab is where the claims can be tried out.
   heroActions: [
     { label: `Open ${EMIL_SHORT} Lab`, href: '/intelligence/emil-lab', variant: 'primary' },
+    { label: EMIL_STRATEGY_BUILDER, href: '/platform/emil/strategy-builder', variant: 'ghost' },
     { label: 'Request a demo', href: '/request-demo', variant: 'ghost' },
   ],
   answers: {

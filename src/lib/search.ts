@@ -7,6 +7,7 @@ import { FAQ_GROUPS } from './copy/engage'
 import * as platform from './copy/platform'
 import { modulesPage } from './copy/modules'
 import { emilTrade } from './copy/emil-trade'
+import { strategyBuilder } from './copy/strategy-builder'
 import * as brokers from './copy/brokers'
 import * as technology from './copy/technology'
 import * as intelligence from './copy/intelligence'
@@ -36,6 +37,7 @@ const PAGES: readonly (readonly [string, PageCopy])[] = [
   ['/platform/modules', modulesPage],
   ['/platform/emil-trade', emilTrade],
   ['/platform/emil', platform.emil],
+  ['/platform/emil/strategy-builder', strategyBuilder],
   ['/platform/markets', platform.markets],
   ['/platform/trading-tools', platform.tradingTools],
   ['/platform/risk', platform.risk],

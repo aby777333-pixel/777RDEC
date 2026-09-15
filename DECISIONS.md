@@ -1227,3 +1227,38 @@ site-wide, which is a look change to make on purpose, not in passing.
 **Brochure and retail partner.** The product brochure is served from
 `public/brochure` (view in a new tab, or download); GIO4X is the retail route to
 EMIL, linked from the footer with the short risk line.
+
+## 47. EMIL apps: standalone, static, registered, white-labelable
+
+The GIO Raptor AI Strategy Lab (the `/ai-lab` Vite app on the Gioraptor Netlify
+site) is now the **EMIL Strategy Builder**, the first of several apps being
+brought into the EMIL universe. The pattern, written up in `apps/README.md`:
+
+**Its own project, its output committed.** Source in `apps/emil-strategy-builder`,
+built by `npm run build:apps` into `public/emil-strategy-builder`. The site's
+`tsconfig` excludes `apps/`; lint, the copy check and the Netlify build never see
+it, so a cloned app cannot break the site build and the deploy needs no second
+toolchain. Linked with plain anchors to `/<id>/index.html` (hash routes inside);
+`/emil-<id>` redirects there. `src/lib/emil-apps.ts` is the registry the Platform
+menu, sitemap, llms.txt and breadcrumbs read.
+
+**Its page is a normal page.** `/platform/emil/strategy-builder` carries the five
+answers, a same-origin live preview (desktop only — the frame is too cramped on
+a phone, which gets the open button), the modules, the risk line and the
+jurisdiction note. `/platform/emil` links to it from the hero.
+
+**Live data through one proxy; no phantom backends.** The Raptor Market API has
+no CORS headers, so `/api/raptor-market/[...path]` forwards allow-listed GETs
+(health, markets, quote, candles, search, market-data) to
+`RAPTOR_MARKET_API_ORIGIN`, with short CDN caching. Key issuance is deliberately
+not proxied. The lab's strategy backend and WebSocket do not exist even on the
+original site; there every screen polled 404s and retried the socket forever.
+Here those calls are off unless `VITE_API_BASE` / `VITE_WS_URL` are set at build
+time, and the app runs on its built-in demo data and client-side pipeline
+simulation — the same screens, without the failing requests.
+
+**White label by configuration.** Brand strings come from `src/brand.ts`
+(`VITE_BRAND_*`), the palette from `--color-*` variables — set to this site's
+dark palette, `--signal` as primary. The remote Google Fonts import was dropped
+(no third-party request before consent); the app uses Inter when installed,
+otherwise the system face. Chart series colours are still in the components.

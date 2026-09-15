@@ -38,6 +38,9 @@ const nextConfig = {
       // The live product experience is supplied separately. Until it is wired
       // up here, keep the URL working rather than serving a placeholder.
       { source: '/experience', destination: '/request-demo', permanent: false },
+      // EMIL apps are static files under public/emil-<id>; send the bare folder
+      // URL to the entry file. Registry: src/lib/emil-apps.ts.
+      { source: '/:app(emil-[a-z0-9-]+)', destination: '/:app/index.html', permanent: false },
     ]
   },
 }
