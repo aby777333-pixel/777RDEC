@@ -5,6 +5,7 @@ import {
   HQ_ADDRESS_LINES,
   HQ_COUNTRY_CODE,
   LEGAL_ENTITY_NAME,
+  LIVE_SOCIAL_PROFILES,
   PHONE_E164,
   SITE_NAME,
   SITE_TAGLINE,
@@ -144,6 +145,8 @@ export function organizationJsonLd() {
       height: 238,
     },
     slogan: SITE_TAGLINE,
+    // Only profiles that exist; see SOCIAL_PROFILES in brand.ts.
+    sameAs: LIVE_SOCIAL_PROFILES.length > 0 ? LIVE_SOCIAL_PROFILES.map((profile) => profile.url) : undefined,
     description:
       'Trading technology provider: terminal, CRM, client portal, risk engine, API hub and an intelligence layer for brokers, institutions and professional desks.',
     email: CONTACT_EMAIL,

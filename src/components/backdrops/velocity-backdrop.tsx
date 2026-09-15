@@ -100,8 +100,8 @@ const BRAKE_SECONDS = 3.5
 const REVEAL_DELAY = 0.4
 /** From coming to rest until the logo fades: the delay, the 3.5s reveal, then a hold. */
 const HOLD_SECONDS = 6.5
-/** The curtain closing to black before the ride restarts under it (its transition is 1.4s). */
-const COVER_SECONDS = 1.6
+/** The curtain closing to black before the ride restarts under it (its transition is 1.4s, plus margin for a slow frame). */
+const COVER_SECONDS = 2
 
 const STEP = 1 / 60
 const MAX_STEPS = 4

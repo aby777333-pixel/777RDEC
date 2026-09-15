@@ -57,6 +57,38 @@ export const RISK_LINE_SHORT =
   'Trading leveraged products carries a high level of risk to capital. Technology can improve analysis and controls; it cannot remove market risk.'
 
 
+/**
+ * Social profiles, in the order the footer shows them.
+ *
+ * The accounts are being set up. Paste each profile's full URL into `url` once
+ * it exists — nothing else needs to change. Until then the footer shows the
+ * icon but not a link (so no visitor lands on a missing or someone else's
+ * page), and the profile is left out of the Organization `sameAs` and llms.txt.
+ */
+export type SocialProfile = {
+  id: 'linkedin' | 'x' | 'youtube' | 'facebook' | 'instagram' | 'telegram' | 'whatsapp' | 'github'
+  label: string
+  url: string
+}
+
+export const SOCIAL_PROFILES: readonly SocialProfile[] = [
+  { id: 'linkedin', label: 'LinkedIn', url: '' },
+  { id: 'x', label: 'X', url: '' },
+  { id: 'youtube', label: 'YouTube', url: '' },
+  { id: 'facebook', label: 'Facebook', url: '' },
+  { id: 'instagram', label: 'Instagram', url: '' },
+  { id: 'telegram', label: 'Telegram', url: '' },
+  { id: 'whatsapp', label: 'WhatsApp', url: '' },
+  { id: 'github', label: 'GitHub', url: '' },
+]
+
+/** A profile is live once it has a full https URL. */
+export function socialProfileIsLive(profile: SocialProfile): boolean {
+  return /^https:\/\//.test(profile.url)
+}
+
+export const LIVE_SOCIAL_PROFILES = SOCIAL_PROFILES.filter(socialProfileIsLive)
+
 export const CONTACT_EMAIL = `info@${SITE_DOMAIN}`
 export const DEVELOPERS_EMAIL = `developers@${SITE_DOMAIN}`
 

@@ -4,6 +4,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { ReduceMotionToggle } from './reduce-motion-toggle'
 import { NewsletterForm } from '@/components/forms/newsletter-form'
 import { CookiePreferencesButton } from './cookie-banner'
+import { SocialLinks } from './social-links'
 import { FOOTER_PRODUCT_LINKS, LEGAL_LINKS } from '@/lib/navigation'
 import { MapPin, Phone } from 'lucide-react'
 import {
@@ -32,6 +33,10 @@ export function Footer() {
             <p className="font-display text-[1.125rem] uppercase tracking-tight text-steel-300">
               {SITE_TAGLINE}
             </p>
+            <div className="flex flex-col gap-2.5 pt-2">
+              <span className="tint-2 tint-ink text-eyebrow uppercase">Follow us</span>
+              <SocialLinks />
+            </div>
           </div>
           <div className="flex flex-col items-start gap-4 lg:items-end">
             <ThemeToggle />
