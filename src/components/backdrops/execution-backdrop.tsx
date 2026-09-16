@@ -12,7 +12,7 @@ import { motionIsReduced } from './motion'
  * clicks; the terminal zooms past the viewer and the order's first millisecond
  * plays out in chapters, a clock counting up to 0.001000 s — input, RAM, CPU,
  * the Raptor risk engine ticking off its checks, the network stack, optical
- * fibre, the data centre, liquidity routing, MATCH, the acknowledgement — until
+ * fibre, the data centre, liquidity routing, the match, the acknowledgement — until
  * the terminal flies back in reading EXECUTED and the band closes on "777
  * RAPTOR / THE FINAL 0.001 SECOND."
  *
@@ -40,6 +40,9 @@ import { motionIsReduced } from './motion'
  *   the terminal in where the pen un-blurs it.
  * - **Decoration, not a control.** The BUY button is not a button, nothing
  *   takes the pointer, and the whole band is hidden from assistive technology.
+ * - **EMIL, not MATCH.** Where the pen zooms MATCH out once, EMIL / EVOLVING /
+ *   MARKET / INTELLIGENCE / LAYER zoom out one after another, as asked, each
+ *   sized to the span.
  * - **The logo, not the name.** The closing screen's "777 RAPTOR" wordmark is
  *   the site's master logo, as asked, with the pen's blue glow. The line, the
  *   time and the two lines of copy stay.
@@ -69,6 +72,14 @@ const SEQUENCE_SECONDS = 20.5
 /** The closing screen starts 600ms after the sequence ends. */
 const FINAL_AT = SEQUENCE_AT + SEQUENCE_SECONDS + 0.6
 const LAP = 31
+/**
+ * In place of the pen's MATCH, as asked: these words zoom out one after another
+ * from where MATCH did, each with MATCH's keyframes, ending as the terminal
+ * starts back (19s into the sequence).
+ */
+const WORDS = ['EMIL', 'EVOLVING', 'MARKET', 'INTELLIGENCE', 'LAYER'] as const
+const WORDS_AT = 16.6
+const WORD_SECONDS = (19 - WORDS_AT) / WORDS.length
 /** How long the closing screen takes to clear at the start of the next lap. */
 const HANDOVER = 1
 
@@ -612,10 +623,17 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
       riskPanel.style.opacity = '0'
     }
 
-    // MATCH and the flashes.
-    const m = phase(t, 16.6, 17.2)
-    if (t >= 16.6 && m < 1) {
-      const e = easeOut(m)
+    // The words that replace MATCH, one zoom each, and the flashes.
+    const w = t - WORDS_AT
+    const word = Math.floor(w / WORD_SECONDS)
+    if (w >= 0 && word < WORDS.length) {
+      const text = WORDS[word]
+      if (texts.get(match) !== text) {
+        setText(match, text)
+        // Sized so the word fits the span at full size, however long it is.
+        match.style.fontSize = `min(220px, calc(var(--exec-span, 100vw) * 1.06 / ${text.length}))`
+      }
+      const e = easeOut((w - word * WORD_SECONDS) / WORD_SECONDS)
       match.style.opacity = String(keys3(0, 1, 0, e))
       match.style.transform = `translate(-50%, -50%) scale(${keys3(0.3, 1, 2, e)})`
     } else {
@@ -820,7 +838,7 @@ export function ExecutionBackdrop({ className }: { className?: string }) {
       </div>
 
       <div className="exec-match" data-exec="match">
-        MATCH
+        EMIL
       </div>
 
       <div className="exec-final" data-exec="final">

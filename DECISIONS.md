@@ -1311,3 +1311,8 @@ heading held to 46% of the band there; below `lg` only the canvas chapters,
 flashes and scanlines play behind the copy. The zoom animates transform and
 opacity only, without the pen's blur, for the reason given in 48. The marionette
 component is left in place, unused.
+
+Two changes since, as asked: the closing screen shows the site's master logo in
+place of the "777 RAPTOR" wordmark (captions kept), and the pen's MATCH is
+replaced by five words zooming out in turn from the same moment: EMIL, EVOLVING,
+MARKET, INTELLIGENCE, LAYER, 0.48s each, finishing as the terminal starts back.
