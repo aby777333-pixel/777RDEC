@@ -1786,6 +1786,374 @@ html[data-scrolling='true'] .hero-band *::after {
 }
 
 /*
+  THE FINAL 0.001 SECOND (`execution`, the EMIL Lab hero): the pen's terminal,
+  clock, chapter label, risk panel, MATCH, closing screen, flash, scanlines and
+  vignette, values from the pen, above the canvas. The scene places every layer
+  from its own clock (opacity, transform, the closing line's width) and publishes
+  its centre as --exec-x and the width it draws to as --exec-span. The terminal
+  keeps the pen's 1040 x 650 layout and is scaled into that span. Below lg the
+  copy spans the band, so only the canvas, the flash, scanlines and vignette show.
+*/
+.pen-scene--execution {
+  background: #020304;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.exec-terminal,
+.exec-chrono,
+.exec-chapter,
+.exec-risk,
+.exec-match,
+.exec-final {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .exec-terminal,
+  .exec-chrono,
+  .exec-chapter,
+  .exec-risk,
+  .exec-match,
+  .exec-final {
+    display: block;
+  }
+}
+.exec-terminal {
+  position: absolute;
+  z-index: 5;
+  width: 1040px;
+  height: 650px;
+  left: var(--exec-x, 50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  overflow: hidden;
+  border: 1px solid rgba(160, 210, 230, 0.18);
+  background: linear-gradient(140deg, rgba(20, 28, 32, 0.97), rgba(3, 6, 8, 0.99));
+  box-shadow:
+    0 40px 130px #000,
+    inset 0 0 80px rgba(40, 150, 200, 0.025);
+  color: #dcebf0;
+}
+.exec-head {
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.exec-mark {
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  font-size: 17px;
+}
+.exec-sub {
+  margin-left: 15px;
+  opacity: 0.35;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+}
+.exec-live {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  opacity: 0.7;
+}
+.exec-live i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 7px;
+  border-radius: 50%;
+  background: #70e6b0;
+  box-shadow: 0 0 10px #70e6b0;
+}
+.exec-market {
+  height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 35px;
+  padding: 0 25px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.exec-symbol {
+  margin-right: auto;
+}
+.exec-symbol strong {
+  display: block;
+  font-size: 22px;
+  letter-spacing: 0.06em;
+}
+.exec-symbol span {
+  font-size: 8px;
+  opacity: 0.35;
+}
+.exec-price small {
+  display: block;
+  font-size: 7px;
+  opacity: 0.35;
+  letter-spacing: 0.3em;
+}
+.exec-price b {
+  font-size: 25px;
+  font-weight: 400;
+}
+.exec-chart {
+  position: absolute;
+  left: 0;
+  top: 156px;
+  right: 290px;
+  bottom: 0;
+}
+.exec-chart > canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.exec-ticket {
+  position: absolute;
+  width: 290px;
+  top: 156px;
+  right: 0;
+  bottom: 0;
+  padding: 28px;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.2);
+}
+.exec-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.exec-row span {
+  opacity: 0.35;
+}
+/* The pen's <button>, at the browser's default 13px, drawn as a box. */
+.exec-buy {
+  width: 100%;
+  margin-top: 40px;
+  padding: 18px 10px;
+  border: 1px solid rgba(90, 220, 170, 0.45);
+  background: rgba(30, 160, 110, 0.16);
+  color: #9bffd4;
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  text-align: center;
+}
+.exec-status {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  opacity: 0.35;
+}
+.exec-cursor {
+  position: absolute;
+  z-index: 10;
+  width: 17px;
+  height: 25px;
+  opacity: 0;
+  filter: drop-shadow(0 2px 3px #000);
+}
+.exec-cursor::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 20px solid white;
+  border-right: 13px solid transparent;
+  transform: rotate(-12deg);
+}
+.exec-chrono {
+  position: absolute;
+  z-index: 20;
+  top: 30px;
+  left: var(--exec-x, 50%);
+  transform: translateX(-50%);
+  color: #c8efff;
+  text-align: center;
+  opacity: 0;
+  text-shadow: 0 0 14px rgba(70, 190, 255, 0.8);
+}
+.exec-chrono span {
+  display: block;
+  font-size: 7px;
+  letter-spacing: 0.5em;
+  opacity: 0.4;
+}
+.exec-chrono b {
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+  font-weight: 400;
+}
+/* The pen pins this to the window's bottom-left; here, to the scene's. */
+.exec-chapter {
+  position: absolute;
+  z-index: 20;
+  left: calc(var(--exec-x, 50%) - var(--exec-span, 100%) * 0.42);
+  bottom: 38px;
+  color: white;
+  opacity: 0;
+}
+.exec-micro {
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  color: #74d7ff;
+}
+.exec-chapter-name {
+  margin-top: 7px;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+.exec-chapter-sub {
+  margin-top: 6px;
+  font-size: 8px;
+  letter-spacing: 0.35em;
+  opacity: 0.4;
+}
+.exec-risk {
+  position: absolute;
+  z-index: 30;
+  width: 320px;
+  left: var(--exec-x, 50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 22px;
+  color: #d9f6ff;
+  background: rgba(2, 10, 14, 0.78);
+  border: 1px solid rgba(80, 200, 255, 0.3);
+  box-shadow: 0 0 70px rgba(0, 160, 255, 0.15);
+  opacity: 0;
+}
+.exec-risk-title {
+  margin-bottom: 18px;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+}
+.exec-check {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  opacity: 0;
+}
+.exec-check b {
+  color: #84ffd0;
+}
+.exec-accepted {
+  margin-top: 18px;
+  text-align: center;
+  color: #86ffd0;
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  opacity: 0;
+}
+/* The pen sizes MATCH and the closing logo to the window; here, to the span. */
+.exec-match {
+  position: absolute;
+  z-index: 40;
+  left: var(--exec-x, 50%);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: min(220px, calc(var(--exec-span, 100vw) / 4.8));
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  white-space: nowrap;
+  color: white;
+  opacity: 0;
+  text-shadow:
+    0 0 20px white,
+    0 0 80px #37bfff;
+}
+.exec-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: white;
+  opacity: 0;
+}
+.exec-final {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  background: #010203;
+  color: white;
+  opacity: 0;
+}
+.exec-final-inner {
+  position: absolute;
+  left: var(--exec-x, 50%);
+  top: 50%;
+  width: var(--exec-span, 100%);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.exec-final-time {
+  margin-bottom: 25px;
+  font-size: 11px;
+  letter-spacing: 0.55em;
+  color: #77dfff;
+}
+.exec-final-logo {
+  font-size: min(130px, calc(var(--exec-span, 100vw) / 9));
+  font-weight: 900;
+  letter-spacing: 0.13em;
+  line-height: 1.1;
+  white-space: nowrap;
+  background: linear-gradient(180deg, #fff, #c9f2ff 35%, #53bfff 58%, #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 6px white) drop-shadow(0 0 25px #34baff) drop-shadow(0 0 65px #1855ff);
+}
+.exec-final-line {
+  width: 0;
+  height: 1px;
+  margin-top: 22px;
+  background: white;
+  box-shadow: 0 0 20px #38c8ff;
+}
+.exec-final-copy {
+  margin-top: 20px;
+  font-size: 12px;
+  letter-spacing: 0.55em;
+  opacity: 0;
+}
+.exec-final-tag {
+  margin-top: 12px;
+  font-size: 8px;
+  letter-spacing: 0.42em;
+  opacity: 0;
+}
+.exec-scan {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  opacity: 0.025;
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 3px, white 4px);
+}
+.exec-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: radial-gradient(
+    circle at var(--exec-x, 50%) 50%,
+    transparent 35%,
+    rgba(0, 0, 0, 0.85) 130%
+  );
+}
+
+/*
   ZERO-POINT (`zeropoint`): the pen's black page, and the two parts of its HUD
   that are not text — the vignette its UI layer paints and the scanlines laid
   over everything at 15%. Drawn above the canvas and never catching the pointer.

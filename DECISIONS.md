@@ -1292,3 +1292,22 @@ loop resets exactly. The renderer outputs linear colour so the r128 pen's values
 render as written. As with VELOCITY, the orb and logo sit to the right of the copy
 from `lg`, the heading is held to 52% of the band there, and below `lg` the logo
 is not shown.
+## 49. THE FINAL 0.001 SECOND behind the EMIL Lab hero
+
+The owner's "THE FINAL 0.001 SECOND" pen now backs `/intelligence/emil-lab`,
+replacing the marionette there, ported in `execution-backdrop.tsx`, where the
+full list of changes is written up. A 777 Raptor execution terminal quotes
+EUR/USD, a cursor clicks BUY, the terminal zooms past the viewer and the order's
+first millisecond plays out chapter by chapter (input, RAM, CPU, the risk engine's
+checks, network, fibre, infrastructure, liquidity, MATCH, acknowledgement) until
+the terminal returns reading EXECUTED and the band closes on the pen's "777 RAPTOR
+/ THE FINAL 0.001 SECOND." screen.
+
+The pen plays once off chained timeouts; here every layer is placed from the
+band's clock, so it pauses cleanly off screen and loops (a lap of 31s, the
+closing screen fading into the next lap's terminal). The terminal keeps the pen's
+1040 x 650 layout and is scaled into the space right of the copy from `lg`, the
+heading held to 46% of the band there; below `lg` only the canvas chapters,
+flashes and scanlines play behind the copy. The zoom animates transform and
+opacity only, without the pen's blur, for the reason given in 48. The marionette
+component is left in place, unused.

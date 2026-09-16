@@ -51,6 +51,7 @@ import { WarpBackdrop } from '@/components/backdrops/warp-backdrop'
 import { CosmicBackdrop } from '@/components/backdrops/cosmic-backdrop'
 import { LazyVelocity } from '@/components/backdrops/lazy-velocity'
 import { LazyBreach } from '@/components/backdrops/lazy-breach'
+import { ExecutionBackdrop } from '@/components/backdrops/execution-backdrop'
 import { HeroImage } from './hero-image'
 import { RiskLine } from './risk-line'
 import type { FiveAnswers, Module, NextStep, PageCopy } from '@/lib/copy/types'
@@ -123,6 +124,7 @@ export type PenBackdrop =
   | 'cosmic'
   | 'velocity'
   | 'breach'
+  | 'execution'
 
 /** Shared hue cycle for grids that are not <Panel>-based. */
 const TINT_CYCLE = ['tint-1', 'tint-2', 'tint-3', 'tint-4', 'tint-5', 'tint-6'] as const
@@ -230,6 +232,7 @@ export function PageHero({
       {backdrop === 'cosmic' ? <CosmicBackdrop className="-z-10" /> : null}
       {backdrop === 'velocity' ? <LazyVelocity className="-z-10" /> : null}
       {backdrop === 'breach' ? <LazyBreach className="-z-10" /> : null}
+      {backdrop === 'execution' ? <ExecutionBackdrop className="-z-10" /> : null}
       {pen ? null : <HeroImage variant={imageVariant ?? 'default'} />}
       {/* A scrim over the copy side of a pen band. It has to come after the
           backdrops to paint on top of them, since both sit at -z-10 and DOM
@@ -258,6 +261,8 @@ export function PageHero({
             backdrop === 'puppet' && 'lg:max-w-[54%]',
             // The breach's orb and logo are centred at 72% across a wide band.
             backdrop === 'breach' && 'lg:max-w-[52%]',
+            // The execution terminal is centred at 74% across a wide band.
+            backdrop === 'execution' && 'lg:max-w-[46%]',
           )}
         >
           <Eyebrow>{eyebrow}</Eyebrow>
