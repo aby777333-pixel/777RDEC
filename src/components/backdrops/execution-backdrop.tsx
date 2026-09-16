@@ -1,5 +1,6 @@
 'use client'
 
+import { useLogoSources } from '@/components/layout/brand-provider'
 import { cn } from '@/lib/utils'
 import { type BackdropScene, useBackdropCanvas } from './use-backdrop-canvas'
 import { motionIsReduced } from './motion'
@@ -39,6 +40,9 @@ import { motionIsReduced } from './motion'
  *   the terminal in where the pen un-blurs it.
  * - **Decoration, not a control.** The BUY button is not a button, nothing
  *   takes the pointer, and the whole band is hidden from assistive technology.
+ * - **The logo, not the name.** The closing screen's "777 RAPTOR" wordmark is
+ *   the site's master logo, as asked, with the pen's blue glow. The line, the
+ *   time and the two lines of copy stay.
  * - **A still band is a composed one.** With motion reduced the terminal is
  *   shown at READY.
  */
@@ -725,6 +729,7 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
 export function ExecutionBackdrop({ className }: { className?: string }) {
   const { hostRef } = useBackdropCanvas(setup, { maxDpr: 1.5 })
+  const logo = useLogoSources().default
 
   return (
     <div ref={hostRef} className={cn('pen-scene pen-scene--execution', className)} aria-hidden>
@@ -821,7 +826,10 @@ export function ExecutionBackdrop({ className }: { className?: string }) {
       <div className="exec-final" data-exec="final">
         <div className="exec-final-inner">
           <div className="exec-final-time">0.001000 s</div>
-          <div className="exec-final-logo">777 RAPTOR</div>
+          {logo ? (
+            // eslint-disable-next-line @next/next/no-img-element -- static brand asset, no optimisation needed
+            <img src={logo} alt="" className="exec-final-logo" />
+          ) : null}
           <div className="exec-final-line" data-exec="final-line" />
           <div className="exec-final-copy" data-exec="final-copy">
             THE FINAL 0.001 SECOND.

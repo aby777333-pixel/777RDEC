@@ -2105,16 +2105,12 @@ html[data-scrolling='true'] .hero-band *::after {
   color: #77dfff;
 }
 .exec-final-logo {
-  font-size: min(130px, calc(var(--exec-span, 100vw) / 9));
-  font-weight: 900;
-  letter-spacing: 0.13em;
-  line-height: 1.1;
-  white-space: nowrap;
-  background: linear-gradient(180deg, #fff, #c9f2ff 35%, #53bfff 58%, #fff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 6px white) drop-shadow(0 0 25px #34baff) drop-shadow(0 0 65px #1855ff);
+  display: block;
+  width: min(420px, calc(var(--exec-span, 100vw) * 0.6));
+  max-height: 34vh;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6)) drop-shadow(0 0 25px #34baff)
+    drop-shadow(0 0 65px #1855ff);
 }
 .exec-final-line {
   width: 0;
