@@ -171,6 +171,8 @@ export function PageHero({
         // the copy.
         backdrop === 'tides' && 'pb-28 md:pb-28 lg:pb-28',
         backdrop === 'reactor' && 'pb-24 md:pb-24 lg:pb-24',
+        // The lion's one-line hint sits under the copy on a narrow band.
+        backdrop === 'lion' && 'pb-28 md:pb-28 lg:pb-16',
         // Racing Lines is a view down two floors of lanes. Extra top padding,
         // because the EMIL Trade hero's own content outgrows the band.
         backdrop === 'racinglines' && 'md:pt-28 lg:pt-32',

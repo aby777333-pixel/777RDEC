@@ -44,7 +44,10 @@ import { type BackdropScene, isInteractiveTarget, useBackdropCanvas } from './us
  * - **The background is black**, and so is the floor, which in the pen is the
  *   page's own pale pink so the shadows fall on the page.
  * - **The text is gone**: the "Press and drag to make wind" instructions and
- *   the credits line.
+ *   the credits line. In their place, asked for later, one line under the
+ *   lion: "Press and hold the fan to make him comfortable." It is centred on
+ *   the lion (68% across a wide band, the middle of a narrow one) and is not
+ *   shown if the scene cannot start.
  *
  * What changed, because three changed underneath the pen (it is r70):
  *
@@ -713,5 +716,9 @@ function setup(canvas: HTMLCanvasElement, host: HTMLElement): BackdropScene | nu
 
 export function LionBackdrop({ className }: { className?: string }) {
   const { hostRef } = useBackdropCanvas(setup, { maxDpr: 2 })
-  return <div ref={hostRef} className={cn('pen-scene pen-scene--lion', className)} aria-hidden />
+  return (
+    <div ref={hostRef} className={cn('pen-scene pen-scene--lion', className)} aria-hidden>
+      <p className="lion-hint">Press and hold the fan to make him comfortable.</p>
+    </div>
+  )
 }

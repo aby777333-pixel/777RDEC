@@ -3212,6 +3212,36 @@ html[data-scrolling='true'] .hero-band *::after {
 .pen-scene--lion {
   background: #000;
 }
+/* The one line of instruction, under the lion. Hidden if the scene never
+   started, since there is then no fan to press. */
+.lion-hint {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 2rem;
+  margin: 0;
+  width: max-content;
+  max-width: calc(100% - 2.5rem);
+  transform: translateX(-50%);
+  color: var(--steel-300);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: normal;
+  user-select: none;
+}
+@media (min-width: 1024px) {
+  .lion-hint {
+    left: 68%;
+    bottom: 3rem;
+    white-space: nowrap;
+  }
+}
+.pen-scene--lion:not(:has(canvas)) .lion-hint {
+  display: none;
+}
 
 /*
   Silly String (`sillystring`). Black ground, as asked for this page, so the
